@@ -1,0 +1,12 @@
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.dll.config
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.dll
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.pdb
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.dll
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.pdb
+C:\Users\James\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.csprojResolveAssemblyReference.cache
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.dll.config
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.dll
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\bin\Release\osVodigiWeb6xTests.pdb
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.csprojResolveAssemblyReference.cache
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.dll
+C:\Users\jwmccord\SkyDrive\osVodigi6x\osVodigiWeb6x\osVodigiWeb6x\osVodigiWeb6xTests\obj\Release\osVodigiWeb6xTests.pdb

@@ -1,0 +1,83 @@
+﻿@model osVodigiWeb6x.Models.Image
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+    }); 
+</script>
+
+<script type="text/javascript" lang="javascript">
+    function ShowPreview() {
+        var path = $("#imgPreview").attr("src");
+        var start = path.lastIndexOf("/");
+        var oldfile = path.substring(start + 1);
+        var newfile = $("#lstFile option:selected").text();
+        var newpath = path.replace(new RegExp(oldfile, "gi"), newfile);
+        $("#imgPreview").attr("src", newpath);
+    }
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/image-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Add Image</span><br />
+                <span class="paragraphtext">Please enter the appropriate information to add a new image.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm()) {
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Add Image</td>
+        </tr>
+        <tr>
+            <td class="formprimary">
+                <b>Select File: <span class="required">*</span></b>
+                <br /><br />
+                The file must be uploaded to the account's FTP site<br />to be available in this list.
+            </td>
+            <td class="formprimary">
+                @Html.DropDownList("lstFile", (SelectList)ViewData["FileList"], new { @style = "width:300px;", onchange = @"ShowPreview();" })<br />
+                <img id="imgPreview" alt="" src='@Url.Content((string)ViewData["ImageURL"])' class="preview" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Image Name: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.ImageName, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Tags: </b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.Tags, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Active: </b></td>
+            <td class="formsecondary">
+                @Html.EditorFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input id="btnSave" type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+}
+
+<br /><br />

@@ -1,0 +1,80 @@
+﻿@model osVodigiWeb6x.Models.Image
+
+@{
+    ViewBag.Title = "Upload";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+        $("#divProgressBar").hide();
+    });
+    function SaveClick() {
+        $("#divProgressBar").show();
+        $("#btnSave").enabled = false;
+    }
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/image-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Add Image</span><br />
+                <span class="paragraphtext">Please enter the appropriate information to upload and add a new image. Please be patient. It may take several minutes to upload large files. Uploads are limited to 200 MB per file.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("Upload", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Add Image</td>
+        </tr>
+        <tr>
+            <td class="formprimary">
+                <b>Select File: <span class="required">*</span></b>
+            </td>
+            <td class="formprimary">
+                <input type="file" name="fileupload" id="fileupload" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Image Name: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.ImageName, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Tags: </b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.Tags, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Active: </b></td>
+            <td class="formsecondary">
+                @Html.EditorFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input id="btnSave" type="submit" value="Save" style="width:75px;" onclick="SaveClick();" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="formfootnote" id="divProgressBar">
+        <img src="~/Images/progress-bar.gif" alt="Please wait. Uploading file." /><br />
+        Please wait. Uploading file.
+    </div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+}
+
+<br /><br />

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.vodigi.com/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://www.vodigi.com/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://www.vodigi.com/">
+      <s:element name="PlayerRegistered">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PlayerRegistrationCode" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerRegisteredResponse">
+        <s:complexType />
+      </s:element>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="PlayerRegisteredSoapIn">
+    <wsdl:part name="parameters" element="tns:PlayerRegistered" />
+  </wsdl:message>
+  <wsdl:message name="PlayerRegisteredSoapOut">
+    <wsdl:part name="parameters" element="tns:PlayerRegisteredResponse" />
+  </wsdl:message>
+  <wsdl:portType name="VodigiWSSoap">
+    <wsdl:operation name="PlayerRegistered">
+      <wsdl:input message="tns:PlayerRegisteredSoapIn" />
+      <wsdl:output message="tns:PlayerRegisteredSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="VodigiWSSoap" type="tns:VodigiWSSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PlayerRegistered">
+      <soap:operation soapAction="http://www.vodigi.com/PlayerRegistered" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="VodigiWSSoap12" type="tns:VodigiWSSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="PlayerRegistered">
+      <soap12:operation soapAction="http://www.vodigi.com/PlayerRegistered" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="VodigiWS">
+    <wsdl:port name="VodigiWSSoap" binding="tns:VodigiWSSoap">
+      <soap:address location="http://www.vodigi.com/VodigiWS.asmx" />
+    </wsdl:port>
+    <wsdl:port name="VodigiWSSoap12" binding="tns:VodigiWSSoap12">
+      <soap12:address location="http://www.vodigi.com/VodigiWS.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

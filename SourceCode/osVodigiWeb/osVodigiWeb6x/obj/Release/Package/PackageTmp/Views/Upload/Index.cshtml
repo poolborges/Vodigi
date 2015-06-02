@@ -1,0 +1,166 @@
+﻿@model IEnumerable<osVodigiWeb6x.Models.Upload>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+        $("#divProgressBar").hide();
+    });
+    function SaveClick() {
+        $("#divProgressBar").show();
+        $("#btnSave").enabled = false;
+    }
+    function SetLargeVideoUrl(url) {
+        $("#videolargepreview").attr("src", url);
+    }
+    $(function () {
+        var moveLeft = 15;
+        var moveDown = -105;
+
+        $('img#videosmallpreview').hover(function (e) {
+            $('div#videopopup').show();
+        }, function () {
+            $('div#videopopup').hide();
+        });
+
+        $('img#videosmallpreview').mousemove(function (e) {
+            $("div#videopopup").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+        });
+    });
+    function SetLargeImageUrl(url) {
+        $("#imglargepreview").attr("src", url);
+    }
+    $(function () {
+        var moveLeft = 15;
+        var moveDown = -105;
+
+        $('img#imgsmallpreview').hover(function (e) {
+            $('div#imagepopup').show();
+        }, function () {
+            $('div#imagepopup').hide();
+        });
+
+        $('img#imgsmallpreview').mousemove(function (e) {
+            $("div#imagepopup").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+        });
+    });     
+</script>
+
+<br /><br />
+<div class="textblock">
+    <span class="paragraphheader">Uploads</span><br />
+    <span class="paragraphtext">The following is a list of image, video, and music uploads. Use the form below to upload a new media file. Only .png, .jpg, .jpeg, .wmv, .mp4, .wma, and .mp3 files can be uploaded. Uploads are limited to 100 MB per file.</span>
+</div>
+<br />
+@using (Html.BeginForm("Index", "Upload", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{    
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="3">Upload File</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Media File: </b></td>
+            <td class="formprimary">
+                <input type="file" name="fileupload" id="fileupload" />
+            </td>
+            <td class="formprimary">
+                <input id="btnSave" type="submit" value="Upload" style="width:75px;" onclick="SaveClick();" />
+            </td>
+        </tr>
+    </table>
+    <div class="formfootnote" id="divProgressBar">
+        <img src="~/Images/progress-bar.gif" alt="Please wait. Uploading file." /><br />
+        Please wait. Uploading file.
+    </div>
+    <br />
+    <table style="border-spacing:0;border-collapse:collapse;" class="gridtable">
+        <tr>
+            <td class="gridheader">Preview</td>
+            <td class="gridheader">File Name</td>
+            <td class="gridheader">File Type</td>
+            <td class="gridheader">File Size</td>
+            <td class="gridheader"></td>
+        </tr>
+
+    @if (Model.Count() > 0)
+    {
+        foreach (var item in Model)
+        {
+            if (item.FileName.ToLower().EndsWith(".wmv") || item.FileName.ToLower().EndsWith(".mp4"))
+            {
+                var videourl = Url.Content((string)ViewData["VideoFolder"] + item.FileName);
+                <tr class="gridrow">
+                    <td class="gridtext">
+                        <img id="videosmallpreview" class="gridpreviewnoborder" alt="" src="@Url.Content("~/Images/video-small.png")" onmouseover="SetLargeVideoUrl('@videourl');" />
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileSize)
+                    </td>
+                    <td class="gridtext">
+                        <span id="gridlinkvideo">@Html.ActionLink("Delete", "Delete", new { filetype = item.FileType, filename = item.FileName })</span>
+                    </td>
+                </tr>                
+            }
+            else if (item.FileName.ToLower().EndsWith(".wma") || item.FileName.ToLower().EndsWith(".mp3"))
+            {
+                var videourl = Url.Content((string)ViewData["MusicFolder"] + item.FileName);
+                <tr class="gridrow">
+                    <td class="gridtext">
+                        <img class="gridpreviewnoborder" alt="" src="@Url.Content("~/Images/music.png")" />
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileSize)
+                    </td>
+                    <td class="gridtext">
+                        <span id="gridlinkvideo">@Html.ActionLink("Delete", "Delete", new { filetype = item.FileType, filename = item.FileName })</span>
+                    </td>
+                </tr>                
+            }
+            else
+            {
+                var imgurl = Url.Content((string)ViewData["ImageFolder"] + item.FileName);
+                <tr class="gridrow">
+                    <td class="gridtext">
+                        <img id="imgsmallpreview" class="gridpreview" alt="" src="@imgurl" onmouseover="SetLargeImageUrl('@imgurl');" />
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileName)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileType)
+                    </td>
+                    <td class="gridtext">
+                        @Html.DisplayFor(modelItem => item.FileSize)
+                    </td>
+                    <td class="gridtext">
+                        <span id="gridlinkimage">@Html.ActionLink("Delete", "Delete", new { filetype = item.FileType, filename = item.FileName })</span>
+                    </td>
+                </tr>
+            }
+        }
+    }
+    else
+    {
+        <tr>
+            <td class="gridtext" colspan="5" style="height:25px;vertical-align:middle;text-align:left;">No data available.</td>
+        </tr>
+    }
+    </table>    
+    <br /><br />
+
+}

@@ -1,0 +1,107 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSurvey"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignWidth="900" d:DesignHeight="600"
+             Background="Black">
+    <UserControl.Resources>
+        <Storyboard x:Key="sbFadeOut">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="1.0" To="0.0" Duration="0:0:0.25" 
+                AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeIn">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="0.0" To="1.0" Duration="0:0:0.25" 
+                AutoReverse="False" />
+        </Storyboard>
+    </UserControl.Resources>
+    <Grid x:Name="gridMain" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Background="#FF000000">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="60"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+            <RowDefinition Height="80"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock x:Name="txtSurveyName" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="1" Margin="0,0,0,0"
+                   FontFamily="Verdana" FontSize="24" Foreground="#FF3084F1" FontWeight="Bold" Text="Survey Name"></TextBlock>
+
+        <Image x:Name="imgSurveyImage" VerticalAlignment="Center" HorizontalAlignment="Center" Stretch="UniformToFill" Grid.Row="0" Grid.Column="0" Grid.RowSpan="2" Margin="0,0,0,0"></Image>
+
+        <StackPanel x:Name="stackQuestion" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,0,0,0" Grid.Row="1" Grid.Column="1"
+                    CanHorizontallyScroll="False" CanVerticallyScroll="True" Orientation="Vertical" >
+        </StackPanel>
+
+        <Rectangle x:Name="rectDivider" HorizontalAlignment="Stretch" VerticalAlignment="Top" Margin="0,0,0,0" Height="2" Fill="#FFFFFFFF" StrokeThickness="0" 
+                   Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2"></Rectangle>
+
+        <Grid x:Name="gridButtons" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Margin="0,0,0,0" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+
+            <Grid x:Name="gridCloseButton" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="33,0,0,0" Background="Transparent" Width="125" Height="44">
+                <Rectangle VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Width="125" Height="44"
+                     Stroke="#FFFFFFFF" StrokeThickness="2" RadiusX="22" RadiusY="22">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#3084F1" Offset="0.5" />
+                            <GradientStop Color="#0E4287" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBlock x:Name="txtClose" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="48,11,0,0" Text="Close"
+                       FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFFFF"></TextBlock>
+                <Grid x:Name="gridCloseIcon" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Width="40" Height="40" Background="Transparent">
+                    <Ellipse x:Name="ellClose" VerticalAlignment="Center" HorizontalAlignment="Center"
+                     Fill="#FF000000" StrokeThickness="0" Width="40" Height="40"></Ellipse>
+                    <Polygon Points="28,12 28,28 12,28 12,12 26,12" StrokeThickness="0">
+                        <Polygon.Fill>
+                            <SolidColorBrush Color="White" Opacity="1.0"/>
+                        </Polygon.Fill>
+                    </Polygon>
+                </Grid>
+                <Rectangle VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Width="125" Height="44" Fill="Transparent"
+                       MouseLeftButtonDown="btnClose_Click"></Rectangle>
+
+            </Grid>
+
+            <Grid x:Name="gridNextButton" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,33,0" Background="Transparent" Width="125" Height="44">
+                <Rectangle VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Width="125" Height="44"
+                 Stroke="#FFFFFFFF" StrokeThickness="2" RadiusX="22" RadiusY="22">
+                    <Rectangle.Fill>
+                        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                            <GradientStop Color="#3084F1" Offset="0.5" />
+                            <GradientStop Color="#0E4287" Offset="1.0" />
+                        </LinearGradientBrush>
+                    </Rectangle.Fill>
+                </Rectangle>
+                <TextBlock x:Name="txtNext" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="48,11,0,0" Text="Next"
+                   FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFFFF"></TextBlock>
+                <Grid x:Name="gridNext" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="2,2,0,0" Width="40" Height="40" Background="Transparent">
+                    <Ellipse x:Name="ellNext" VerticalAlignment="Center" HorizontalAlignment="Center"
+                 Fill="#FF000000" StrokeThickness="0" Width="40" Height="40"></Ellipse>
+                    <Polygon Points="14,12 14,28 30,20 14,12" StrokeThickness="0">
+                        <Polygon.Fill>
+                            <SolidColorBrush Color="White" Opacity="1.0"/>
+                        </Polygon.Fill>
+                    </Polygon>
+                </Grid>
+                <Rectangle VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Width="125" Height="44" Fill="Transparent" 
+                 MouseLeftButtonDown="btnNext_Click"></Rectangle>
+            </Grid>
+
+            <TextBlock x:Name="txtCounter" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Margin="0,0,0,0"
+                   FontFamily="Verdana" FontSize="18" Foreground="#FFFFFFFF" FontWeight="Bold" Text="1 : 1"></TextBlock>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

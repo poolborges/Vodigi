@@ -1,0 +1,935 @@
+﻿body {
+    background-color: #F2F2F2;
+    font-size: 12px;
+    font-family: Verdana, Arial;
+    margin-top: 0px;
+    padding: 0;
+    color: #333333;
+}
+
+/* ----- DIVS ------------------------------------- */
+div.page
+{
+    background-color: #FFFFFF;
+    width: 980px;
+    margin-top: 0px;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 3px;    
+    border: 1px solid #888888;
+	border-radius: 6px 6px;
+}
+
+div.pageheader
+{
+    width: 980px;
+    height: 65px;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 5px;
+    background: #4173B1;
+	border: solid 1px #4173B1;
+	border-radius: 6px 6px;
+}
+
+div.pagefooter
+{
+    border-top: 1px solid #555555;
+    width: 980px;
+    height: 30px;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 3px;
+    background: #4173B1;
+	border: solid 1px #4173B1;
+	border-radius: 6px 6px;
+}
+
+div.pagemenubar
+{
+    width: 980px;
+    height: 33px;
+    /*background-image: url('../Images/menubar.png');*/
+	background-color: #BBBBBB;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 3px;
+	border: solid 1px #888888;
+	border-radius: 6px 6px;
+}
+
+div.pagelogininfo
+{
+    width: 980px;
+    height: 14px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    vertical-align: middle;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+	margin-top: 3px;
+    background: #EEEEEE;
+    font-family: Verdana, Arial;
+    font-size: 10px;
+    color: #333333;
+    border: 1px solid #888888;
+	border-radius: 6px 6px;
+}
+
+div.errormessage
+{
+    width: 980px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 12px;
+    color: #CC0000;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.textblock
+{
+    width: 920px;
+    vertical-align: top;
+    text-align: left;
+    font-size: 14px;
+    color: #333333;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.formfootnote
+{
+    width: 920px;
+    vertical-align: top;
+    text-align: center;
+    font-size: 10px;
+    color: #333333;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div#imagepopup 
+{
+  display: none;
+  position: absolute;
+  color: #333333;
+  font-size: 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+div#videopopup 
+{
+  display: none;
+  position: absolute;
+  color: #333333;
+  font-size: 10px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+div.schedule
+{
+    width: 110px;
+    padding: 3px;
+    font-size: 10px;
+    color: #FFFFFF;
+    background: #F77E0F;
+    margin-bottom: 3px;
+    border-radius: 3px 3px;
+}
+
+/* ----- TABLES ------------------------------------- */
+
+table.menutable
+{
+    width: 980px;
+    height: 38px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.menucell
+{
+    vertical-align: middle; 
+    text-align: center;
+    height: 23px;
+}
+
+table.instructions
+{
+	width: 910px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+td.instructionscell
+{
+	vertical-align: middle;
+	padding-left: 10px;
+	padding-right: 10px;
+}
+
+/* ----- CONTROLS -------------------------------------- */
+
+input[type="text"], 
+input[type="password"] {
+    border: 1px solid #CCCCCC;
+    padding: 2px;
+    font-size: 12px;
+    color: #333333;
+}
+
+input[type="submit"] {
+    font-size: 12px;
+    padding: 2px;
+	border-radius: 3px 3px;
+}
+
+select {
+    border: 1px solid #CCCCCC;
+    padding: 2px;
+    font-size: 12px;
+    color: #333333;
+}
+
+img.preview 
+{
+    margin-top: 5px;
+    max-width: 300px;
+    max-height: 300px;
+}
+
+img.slideshowpreview 
+{
+    max-width: 320px;
+    max-height: 320px;
+}
+
+img.timelineimagepreview 
+{
+    max-width: 175px;
+    max-height: 175px;
+}
+
+img.interactivebuttonpreview 
+{
+    width: 225px;
+    height: 80px;
+}
+
+img.imagepopuppreview
+{
+    max-width:320px;
+    max-height:320px;
+    border: 1px #333333 solid;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+video.videopopuppreview
+{
+    max-width:420px;
+    max-height:240px;
+    border: 1px #333333 solid;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+input.search
+{
+    font-size: 10px;
+	border-radius: 3px 3px;
+}
+
+input.numericonly
+{
+    border: 1px solid #CCCCCC;
+    padding: 2px;
+    font-size: 12px;
+    color: #333333;
+}
+
+/* ----- FORMS ------------------------------------- */
+
+table.formtable
+{
+    border: 0px solid #CCCCCC;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.formheader
+{
+    padding: 3px 3px 3px 3px;
+    font-size: 14px;
+    font-weight: bold;
+    height:25px;
+    background-color: #7199CA;
+    vertical-align: middle;
+    text-align: center;
+    color: #FFFFFF;
+	border-top-left-radius: 8px;
+	border-top-right-radius: 8px;
+}
+
+td.formprimary
+{
+    padding: 3px 3px 3px 3px;
+    background-color: #FFFFFF;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+td.formsecondary
+{
+    padding: 3px 3px 3px 3px;
+    background-color: #EEEEEE;
+    vertical-align: middle;
+    text-align: left;
+    padding-left: 20px;
+    padding-right: 20px;
+}
+
+td.formfooter
+{
+    padding: 3px 3px 3px 3px;
+    height:25px;
+    background-color: #7199CA;
+    vertical-align: middle;
+    text-align: center;
+	border-bottom-left-radius: 8px;
+	border-bottom-right-radius: 8px;
+}
+
+/* ----- SEARCH FORMS ------------------------------------- */
+div.searchdiv
+{
+	width: 940px;
+	margin-left: auto;
+	margin-right: auto;
+	border: 1px solid #7199CA;
+	border-radius: 6px 6px;
+	background-color: #7199CA;
+	color: #FFFFFF;
+}
+
+table.searchtable
+{
+    width: 920px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+td.searchcell
+{
+    font-size: 10px;
+    padding: 1px 1px 1px 1px;
+    text-align: left;
+    vertical-align: middle;
+}
+
+/* ----- GRID --------------------------------------------*/
+
+table.gridtable
+{
+    border: 1px solid #CCCCCC;
+    width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr.gridrow:nth-child(odd)
+{
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+tr.gridrow:nth-child(even)
+{
+    background-color: #EEEEEE;
+    border-bottom: 1px solid #CCCCCC;
+}
+
+td.gridheader
+{
+    padding: 3px 3px 3px 3px;
+    font-size: 12px;
+    font-weight: bold;
+    height:20px;
+    background-color: #4173B1;
+    vertical-align: middle;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+td.gridcell
+{
+    padding: 3px 3px 3px 3px;
+    vertical-align: top;
+    text-align: left;
+}
+
+td.gridprimary
+{
+    padding: 3px 3px 3px 3px;
+    background-color: #FFFFFF;
+    vertical-align: middle;
+    text-align: left;
+}
+
+td.gridsecondary
+{
+    padding: 3px 3px 3px 3px;
+    background-color: #EEEEEE;
+    vertical-align: middle;
+    text-align: left;
+}
+
+td.gridfooter
+{
+    padding: 3px 3px 3px 3px;
+    height:25px;
+    background-color: #4173B1;
+    vertical-align: middle;
+    text-align: center;
+	border-bottom-left-radius: 6px;
+	border-bottom-right-radius: 6px;
+}
+
+td.gridtext
+{
+    padding: 3px 3px 3px 3px;
+}
+
+img.gridpreview 
+{
+    max-width: 75px;
+    max-height: 75px;
+    border: 1px solid #333333;
+}
+
+img.gridpreviewnoborder
+{
+    max-width: 40px;
+    max-height: 40px;
+}
+
+table.gridfootertable
+{
+    width: 880px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+div.footerdiv
+{
+	width: 940px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 3px;
+	padding: 3px 0px 3px 0px;
+	border: 1px solid #7199CA;
+	border-radius: 6px 6px;
+	background-color: #7199CA;
+}
+
+div.griddiv
+{
+	width: 940px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 3px;
+	padding: 3px 0px 3px 0px;
+	border: 1px solid #888888;
+	border-radius: 6px 6px;
+	background-color: #EEEEEE;
+}
+
+#divfooter a 
+{ 
+    font-size: 12px;
+    color: #FFFFFF;
+    text-decoration: underline; 
+}
+
+#addlink a
+{
+    font-size: 11px;
+    color: #FFFFFF;
+    text-decoration: underline; 
+    padding: 4px 10px 4px 10px;
+	text-align: center;
+    float: right;
+	background-color: #F77E0F;
+	border: 1px solid #F77E0F;
+	border-radius: 6px 6px;
+	margin-left: 10px;
+}
+
+div.gridlinkdiv
+{
+	width: 100px;
+	text-align: center;
+	vertical-align: middle;
+	background-color: #71AD07;
+	border: 1px solid #71AD07;
+	border-radius: 6px 6px;
+	padding-top: 2px;
+	padding-bottom: 2px;
+	margin-top: 3px;
+}
+
+#gridlink a
+{
+    font-size: 11px;
+    color: #FFFFFF;
+    text-decoration: underline; 
+}
+
+#gridlinkdelete a
+{
+    font-size: 11px;
+    color: #FFFFFF;
+    text-decoration: underline; 
+}
+
+#reportlink a
+{
+    font-size: 11px;
+    color: #333333;
+    margin-left: 50px;
+    text-decoration: underline; 
+    font-weight: bold;
+}
+
+#returnlink a
+{
+    font-size: 12px;
+    color: #FFFFFF;
+    text-decoration: underline; 
+    padding-left: 15px;
+}
+
+#menulink a
+{
+    font-size: 12px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#schedulelink a
+{
+    font-size: 10px;
+    color: #FFFFFF;
+    font-weight: normal;
+    text-decoration: underline;    
+}
+
+#freelink a
+{
+    font-size: 10px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;    
+}
+
+#adminlinklogoff a
+{
+    font-size: 10px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;
+    margin-left: 120px;   
+}
+
+#adminlinkaccounts a
+{
+    font-size: 10px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;
+    margin-left: 7px;   
+}
+
+#adminlinkusers a
+{
+    font-size: 10px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;
+    margin-left: 7px;   
+}
+
+#adminlinkmessages a
+{
+    font-size: 10px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;
+    margin-left: 7px;   
+}
+
+#clearlink a
+{
+    font-size: 10px;
+    color: #FFFFFF;
+    font-weight: normal;
+    text-decoration: underline; 
+    margin-right: 15px;
+}
+
+.previousnext
+{
+    font-size: 12px;
+    color: #FFFFFF;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* ----- SURVEY DESIGN ------------------------------------- */
+
+table.surveytable
+{
+    border: 1px solid #CCCCCC;
+    width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr.surveysubheadrow
+{
+    background-color: #5893DC;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+tr.surveyrow
+{
+    background-color: #315581;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+tr.questionrow
+{
+    background-color: #E5E5E5;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+tr.optionrow:nth-child(odd)
+{
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+tr.optionrow:nth-child(even)
+{
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+.surveyquestionlink
+{
+    font-size: 11px;
+    color: #FFFFFF;
+    font-weight: normal;
+    text-decoration: underline;
+    cursor: pointer;  
+}
+
+.surveyquestionoptionlink 
+{
+    font-size: 11px;
+    color: #333333;
+    font-weight: normal;
+    text-decoration: underline;    
+    cursor: pointer;  
+}
+
+/* ----- TIMELINE DESIGN ------------------------------------- */
+
+table.timelinetable
+{
+    border: 1px solid #CCCCCC;
+    width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr.timelineheaderrow
+{
+    background-color: #5893DC;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+tr.timelinerow:nth-child(odd)
+{
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+tr.timelinerow:nth-child(even)
+{
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+
+/* ----- Player Heartbeat ------------------------------------- */
+
+table.playerheartbeattable
+{
+    border: 1px solid #CCCCCC;
+    width: 940px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+tr.playerheartbeatheaderrow
+{
+    background-color: #5893DC;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: bold;
+    text-align: left;
+    color: #FFFFFF;
+}
+
+tr.playerheartbeatrow
+{
+    background-color: #FFFFFF;
+    border-bottom: 1px solid #CCCCCC;
+    font-size: 12px;
+    font-weight: normal;
+    text-align: left;
+    color: #333333;
+}
+
+
+/* ----- GENERIC ------------------------------------- */
+ 
+.headertext
+{
+    font-weight: bold;
+    font-size: 14px;
+    color: #0000CC;
+}
+
+.footertext
+{
+    font-size: 11px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.paragraphheader
+{
+    font-weight: bold;
+    font-size: 14px;
+    color: #315581;
+}
+
+.paragraphtext
+{
+    font-size: 12px;
+    color: #333333;
+}
+
+.errortext
+{
+    font-size: 12px;
+    color: #DD0000;
+}
+
+.addimagetoslideshow
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+}
+
+.modifyslideshowimagelist
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+    margin-left: 4px;    
+}
+
+.addvideotoplaylist
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+}
+
+.modifyplaylistvideolist
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+    margin-left: 4px;    
+}
+
+.addmediatotimeline
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+}
+
+.modifytimelinelist
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+    margin-left: 4px;    
+}
+
+.addcontenttoscreen
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+}
+
+.modifyscreenscreencontentlist
+{
+    cursor: pointer;
+    font-size: 10px;
+    color: #315581;
+    text-decoration: underline;
+    margin-left: 4px;    
+}
+
+#sectionmain
+{
+    min-height: 550px;
+}
+
+.required
+{
+    color: #315581;
+}
+
+/* ----- DROP DOWN MENU ------------------------------------- */
+#dropdownmenu
+{	
+	margin: 0px;
+	padding: 0px;
+	z-index: 30;
+}
+
+#dropdownmenu li
+{	
+	margin: 0px;
+	padding: 0px;
+	list-style: none;
+	float: left;
+    font-size: 12px;
+    color: #FFFFFF;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+#dropdownmenu li a
+{	
+	display: block;
+	margin: 0px 5px 0px 0px;
+	padding: 4px 10px;
+	color: #FFFFFF;
+	text-align: center;
+	text-decoration: none;
+	border-radius: 6px 6px;
+}
+
+#dropdownmenu li a:hover
+{	
+	background-color: #6B3397;
+	color: #FFFFFF;
+}
+
+#dropdownmenu div
+{	
+	position: absolute;
+	visibility: hidden;
+	margin: 0px;
+	padding: 0px;
+	background-color: transparent;
+}
+
+#dropdownmenu div a
+{	
+	position: relative;
+	display: block;
+	margin-top: 2px;
+	padding: 5px 10px;
+	width: auto;
+	white-space: nowrap;
+	text-align: left;
+	text-decoration: none;
+	background-color: #EEEEEE;
+	border: solid 1px #888888;
+	color: #333333;
+	font-size: 11px;
+	font-weight: normal;
+}
+
+#dropdownmenu div a:hover
+{	
+	background: #6B3397;
+	color: #FFFFFF;
+}

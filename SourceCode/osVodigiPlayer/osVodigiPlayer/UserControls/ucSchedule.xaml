@@ -1,0 +1,65 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSchedule"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+    <UserControl.Resources>
+        <Storyboard x:Key="sbFadeOut">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="1.0" To="0.0" Duration="0:0:0.5" 
+                AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeIn">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="0.0" To="1.0" Duration="0:0:0.5" 
+                AutoReverse="False" />
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid x:Name="gridMain">
+        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
+        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0" Fill="#7FBA00" Width="290" Height="40"></Rectangle>
+        <TextBlock x:Name="lblTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,12,0,0"
+                   Text="Player Schedule" FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,55,0,0"
+                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Width="260" TextWrapping="Wrap"
+                   Text="Please wait while the schedule for this player is downloaded." 
+                   ></TextBlock>
+
+        <TextBlock x:Name="lblErrorLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,100,0,0"
+                   Text="Error:" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581"></TextBlock>
+
+        <TextBlock x:Name="lblError" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,120,0,0" Width="250" TextWrapping="Wrap"
+                   Text="The schedule for this player could not be downloaded. Click 'Retry' to attempt to download the schedule again or 'Use Last' to use the most recently downloaded schedule for this player." FontFamily="Verdana" FontSize="12" Foreground="#CC0000"></TextBlock>
+
+        <TextBlock x:Name="lblCounter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,105,0,0"
+                   FontFamily="Verdana" FontSize="24" Foreground="#333333" Text="Waiting x secs" ></TextBlock>
+
+        <Rectangle x:Name="rectFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,275,0,0" Fill="#7FBA00" Width="290" Height="20"></Rectangle>
+        <TextBlock x:Name="lblFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,277,0,0"
+                   Text="Vodigi Player - Windows Desktop Edition" FontFamily="Verdana" FontSize="12" Foreground="#FFFFFF"></TextBlock>
+
+
+        <Grid x:Name="btnRetry" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,215,0,0" Width="120" Height="28" Background="Transparent">
+            <Rectangle x:Name="rectRetry" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#315581" RadiusX="12" RadiusY="12"></Rectangle>
+            <TextBlock x:Name="lblRegister" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
+                       Text="Retry" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        </Grid>
+        <Grid x:Name="btnUseLast" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="155,215,0,0" Width="120" Height="28" Background="Transparent">
+            <Rectangle x:Name="rectUseLast" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#315581" RadiusX="12" RadiusY="12"></Rectangle>
+            <TextBlock x:Name="lblUseLast" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
+                       Text="Use Last" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        </Grid>
+
+        <TextBlock x:Name="lblRetryTime" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,253,0,0"
+                   FontFamily="Verdana" FontSize="10" Foreground="#333333" Text="Retrying schedule download in 30 seconds." 
+                   ></TextBlock>
+
+    </Grid>
+</UserControl>

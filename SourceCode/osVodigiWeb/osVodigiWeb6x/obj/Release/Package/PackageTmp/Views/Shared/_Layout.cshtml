@@ -1,0 +1,162 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Vodigi</title>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/themes/base/jquery.ui.all.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.9.1.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/modernizr-2.6.2.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-ui-1.10.2.js")" type="text/javascript"></script>
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        var admin = $("#txtIsAdmin").val();
+        if (admin == "true") {
+            $("#adminlinks").show();
+        }
+    });
+
+    // Menu Scripts
+    var menutimeout = 500;
+    var closemenutimer = 0;
+    var ddmenuitem = 0;
+
+    function menuopen(id) {
+        menucancelclosetime();
+        if (ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+        ddmenuitem = document.getElementById(id);
+        ddmenuitem.style.visibility = 'visible';
+    }
+
+    function menuclose() {
+        if (ddmenuitem) ddmenuitem.style.visibility = 'hidden';
+    }
+
+    function menuclosetime() {
+        closemenutimer = window.setTimeout(menuclose, menutimeout);
+    }
+
+    function menucancelclosetime() {
+        if (closemenutimer) {
+            window.clearTimeout(closemenutimer);
+            closemenutimer = null;
+        }
+    }
+
+    document.onclick = menuclose;
+</script>
+</head>
+<body>
+    <header>
+        <div class="pageheader">
+            <img src="@Url.Content("~/Images/vodigi-logo-6.png")" alt="" style="position:relative; left:-200px; top:7px;" />
+            <img src="@Url.Content("~/Images/vodigi-tag-6.png")" alt="" style="position:relative; left:200px;" />
+        </div>
+        <div class="pagemenubar">
+            <div style="padding-left:25px;padding-top:5px;">
+                <ul id="dropdownmenu">
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuPlayers')" onmouseout="menuclosetime()">Players</a>
+                        <div id="menuPlayers" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Players", "Index", "Player")
+                            @Html.ActionLink("Add Player", "Create", "Player")
+                            @Html.ActionLink("View Player Groups", "Index", "PlayerGroup")
+                            @Html.ActionLink("Add Player Group", "Create", "PlayerGroup")
+                            @Html.ActionLink("Manage Default Player Settings", "Index", "PlayerSettingAccountDefault")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuScreens')" onmouseout="menuclosetime()">Screens</a>
+                        <div id="menuScreens" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Screens", "Index", "Screen")
+                            @Html.ActionLink("Add Screen", "Step1", "ScreenWizard", new { id = 0 }, "")
+                            @Html.ActionLink("View Screen Content", "Index", "ScreenContent")
+                            @Html.ActionLink("Add Screen Content", "Create", "ScreenContent")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuMedia')" onmouseout="menuclosetime()">Media</a>
+                        <div id="menuMedia" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Images", "Index", "Image")
+                            @Html.ActionLink("Add Image", "Upload", "Image")
+                            @Html.ActionLink("View Videos", "Index", "Video")
+                            @Html.ActionLink("Add Video", "Upload", "Video")
+                            @Html.ActionLink("View Music", "Index", "Music")
+                            @Html.ActionLink("Add Music", "Upload", "Music")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuSlideShows')" onmouseout="menuclosetime()">Slide Shows</a>
+                        <div id="menuSlideShows" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Slide Shows", "Index", "SlideShow")
+                            @Html.ActionLink("Add Slide Show", "Create", "SlideShow")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuPlayLists')" onmouseout="menuclosetime()">Play Lists</a>
+                        <div id="menuPlayLists" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Play Lists", "Index", "PlayList")
+                            @Html.ActionLink("Add Play List", "Create", "PlayList")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuTimelines')" onmouseout="menuclosetime()">Timelines</a>
+                        <div id="menuTimelines" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Timelines", "Index", "Timeline")
+                            @Html.ActionLink("Add Timeline", "Create", "Timeline")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuSurveys')" onmouseout="menuclosetime()">Surveys</a>
+                        <div id="menuSurveys" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("View Surveys", "Index", "Survey")
+                            @Html.ActionLink("Add Survey", "Create", "Survey")
+                        </div>
+                    </li>
+                    <li>
+                        <a href="#" onmouseover="menuopen('menuReports')" onmouseout="menuclosetime()">Reports</a>
+                        <div id="menuReports" onmouseover="menucancelclosetime()" onmouseout="menuclosetime()">
+                            @Html.ActionLink("Login Report", "ReportLoginLog", "Report")
+                            @Html.ActionLink("Activity Report", "ReportActivityLog", "Report")
+                            @Html.ActionLink("Screen Display Report", "ReportPlayerScreenLog", "Report")
+                            @Html.ActionLink("Screen Content Display Report", "ReportPlayerScreenContentLog", "Report")
+                            @Html.ActionLink("Survey Results Report", "ReportSurveyResults", "Report")
+                            @Html.ActionLink("Player Heartbeat Report", "ReportPlayerHeartbeat", "Report")
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="pagelogininfo">
+            <span style="float:left;padding-left:20px;">
+                @Html.Raw((string)ViewData["LoginInfo"])
+            </span>
+            <span style="float:right;padding-right:20px;">
+                <span id="adminlinklogoff">@Html.ActionLink("Logout", "Validate", "Login")</span>
+                <span id="adminlinks" style="display:none;">  
+                    <span id="adminlinkaccounts">@Html.ActionLink("Accounts", "Index", "Account")</span>
+                    <span id="adminlinkusers">@Html.ActionLink("Users", "Index", "User")</span>
+                    <span id="adminlinkmessages">@Html.ActionLink("Messages", "Index", "SystemMessage")</span>
+                </span>
+            </span>
+        </div>
+    </header>
+    <div class="page">
+        <section id="sectionmain">
+            @RenderBody()
+        </section>
+    </div>
+    <footer>
+       <div class="pagefooter">
+            <span class="footertext" style="position:relative; top:6px;">Copyright &copy; 2005-2013, JMC Publications, LLC</span>
+       </div>
+    </footer>
+    <div id="imagepopup">
+        <img id="imglargepreview" alt="" src="" class="imagepopuppreview" />
+    </div>
+    <div id="videopopup">
+        <video id="videolargepreview" autoplay controls src="" class="videopopuppreview" />
+    </div>
+    @Html.Hidden("txtIsAdmin", ViewData["txtIsAdmin"])
+</body>
+</html>

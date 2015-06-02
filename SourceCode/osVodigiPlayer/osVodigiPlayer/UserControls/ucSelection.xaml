@@ -1,0 +1,52 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSelection"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="210" d:DesignWidth="300" Background="Transparent">
+    <UserControl.Resources>
+
+        <Storyboard x:Key="sbImageZoom">
+            <DoubleAnimation 
+                        Storyboard.TargetName="stImage"
+                        Storyboard.TargetProperty="ScaleX" 
+                        From="1.0" To="1.5" Duration="0:0:.15"
+                        AutoReverse="False" />
+            <DoubleAnimation 
+                        Storyboard.TargetName="stImage"
+                        Storyboard.TargetProperty="ScaleY" 
+                        From="1.0" To="1.5" Duration="0:0:.15"
+                        AutoReverse="False" />
+        </Storyboard>
+
+        <Storyboard x:Key="sbImageNormal">
+            <DoubleAnimation 
+                        Storyboard.TargetName="stImage"
+                        Storyboard.TargetProperty="ScaleX" 
+                        From="1.5" To="1.0" Duration="0:0:.15"
+                        AutoReverse="False" />
+            <DoubleAnimation 
+                        Storyboard.TargetName="stImage"
+                        Storyboard.TargetProperty="ScaleY" 
+                        From="1.5" To="1.0" Duration="0:0:0.15"
+                        AutoReverse="False" />
+        </Storyboard>
+
+    </UserControl.Resources>
+    <Canvas Background="Transparent">
+        <Grid x:Name="gridMain" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Background="Transparent">
+            <Canvas x:Name="canvasImage" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Canvas.Clip>
+                    <RectangleGeometry x:Name="rgGridClip" RadiusX="10" RadiusY="10"></RectangleGeometry>
+                </Canvas.Clip>
+                <Canvas.RenderTransform>
+                    <ScaleTransform x:Name="stImage" ScaleX="1.0" ScaleY="1.0"></ScaleTransform>
+                </Canvas.RenderTransform>
+                <Image x:Name="img" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
+                <Rectangle x:Name="rectBorder" Fill="#00000000" Stroke="#FFFFFFFF" StrokeThickness="3" RadiusX="8" RadiusY="8" 
+                           MouseDown="rectBorder_MouseDown" MouseUp="rectBorder_MouseUp" TouchDown="rectBorder_TouchDown" TouchUp="rectBorder_TouchUp"></Rectangle>
+            </Canvas>
+        </Grid>
+    </Canvas>
+</UserControl>

@@ -1,0 +1,127 @@
+﻿@model IEnumerable<osVodigiWeb6x.Models.ScreenWizardView>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) == 1) {
+            $("#linkPrevious").hide();
+        }
+        if (parseInt(pagenumber) == parseInt(pagecount)) {
+            $("#linkNext").hide();
+        }
+    });
+    function NextPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) < parseInt(pagecount)) {
+            $("#txtPageNumber").val(parseInt(pagenumber) + 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function PreviousPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        if (parseInt(pagenumber) > 1) {
+            $("#txtPageNumber").val(parseInt(pagenumber) - 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function ResetPageCount() {
+        $("#txtPageNumber").val(1);
+    }
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/screen-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+          <td>
+                <span class="paragraphheader">Screens</span><span id="addlink">@Html.ActionLink("Add Screen", "Step1", "ScreenWizard", new { id = 0 }, "")</span><br />
+                <span class="paragraphtext">The following is a list of screens that match the search parameters below.</span>
+          </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("Index", "Screen", FormMethod.Post, new { id = "formSearch" }))
+{    
+    <div class="searchdiv">    
+        <table class="searchtable">
+            <tr>
+                <td class="searchcell"><b>Screen Name:&nbsp;</b><br />@Html.TextBox("txtScreenName", (string)ViewData["ScreenName"], new { @style = "width:150px;font-size:10px;" })</td>
+                <td class="searchcell"><b>Description:</b><br />@Html.TextBox("txtDescription", (string)ViewData["Description"], new { @style = "width:150px;font-size:10px;" })</td>
+                <td class="searchcell"><b>Include Inactive:</b><br />@Html.CheckBox("chkIncludeInactive", (bool)ViewData["IncludeInactive"])</td>
+                <td class="searchcell"><b>Sort By:</b><br />@Html.DropDownList("lstSortBy", (SelectList)ViewData["SortByList"], new { @style = "font-size:10px;" })@Html.DropDownList("lstAscDesc", (SelectList)ViewData["AscDescList"], new { @style = "font-size:10px;" })</td>
+                <td class="searchcell" style="vertical-align:bottom;"><input type="submit" class="search" value="Search" onclick="ResetPageCount()" /></td>
+            </tr>
+        </table>   
+    </div>
+         
+    if (Model.Count() > 0)
+    {
+        string[] colors = { "#FFFFFF", "#EEEEEE" };
+        int colorindex = 0;
+
+        foreach (var item in Model)
+        {
+            <div class="griddiv" style="background-color:@colors[colorindex]">
+                <table style="border-spacing:0;border-collapse:collapse;width:920px;margin-left:auto;margin-right:auto;">
+                    <tr>
+                        <td class="gridcell" style="width:200px;color:#315581;text-align:right;"><b>Screen Name:</b></td>
+                        <td class="gridcell" style="width:210px;"><b>@Html.DisplayFor(modelItem => item.ScreenName)</b></td>
+                        <td class="gridcell" style="width:200px;color:#315581;text-align:right;"><b>Active:</b></td>
+                        <td class="gridcell" style="width:210px;">@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td class="gridcell" style="width:100px;">
+                            <div class="gridlinkdiv"><span id="gridlink">@Html.ActionLink("Edit", "Step1", "ScreenWizard", new { id = item.ScreenID }, "")</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Description:</b></td>
+                        <td class="gridcell" colspan="3">@Html.DisplayFor(modelItem => item.ScreenDescription)</td>
+                        <td class="gridcell"></td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Main Feature Type:</b></td>
+                        <td class="gridcell">@Html.DisplayFor(modelItem => item.MainFeatureType)</td>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Main Feature Name:</b></td>
+                        <td class="gridcell">@Html.DisplayFor(modelItem => item.MainFeatureName)</td>
+                        <td class="gridcell"></td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Interactive Content:</b></td>
+                        <td class="gridcell" colspan="3">@Html.DisplayFor(modelItem => item.InteractiveContent)</td>
+                        <td class="gridcell"></td>
+                    </tr>
+                </table>
+            </div>
+            if (colorindex == 0) { colorindex = 1; }
+            else { colorindex = 0; }
+        }
+    }
+    else
+    {
+        <div class="griddiv">No Data Available</div>
+    }
+
+    <div id="divfooter" class="footerdiv">
+        <table style="border-spacing:0;border-collapse:collapse;" class="gridfootertable">
+            <tr>
+                <td style="text-align:left;"><span style="color:#FFFFFF;">Page @Html.Label((string)ViewData["PageNumber"]) of @Html.Label((string)ViewData["PageCount"]) (@Html.Label((string)ViewData["RecordCount"]) Total Items)</span></td>
+                <td style="text-align:right;">
+                    <span id="linkPrevious" class="previousnext" onclick="PreviousPage();">Previous</span>&nbsp;&nbsp;
+                    <span id="linkNext" class="previousnext" onclick="NextPage();">Next</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br /><br />
+
+    @Html.Hidden("txtPageCount", ViewData["PageCount"])
+    @Html.Hidden("txtPageNumber", ViewData["PageNumber"])
+
+}

@@ -1,0 +1,31 @@
+﻿@model osVodigiWeb6x.Models.LoginLog
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<br /><br />
+<div class="textblock">
+    <span class="paragraphheader">Reports</span><br />
+    <span class="paragraphtext">Please select a report.</span>
+    <br /><br /><br />
+    <span id="reportlink">@Html.ActionLink("Login Report", "ReportLoginLog")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of all application logins.</span>
+    <br /><br />
+    <span id="reportlink">@Html.ActionLink("Activity Report", "ReportActivityLog")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of all application activity.</span>
+    <br /><br />
+    <span id="reportlink">@Html.ActionLink("Screen Display Report", "ReportPlayerScreenLog")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of all screen displays on players.</span>
+    <br /><br />
+    <span id="reportlink">@Html.ActionLink("Screen Content Display Report", "ReportPlayerScreenContentLog")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of all screen content displays on players.</span>
+    <br /><br />
+    <span id="reportlink">@Html.ActionLink("Survey Results Report", "ReportSurveyResults")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of results for a specific survey.</span>
+    <br /><br />
+    <span id="reportlink">@Html.ActionLink("Player Heartbeat Report", "ReportPlayerHeartbeat")</span>&nbsp;&nbsp;
+    <span class="paragraphtext">Report of last heartbeat from all players.</span>
+    <br /><br />
+</div>
+<br /><br />

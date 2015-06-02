@@ -1,0 +1,45 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSplash"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+    <UserControl.Resources>
+        <Storyboard x:Key="sbFadeOut">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="1.0" To="0.0" Duration="0:0:0.5" 
+                AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeIn">
+            <DoubleAnimation
+                Storyboard.TargetName="gridMain"
+                Storyboard.TargetProperty="Opacity"
+                From="0.0" To="1.0" Duration="0:0:0.5" 
+                AutoReverse="False" />
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid x:Name="gridMain">
+        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
+        <Image x:Name="imgLogo" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="55,24,55,0" Stretch="Fill" Width="190" Height="80" Source="/Images/logo.png"></Image>
+        <TextBlock x:Name="txtTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,124,0,0"
+                   Text="Vodigi Player" FontFamily="Verdana" FontSize="28" FontWeight="Bold" Foreground="#315581"></TextBlock>
+        <TextBlock x:Name="txtSubtitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,174,0,0"
+                   Text="Windows Desktop Edition" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581"></TextBlock>
+        <TextBlock x:Name="txtVersion" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,200,0,0"
+                   Text="Version 6.0" FontFamily="Verdana" FontSize="12" Foreground="#315581"></TextBlock>
+        <TextBlock x:Name="txtCopyright" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,231,0,0"
+        	Text="Copyright © 2005-2013" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
+        <TextBlock x:Name="txtCompany" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,247,0,0"
+        	Text="JMC Publications, LLC" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
+        <TextBlock x:Name="txtLoading" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,273,0,0"
+        	Text="Please wait. Loading..." FontFamily="Verdana" FontSize="10" Foreground="#315581"/>
+        <Rectangle x:Name="rectOrange" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="45,161,0,0" Fill="#F25022" Height="10" Width="50"></Rectangle>
+        <Rectangle x:Name="rectGreen" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="98,161,0,0" Fill="#7FBA00" Height="10" Width="50"></Rectangle>
+        <Rectangle x:Name="rectBlue" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="151,161,0,0" Fill="#02A4EF" Height="10" Width="50"></Rectangle>
+        <Rectangle x:Name="rectYellow" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="204,161,0,0" Fill="#FFB901" Height="10" Width="50"></Rectangle>
+    </Grid>
+</UserControl>

@@ -1,0 +1,156 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSettings"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="560" d:DesignWidth="555" Background="#FFFFFFFF" Cursor="Arrow">
+
+    <Grid x:Name="gridBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Width="Auto" Height="Auto" Background="#FF000000">
+        <Grid x:Name="gridMain" VerticalAlignment="Center" HorizontalAlignment="Center" Width="555" Height="560" Background="#FFFFFFFF">
+
+            <Rectangle x:Name="rectHeader" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Width="900" Height="35" Fill="#FF405579"
+                       Stroke="#FF000000" StrokeThickness="1"></Rectangle>
+
+            <Rectangle x:Name="rectBackground" VerticalAlignment="Top" HorizontalAlignment="Left" Width="555" Height="560" Fill="#00FFFFFF"
+                       Stroke="#FF000000" StrokeThickness="2"></Rectangle>
+
+            <TextBlock x:Name="lblTitle" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,7,0,0" Foreground="#FFFFFFFF" Text="Vodigi Player Settings"
+                       FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+
+            <TabControl HorizontalAlignment="Left" Margin="2,40,0,0" Name="tabTabs" VerticalAlignment="Top" Width="551" Height="475"
+                        FontFamily="Verdana" FontSize="12" SelectionChanged="tabTabs_SelectionChanged">
+                <TabItem Header="Registration" Name="tabRegistration">
+                    <Grid>
+                        <TextBlock x:Name="lblAccountName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,41,0,0" Foreground="#FF333333" Text="Account Name:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtAccountName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="39,66,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579" IsEnabled="False"></TextBox>
+                        <TextBlock x:Name="lblPlayerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,101,0,0" Foreground="#FF333333" Text="Player Name:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtPlayerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="39,126,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579" IsEnabled="False"></TextBox>
+                        <TextBlock x:Name="lblIDs" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="45,161,0,0" Foreground="#FF333333" Text="AccountID: N/A   PlayerID: N/A"
+                            FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+
+                        <Button x:Name="btnUnregister" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="368,237,0,0" Content="Unregister" Click="btnUnregister_Click"></Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Web Server" Name="tabWebServer">
+                    <Grid>
+                        <TextBlock x:Name="lblWebServiceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,41,0,0" Foreground="#FF333333" Text="Vodigi Web Service URL:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtWebServiceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="39,66,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+                        <TextBlock x:Name="lblMediaSourceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,101,0,0" Foreground="#FF333333" Text="Media Source URL:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtMediaSourceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="39,126,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+                        <TextBlock x:Name="lblWebServerValidate" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="52,161,0,0" Foreground="#FFCC0000" Text="Validate"
+                            FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+                        <Button x:Name="btnWebServerSave" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="289,215,0,0" Content="Save" Click="btnWebServerSave_Click"></Button>
+                        <Button x:Name="btnWebServerReset" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="400,215,0,0" Content="Reset" Click="btnServerReset_Click"></Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Downloads" Name="tabDownloads">
+                    <Grid>
+                        <TextBlock x:Name="lblDownloadFolder" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,41,0,0" Foreground="#FF333333" Text="Local Download Folder:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtDownloadFolder" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="39,66,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+                        <TextBlock x:Name="lblDownloadsValidate" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="52,106,0,0" Foreground="#FFCC0000" Text="Validate"
+                            FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+                        <Button x:Name="btnDownloadsSave" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="290,161,0,0" Content="Save" Click="btnWebDownloadsSave_Click"></Button>
+                        <Button x:Name="btnDownloadsReset" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="401,161,0,0" Content="Reset" Click="btnDownloadsReset_Click"></Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Controls" Name="tabControls">
+                    <Grid>
+                        <TextBlock x:Name="lblLatitude" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,63,0,0" Foreground="#FF333333" Text="Latitude:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtLatitude" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="215,61,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="250" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblLongitude" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,94,0,0" Foreground="#FF333333" Text="Longitude:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtLongitude" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="215,92,0,0" Foreground="#FF333333"
+                                 FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="250" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblWebcamName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="49,125,0,0" Foreground="#FF333333" Text="Webcam Name:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtWebcamName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="215,123,0,0" Foreground="#FF333333"
+                                 FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="250" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblControlsValidate" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="216,165,0,0" Foreground="#FFCC0000" Text="Validate"
+                            FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+
+                        <Button x:Name="btnControlSave" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="254,215,0,0" Content="Save" Click="btnControlSave_Click"></Button>
+                        <Button x:Name="btnControlReset" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="365,215,0,0" Content="Reset" Click="btnControlReset_Click"></Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Buttons" Name="tabButtons">
+                    <Grid>
+                        <TextBlock x:Name="lblOpenButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,65,0,0" Foreground="#FF333333" Text="Open:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtOpenButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="107,63,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="150" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblCloseButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,97,0,0" Foreground="#FF333333" Text="Close:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtCloseButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="107,94,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="150" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblBackButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="278,65,0,0" Foreground="#FF333333" Text="Back:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtBackButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="343,63,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="150" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblNextButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="278,97,0,0" Foreground="#FF333333" Text="Next:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtNextButtonText" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="343,94,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="150" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+
+                        <TextBlock x:Name="lblButtonsValidate" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="110,148,0,0" Foreground="#FFCC0000" Text="Validate"
+                            FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+
+                        <Button x:Name="btnButtonsSave" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="282,188,0,0" Content="Save" Click="btnButtonsSave_Click"></Button>
+                        <Button x:Name="btnButtonsReset" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="393,188,0,0" Content="Reset" Click="btnButtonsReset_Click"></Button>
+                    </Grid>
+                </TabItem>
+                <TabItem Header="Misc" Name="tabCursor">
+                    <Grid>
+                        <CheckBox x:Name="chkShowCursor" Content="Show Mouse Cursor" HorizontalAlignment="Left" Margin="100,28,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="18" />
+                        <CheckBox x:Name="chkShowDateTimeBar" Content="Show Date/Time and Weather Bar" HorizontalAlignment="Left" Margin="101,58,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="18" />
+                        <CheckBox x:Name="chkShowFahrenheit" Content="Show Temperature in Fahrenheit" HorizontalAlignment="Left" Margin="101,88,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="18" />
+                        <TextBlock x:Name="lblHighTempLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="101,128,0,0" Foreground="#FF333333" Text="High Temp Label:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtHighTempLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="277,125,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="200" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+                        <TextBlock x:Name="lblLowTempLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="101,163,0,0" Foreground="#FF333333" Text="Low Temp Label:"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal"></TextBlock>
+                        <TextBox x:Name="txtLowTempLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="277,159,0,0" Foreground="#FF333333"
+                            FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="200" BorderThickness="2" BorderBrush="#FF405579"></TextBox>
+                        <CheckBox x:Name="chkAspectRatio" Content="Maintain Image Aspect Ratio" HorizontalAlignment="Left" Margin="101,198,0,0" VerticalAlignment="Top" FontFamily="Verdana" FontSize="18" />
+                        
+                        <Button x:Name="btnCursorSave" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="270,267,0,0" Content="Save" Click="btnCursorSave_Click"></Button>
+                        <Button x:Name="btnCursorReset" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="380,267,0,0" Content="Reset" Click="btnCursorReset_Click"></Button>
+                        
+                        <Rectangle x:Name="rectLine" VerticalAlignment="Top" HorizontalAlignment="Left" Width="520" Height="2" Margin="12,315,0,0"
+                                   Fill="#FF000000" StrokeThickness="0"></Rectangle>
+
+                        <Button x:Name="btnCleanupMedia" IsDefault="False" VerticalAlignment="Top" HorizontalAlignment="Left" Width="200" Height="32" Margin="50,350,0,0" Content="Cleanup Local Media" Click="btnCleanupMedia_Click"></Button>
+
+                    </Grid>
+                </TabItem>
+            </TabControl>
+
+            <TextBlock x:Name="lblVersion" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="13,521,0,0" Foreground="#FF333333" Text="Vodigi Open Source Interactive Digital Signage v6.0"
+                       FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+            <TextBlock x:Name="lblCopyright" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="11,537,0,0" Foreground="#FF333333" Text="Copyright © 2005-13 JMC Publications. All Rights Reserved."
+                       FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
+
+            <Button x:Name="btnClose" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="436,521,0,0" Content="Close" Click="btnClose_Click"></Button>
+
+        </Grid>
+    </Grid>
+</UserControl>

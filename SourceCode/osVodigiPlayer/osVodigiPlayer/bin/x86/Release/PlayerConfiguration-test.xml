@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8" ?><PlayerConfiguration>
+<PlayerID>1000293</PlayerID>
+<PlayerName>My Player</PlayerName>
+<AccountID>1000258</AccountID>
+<AccountName>TylerKraus</AccountName>
+<IsPlayerInitialized>true</IsPlayerInitialized>
+<IsDownloadApproved>true</IsDownloadApproved>
+<VodigiWebserviceURL>http://localhost:52713/osVodigiService.asmx</VodigiWebserviceURL>
+<ConfigurationSettings>
+<ConfigurationSetting ConfigurationSettingName="PlayerSetting1" ConfigurationSettingTypeID="1" ConfigurationSettingValue="One" />
+<ConfigurationSetting ConfigurationSettingName="PlayerSetting2" ConfigurationSettingTypeID="2" ConfigurationSettingValue="Two" />
+<ConfigurationSetting ConfigurationSettingName="PlayerSetting3" ConfigurationSettingTypeID="3" ConfigurationSettingValue="Three" />
+<ConfigurationSetting ConfigurationSettingName="PlayerSetting4" ConfigurationSettingTypeID="4" ConfigurationSettingValue="Four" />
+</ConfigurationSettings>
+</PlayerConfiguration>

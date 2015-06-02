@@ -1,0 +1,632 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://tempuri.org/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://tempuri.org/">
+      <s:element name="Account_GetByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="accountname" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Account_GetByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Account_GetByNameResult" type="tns:Account" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Account">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="AccountID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPServer" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPUsername" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPPassword" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="ActivityLog_Create">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="userid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="entitytype" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="entityaction" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="activitydatetime" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="activitydetails" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="ActivityLog_CreateResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="AnsweredSurvey_Create">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="surveyid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="playerid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AnsweredSurvey_CreateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AnsweredSurvey_CreateResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AnsweredSurveyQuestionOption_Create">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="answeredsurveyid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="surveyquestionoptionid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="isselected" type="s:boolean" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="AnsweredSurveyQuestionOption_CreateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="AnsweredSurveyQuestionOption_CreateResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DatabaseVersion_Get">
+        <s:complexType />
+      </s:element>
+      <s:element name="DatabaseVersion_GetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DatabaseVersion_GetResult" type="tns:DatabaseVersion" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="DatabaseVersion">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="DatabaseVersionID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Version" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="DateInstalled" type="s:dateTime" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Player_GetByName">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="playername" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Player_GetByNameResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Player_GetByNameResult" type="tns:Player" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="Player">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="PlayerID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="PlayerGroupID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlayerName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlayerLocation" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="PlayerDescription" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsActive" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="Player_GetCurrentSchedule">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="playerid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Player_GetCurrentScheduleResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Player_GetCurrentScheduleResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Player_GetMediaToDownload">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Player_GetMediaToDownloadResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="Player_GetMediaToDownloadResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenContentLog_Create">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="playerid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="playername" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="screenid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="screenname" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="screencontentid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="screencontentname" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="screencontenttypeid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="screencontenttypename" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="displaydatetime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="closedatetime" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="contentdetails" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenContentLog_CreateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PlayerScreenContentLog_CreateResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenContentLog_UpdateCloseDateTime">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="playerscreencontentlogid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="closedatetime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenContentLog_UpdateCloseDateTimeResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="PlayerScreenLog_Create">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="accountid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="playerid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="playername" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="screenid" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="screenname" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="displaydatetime" type="s:dateTime" />
+            <s:element minOccurs="1" maxOccurs="1" name="closedatetime" type="s:dateTime" />
+            <s:element minOccurs="0" maxOccurs="1" name="screendetails" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenLog_CreateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="PlayerScreenLog_CreateResult" type="s:int" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenLog_UpdateCloseDateTime">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="1" maxOccurs="1" name="playerscreenlogid" type="s:int" />
+            <s:element minOccurs="1" maxOccurs="1" name="closedatetime" type="s:dateTime" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="PlayerScreenLog_UpdateCloseDateTimeResponse">
+        <s:complexType />
+      </s:element>
+      <s:element name="User_Validate">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="username" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="password" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="User_ValidateResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="User_ValidateResult" type="tns:UserAccount" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="UserAccount">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="UserID" type="s:int" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountID" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Username" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="Password" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FirstName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="LastName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="EmailAddress" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="IsAdmin" type="s:boolean" />
+          <s:element minOccurs="1" maxOccurs="1" name="UserIsActive" type="s:boolean" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountName" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="AccountDescription" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPServer" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPUsername" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FTPPassword" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="AccountIsActive" type="s:boolean" />
+        </s:sequence>
+      </s:complexType>
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="Account_GetByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:Account_GetByName" />
+  </wsdl:message>
+  <wsdl:message name="Account_GetByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:Account_GetByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="ActivityLog_CreateSoapIn">
+    <wsdl:part name="parameters" element="tns:ActivityLog_Create" />
+  </wsdl:message>
+  <wsdl:message name="ActivityLog_CreateSoapOut">
+    <wsdl:part name="parameters" element="tns:ActivityLog_CreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="AnsweredSurvey_CreateSoapIn">
+    <wsdl:part name="parameters" element="tns:AnsweredSurvey_Create" />
+  </wsdl:message>
+  <wsdl:message name="AnsweredSurvey_CreateSoapOut">
+    <wsdl:part name="parameters" element="tns:AnsweredSurvey_CreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="AnsweredSurveyQuestionOption_CreateSoapIn">
+    <wsdl:part name="parameters" element="tns:AnsweredSurveyQuestionOption_Create" />
+  </wsdl:message>
+  <wsdl:message name="AnsweredSurveyQuestionOption_CreateSoapOut">
+    <wsdl:part name="parameters" element="tns:AnsweredSurveyQuestionOption_CreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="DatabaseVersion_GetSoapIn">
+    <wsdl:part name="parameters" element="tns:DatabaseVersion_Get" />
+  </wsdl:message>
+  <wsdl:message name="DatabaseVersion_GetSoapOut">
+    <wsdl:part name="parameters" element="tns:DatabaseVersion_GetResponse" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetByNameSoapIn">
+    <wsdl:part name="parameters" element="tns:Player_GetByName" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetByNameSoapOut">
+    <wsdl:part name="parameters" element="tns:Player_GetByNameResponse" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetCurrentScheduleSoapIn">
+    <wsdl:part name="parameters" element="tns:Player_GetCurrentSchedule" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetCurrentScheduleSoapOut">
+    <wsdl:part name="parameters" element="tns:Player_GetCurrentScheduleResponse" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetMediaToDownloadSoapIn">
+    <wsdl:part name="parameters" element="tns:Player_GetMediaToDownload" />
+  </wsdl:message>
+  <wsdl:message name="Player_GetMediaToDownloadSoapOut">
+    <wsdl:part name="parameters" element="tns:Player_GetMediaToDownloadResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenContentLog_CreateSoapIn">
+    <wsdl:part name="parameters" element="tns:PlayerScreenContentLog_Create" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenContentLog_CreateSoapOut">
+    <wsdl:part name="parameters" element="tns:PlayerScreenContentLog_CreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenContentLog_UpdateCloseDateTimeSoapIn">
+    <wsdl:part name="parameters" element="tns:PlayerScreenContentLog_UpdateCloseDateTime" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenContentLog_UpdateCloseDateTimeSoapOut">
+    <wsdl:part name="parameters" element="tns:PlayerScreenContentLog_UpdateCloseDateTimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenLog_CreateSoapIn">
+    <wsdl:part name="parameters" element="tns:PlayerScreenLog_Create" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenLog_CreateSoapOut">
+    <wsdl:part name="parameters" element="tns:PlayerScreenLog_CreateResponse" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenLog_UpdateCloseDateTimeSoapIn">
+    <wsdl:part name="parameters" element="tns:PlayerScreenLog_UpdateCloseDateTime" />
+  </wsdl:message>
+  <wsdl:message name="PlayerScreenLog_UpdateCloseDateTimeSoapOut">
+    <wsdl:part name="parameters" element="tns:PlayerScreenLog_UpdateCloseDateTimeResponse" />
+  </wsdl:message>
+  <wsdl:message name="User_ValidateSoapIn">
+    <wsdl:part name="parameters" element="tns:User_Validate" />
+  </wsdl:message>
+  <wsdl:message name="User_ValidateSoapOut">
+    <wsdl:part name="parameters" element="tns:User_ValidateResponse" />
+  </wsdl:message>
+  <wsdl:portType name="osVodigiServiceSoap">
+    <wsdl:operation name="Account_GetByName">
+      <wsdl:input message="tns:Account_GetByNameSoapIn" />
+      <wsdl:output message="tns:Account_GetByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="ActivityLog_Create">
+      <wsdl:input message="tns:ActivityLog_CreateSoapIn" />
+      <wsdl:output message="tns:ActivityLog_CreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurvey_Create">
+      <wsdl:input message="tns:AnsweredSurvey_CreateSoapIn" />
+      <wsdl:output message="tns:AnsweredSurvey_CreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurveyQuestionOption_Create">
+      <wsdl:input message="tns:AnsweredSurveyQuestionOption_CreateSoapIn" />
+      <wsdl:output message="tns:AnsweredSurveyQuestionOption_CreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DatabaseVersion_Get">
+      <wsdl:input message="tns:DatabaseVersion_GetSoapIn" />
+      <wsdl:output message="tns:DatabaseVersion_GetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetByName">
+      <wsdl:input message="tns:Player_GetByNameSoapIn" />
+      <wsdl:output message="tns:Player_GetByNameSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetCurrentSchedule">
+      <wsdl:input message="tns:Player_GetCurrentScheduleSoapIn" />
+      <wsdl:output message="tns:Player_GetCurrentScheduleSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetMediaToDownload">
+      <wsdl:input message="tns:Player_GetMediaToDownloadSoapIn" />
+      <wsdl:output message="tns:Player_GetMediaToDownloadSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_Create">
+      <wsdl:input message="tns:PlayerScreenContentLog_CreateSoapIn" />
+      <wsdl:output message="tns:PlayerScreenContentLog_CreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_UpdateCloseDateTime">
+      <wsdl:input message="tns:PlayerScreenContentLog_UpdateCloseDateTimeSoapIn" />
+      <wsdl:output message="tns:PlayerScreenContentLog_UpdateCloseDateTimeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_Create">
+      <wsdl:input message="tns:PlayerScreenLog_CreateSoapIn" />
+      <wsdl:output message="tns:PlayerScreenLog_CreateSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_UpdateCloseDateTime">
+      <wsdl:input message="tns:PlayerScreenLog_UpdateCloseDateTimeSoapIn" />
+      <wsdl:output message="tns:PlayerScreenLog_UpdateCloseDateTimeSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="User_Validate">
+      <wsdl:input message="tns:User_ValidateSoapIn" />
+      <wsdl:output message="tns:User_ValidateSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="osVodigiServiceSoap" type="tns:osVodigiServiceSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Account_GetByName">
+      <soap:operation soapAction="http://tempuri.org/Account_GetByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActivityLog_Create">
+      <soap:operation soapAction="http://tempuri.org/ActivityLog_Create" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurvey_Create">
+      <soap:operation soapAction="http://tempuri.org/AnsweredSurvey_Create" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurveyQuestionOption_Create">
+      <soap:operation soapAction="http://tempuri.org/AnsweredSurveyQuestionOption_Create" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DatabaseVersion_Get">
+      <soap:operation soapAction="http://tempuri.org/DatabaseVersion_Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetByName">
+      <soap:operation soapAction="http://tempuri.org/Player_GetByName" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetCurrentSchedule">
+      <soap:operation soapAction="http://tempuri.org/Player_GetCurrentSchedule" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetMediaToDownload">
+      <soap:operation soapAction="http://tempuri.org/Player_GetMediaToDownload" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_Create">
+      <soap:operation soapAction="http://tempuri.org/PlayerScreenContentLog_Create" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_UpdateCloseDateTime">
+      <soap:operation soapAction="http://tempuri.org/PlayerScreenContentLog_UpdateCloseDateTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_Create">
+      <soap:operation soapAction="http://tempuri.org/PlayerScreenLog_Create" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_UpdateCloseDateTime">
+      <soap:operation soapAction="http://tempuri.org/PlayerScreenLog_UpdateCloseDateTime" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="User_Validate">
+      <soap:operation soapAction="http://tempuri.org/User_Validate" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="osVodigiServiceSoap12" type="tns:osVodigiServiceSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="Account_GetByName">
+      <soap12:operation soapAction="http://tempuri.org/Account_GetByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="ActivityLog_Create">
+      <soap12:operation soapAction="http://tempuri.org/ActivityLog_Create" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurvey_Create">
+      <soap12:operation soapAction="http://tempuri.org/AnsweredSurvey_Create" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="AnsweredSurveyQuestionOption_Create">
+      <soap12:operation soapAction="http://tempuri.org/AnsweredSurveyQuestionOption_Create" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DatabaseVersion_Get">
+      <soap12:operation soapAction="http://tempuri.org/DatabaseVersion_Get" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetByName">
+      <soap12:operation soapAction="http://tempuri.org/Player_GetByName" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetCurrentSchedule">
+      <soap12:operation soapAction="http://tempuri.org/Player_GetCurrentSchedule" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Player_GetMediaToDownload">
+      <soap12:operation soapAction="http://tempuri.org/Player_GetMediaToDownload" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_Create">
+      <soap12:operation soapAction="http://tempuri.org/PlayerScreenContentLog_Create" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenContentLog_UpdateCloseDateTime">
+      <soap12:operation soapAction="http://tempuri.org/PlayerScreenContentLog_UpdateCloseDateTime" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_Create">
+      <soap12:operation soapAction="http://tempuri.org/PlayerScreenLog_Create" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PlayerScreenLog_UpdateCloseDateTime">
+      <soap12:operation soapAction="http://tempuri.org/PlayerScreenLog_UpdateCloseDateTime" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="User_Validate">
+      <soap12:operation soapAction="http://tempuri.org/User_Validate" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="osVodigiService">
+    <wsdl:port name="osVodigiServiceSoap" binding="tns:osVodigiServiceSoap">
+      <soap:address location="http://localhost:52713/osVodigiService.asmx" />
+    </wsdl:port>
+    <wsdl:port name="osVodigiServiceSoap12" binding="tns:osVodigiServiceSoap12">
+      <soap12:address location="http://localhost:52713/osVodigiService.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

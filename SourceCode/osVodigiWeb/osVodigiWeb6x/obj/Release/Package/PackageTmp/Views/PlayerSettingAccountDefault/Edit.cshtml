@@ -1,0 +1,71 @@
+﻿@model osVodigiWeb6x.Models.PlayerSettingAccountDefault
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+    }); 
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/playersetting-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Edit Default Player Setting</span><br />
+                <span class="paragraphtext">Please update the appropriate information below.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm()) {
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Edit Default Player Setting</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Setting Name: </b></td>
+            <td class="formprimary">
+                @Html.DisplayFor(model => model.PlayerSettingName)
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Setting Type: </b></td>
+            <td class="formsecondary">
+                @Html.Raw(ViewData["PlayerSettingTypeName"])
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Setting Description: </b></td>
+            <td class="formprimary">
+                @Html.Raw(ViewData["PlayerSettingDescription"])
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Setting Value: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.PlayerSettingAccountDefaultValue, new { @style = "width:300px;", maxlength = 256 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+    @Html.HiddenFor(model => model.PlayerSettingAccountDefaultID)
+    @Html.HiddenFor(model => model.PlayerSettingTypeID)
+    @Html.HiddenFor(model => model.PlayerSettingName)
+    @Html.HiddenFor(model => model.AccountID)
+}
+
+<br /><br />

@@ -1,0 +1,441 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{4F288117-4679-4940-9E4C-AA567E7498C0}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>osVodigiPlayer</RootNamespace>
+    <AssemblyName>osVodigiPlayer</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <WarningLevel>4</WarningLevel>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>film.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xaml">
+      <RequiredTargetFramework>4.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Compile Include="Data\Account.cs" />
+    <Compile Include="Data\CurrentSchedule.cs" />
+    <Compile Include="Data\Download.cs" />
+    <Compile Include="Data\DownloadImage.cs" />
+    <Compile Include="Data\DownloadVideo.cs" />
+    <Compile Include="Data\Image.cs" />
+    <Compile Include="Data\Music.cs" />
+    <Compile Include="Data\Player.cs" />
+    <Compile Include="Data\PlayerConfiguration.cs" />
+    <Compile Include="Data\PlayerGroup.cs" />
+    <Compile Include="Data\PlayerGroupSchedule.cs" />
+    <Compile Include="Data\PlayerSetting.cs" />
+    <Compile Include="Data\PlayList.cs" />
+    <Compile Include="Data\PlayListVideoXref.cs" />
+    <Compile Include="Data\ScheduleFile.cs" />
+    <Compile Include="Data\Screen.cs" />
+    <Compile Include="Data\ScreenContent.cs" />
+    <Compile Include="Data\ScreenScreenContentXref.cs" />
+    <Compile Include="Data\SlideShow.cs" />
+    <Compile Include="Data\SlideShowImageXref.cs" />
+    <Compile Include="Data\SlideShowMusicXref.cs" />
+    <Compile Include="Data\Survey.cs" />
+    <Compile Include="Data\SurveyQuestion.cs" />
+    <Compile Include="Data\SurveyQuestionOption.cs" />
+    <Compile Include="Data\Timeline.cs" />
+    <Compile Include="Data\TimelineImageXref.cs" />
+    <Compile Include="Data\TimelineMedia.cs" />
+    <Compile Include="Data\TimelineMusicXref.cs" />
+    <Compile Include="Data\TimelineVideoXref.cs" />
+    <Compile Include="Data\User.cs" />
+    <Compile Include="Data\Video.cs" />
+    <Compile Include="Helpers\CurrentScreen.cs" />
+    <Compile Include="Helpers\DownloadManager.cs" />
+    <Compile Include="Helpers\DownloadThread.cs" />
+    <Compile Include="Helpers\PlayerSettings.cs" />
+    <Compile Include="Helpers\Utility.cs" />
+    <Compile Include="Helpers\Weather.cs" />
+    <Compile Include="Helpers\WeatherDay.cs" />
+    <Compile Include="Service References\osVodigiWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="Service References\VodigiWS\Reference.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucDownload.xaml.cs">
+      <DependentUpon>ucDownload.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucPlayList.xaml.cs">
+      <DependentUpon>ucPlayList.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucRegister.xaml.cs">
+      <DependentUpon>ucRegister.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucResetPlayer.xaml.cs">
+      <DependentUpon>ucResetPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSchedule.xaml.cs">
+      <DependentUpon>ucSchedule.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSelection.xaml.cs">
+      <DependentUpon>ucSelection.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSelectionBar.xaml.cs">
+      <DependentUpon>ucSelectionBar.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSettings.xaml.cs">
+      <DependentUpon>ucSettings.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSlideShowDropFromTop.xaml.cs">
+      <DependentUpon>ucSlideShowDropFromTop.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSlideShowFader.xaml.cs">
+      <DependentUpon>ucSlideShowFader.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSlideShowPanZoom.xaml.cs">
+      <DependentUpon>ucSlideShowPanZoom.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSlideShowSlideFromRight.xaml.cs">
+      <DependentUpon>ucSlideShowSlideFromRight.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSlideShowZoomIn.xaml.cs">
+      <DependentUpon>ucSlideShowZoomIn.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSplash.xaml.cs">
+      <DependentUpon>ucSplash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucSurvey.xaml.cs">
+      <DependentUpon>ucSurvey.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucTimeline.xaml.cs">
+      <DependentUpon>ucTimeline.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucWeather.xaml.cs">
+      <DependentUpon>ucWeather.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucWeb.xaml.cs">
+      <DependentUpon>ucWeb.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ucWebservice.xaml.cs">
+      <DependentUpon>ucWebservice.xaml</DependentUpon>
+    </Compile>
+    <Page Include="MainWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MainWindow.xaml.cs">
+      <DependentUpon>MainWindow.xaml</DependentUpon>
+      <SubType>Code</SubType>
+    </Compile>
+    <Page Include="UserControls\ucDownload.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucPlayList.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucRegister.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucResetPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSchedule.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSelection.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSelectionBar.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSettings.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSlideShowDropFromTop.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSlideShowFader.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSlideShowPanZoom.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSlideShowSlideFromRight.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSlideShowZoomIn.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSplash.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucSurvey.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucTimeline.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucWeather.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucWeb.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\ucWebservice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <AppDesigner Include="Properties\" />
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Account.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Account_GetByNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.ActivityLog_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.DatabaseVersion.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.DatabaseVersion_GetResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Player.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.PlayerScreenContentLog_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.PlayerScreenLog_CreateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Player_GetByNameResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Player_GetCurrentScheduleResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.Player_GetMediaToDownloadResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.UserAccount.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiPlayer.osVodigiWS.User_ValidateResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\osVodigiWS\osVodigiService1.wsdl" />
+    <None Include="Service References\VodigiWS\osVodigiPlayer.VodigiWS.PlayerRegisteredResponse.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\VodigiWS\VodigiWS.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="film.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\osVodigiWS\" />
+    <WCFMetadataStorage Include="Service References\VodigiWS\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\osVodigiWS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\osVodigiWS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\osVodigiWS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\cloudy.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\partlycloudy.png" />
+    <Resource Include="Images\rain.png" />
+    <Resource Include="Images\rainsun.png" />
+    <Resource Include="Images\snow.png" />
+    <Resource Include="Images\sunny.png" />
+    <Resource Include="Images\thunderstorm.png" />
+    <Resource Include="Images\wintermix.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\VodigiWS\VodigiWS.disco" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\VodigiWS\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\VodigiWS\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\VodigiWS\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\osVodigiWS\osVodigiService1.disco" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

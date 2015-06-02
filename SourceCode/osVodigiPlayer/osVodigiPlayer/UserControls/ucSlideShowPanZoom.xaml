@@ -1,0 +1,81 @@
+﻿<UserControl x:Class="osVodigiPlayer.UserControls.ucSlideShowPanZoom"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <Storyboard x:Key="sbFadeOutImageOne">
+            <DoubleAnimation
+                        Storyboard.TargetName="imgSlideshow1"
+                        Storyboard.TargetProperty="Opacity"
+                        From="1.0" To="0.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeInImageOne">
+            <DoubleAnimation
+                        Storyboard.TargetName="imgSlideshow1"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0" To="1.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeOutImageTwo">
+            <DoubleAnimation
+                        Storyboard.TargetName="imgSlideshow2"
+                        Storyboard.TargetProperty="Opacity"
+                        From="1.0" To="0.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbFadeInImageTwo">
+            <DoubleAnimation
+                        Storyboard.TargetName="imgSlideshow2"
+                        Storyboard.TargetProperty="Opacity"
+                        From="0.0" To="1.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbImageOneScale">
+            <DoubleAnimation Name="daImageSlideshow1X"
+                        Storyboard.TargetName="stImageSlideshow1"
+                        Storyboard.TargetProperty="ScaleX"
+                        From="1.0" To="1.2" Duration="0:0:2" 
+                        AutoReverse="False" />
+            <DoubleAnimation Name="daImageSlideshow1Y"
+                        Storyboard.TargetName="stImageSlideshow1"
+                        Storyboard.TargetProperty="ScaleY"
+                        From="1.0" To="1.2" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+        <Storyboard x:Key="sbImageTwoScale">
+            <DoubleAnimation Name="daImageSlideshow2X"
+                        Storyboard.TargetName="stImageSlideshow2"
+                        Storyboard.TargetProperty="ScaleX"
+                        From="1.2" To="1.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+            <DoubleAnimation Name="daImageSlideshow2Y"
+                        Storyboard.TargetName="stImageSlideshow2"
+                        Storyboard.TargetProperty="ScaleY"
+                        From="1.2" To="1.0" Duration="0:0:2" 
+                        AutoReverse="False" />
+        </Storyboard>
+    </UserControl.Resources>
+
+    <Grid x:Name="gridMain" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <Grid.Clip>
+            <RectangleGeometry x:Name="rectClip"></RectangleGeometry>
+        </Grid.Clip>
+
+        <Image x:Name="imgSlideshow1" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
+            <Image.RenderTransform>
+                <ScaleTransform x:Name="stImageSlideshow1" ScaleX="1.0" ScaleY="1.0"></ScaleTransform>
+            </Image.RenderTransform>
+        </Image>
+        <Image x:Name="imgSlideshow2" Width="15" Height="15" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill">
+            <Image.RenderTransform>
+                <ScaleTransform x:Name="stImageSlideshow2" ScaleX="1.0" ScaleY="1.0"></ScaleTransform>
+            </Image.RenderTransform>
+        </Image>
+        <MediaElement x:Name="mediaPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" UnloadedBehavior="Manual" Opacity="0"></MediaElement>
+
+    </Grid>
+</UserControl>

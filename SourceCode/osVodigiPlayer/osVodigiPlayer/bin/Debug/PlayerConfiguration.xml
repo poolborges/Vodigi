@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8" ?><PlayerConfiguration>
+<PlayerID>1000000</PlayerID>
+<PlayerName>My Player</PlayerName>
+<AccountID>1000000</AccountID>
+<AccountName>Default Account</AccountName>
+<IsPlayerInitialized>true</IsPlayerInitialized>
+<VodigiWebserviceURL>http://localhost:52713/osVodigiService.asmx</VodigiWebserviceURL>
+</PlayerConfiguration>

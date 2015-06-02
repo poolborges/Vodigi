@@ -1,0 +1,137 @@
+﻿@model IEnumerable<osVodigiWeb6x.Models.ScreenContentView>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) == 1) {
+            $("#linkPrevious").hide();
+        }
+        if (parseInt(pagenumber) == parseInt(pagecount)) {
+            $("#linkNext").hide();
+        }
+    });
+    function NextPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) < parseInt(pagecount)) {
+            $("#txtPageNumber").val(parseInt(pagenumber) + 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function PreviousPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        if (parseInt(pagenumber) > 1) {
+            $("#txtPageNumber").val(parseInt(pagenumber) - 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function ResetPageCount() {
+        $("#txtPageNumber").val(1);
+    }
+    function SetLargeImageUrl(url) {
+        $("#imglargepreview").attr("src", url);
+    }
+    $(function () {
+        var moveLeft = 15;
+        var moveDown = -105;
+
+        $('img#imgsmallpreview').hover(function (e) {
+            $('div#imagepopup').show();
+        }, function () {
+            $('div#imagepopup').hide();
+        });
+
+        $('img#imgsmallpreview').mousemove(function (e) {
+            $("div#imagepopup").css('top', e.pageY + moveDown).css('left', e.pageX + moveLeft);
+        });
+
+    }); 
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/screencontent-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Screen Content</span><span id="addlink">@Html.ActionLink("Add Screen Content", "Create")</span><br />
+                <span class="paragraphtext">The following is a list of screen content items that match the search parameters below.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("Index", "ScreenContent", FormMethod.Post, new { id = "formSearch" }))
+{    
+    <div class="searchdiv">
+        <table class="searchtable">
+            <tr>
+                <td class="searchcell"><b>Screen Content Name:&nbsp;</b><br />@Html.TextBox("txtScreenContentName", (string)ViewData["ScreenContentName"], new { @style = "width:150px;font-size:10px;" })</td>
+                <td class="searchcell"><b>Screen Content Type:</b><br />@Html.DropDownList("lstScreenContentTypeList", (SelectList)ViewData["ScreenContentTypeList"], new { @style = "font-size:10px;" })</td>
+                <td class="searchcell"><b>Include Inactive:</b><br />@Html.CheckBox("chkIncludeInactive", (bool)ViewData["IncludeInactive"])</td>
+                <td class="searchcell"><b>Sort By:</b><br />@Html.DropDownList("lstSortBy", (SelectList)ViewData["SortByList"], new { @style = "font-size:10px;" })@Html.DropDownList("lstAscDesc", (SelectList)ViewData["AscDescList"], new { @style = "font-size:10px;" })</td>
+                <td class="searchcell" style="vertical-align:bottom;"><input type="submit" class="search" value="Search" onclick="ResetPageCount()" /></td>
+            </tr>
+        </table>    
+    </div>
+
+    if (Model.Count() > 0)
+    {
+        string[] colors = { "#FFFFFF", "#EEEEEE" };
+        int colorindex = 0;
+        foreach (var item in Model)
+        {
+            var imgurl = Url.Content((string)ViewData["ImageFolder"] + item.StoredFilename);
+
+            <div class="griddiv" style="background-color:@colors[colorindex]">
+                <table style="border-spacing:0;border-collapse:collapse;width:920px;margin-left:auto;margin-right:auto;">
+                    <tr>
+                        <td class="gridcell" rowspan="2" style="vertical-align:middle;text-align:center;width:100px;">
+                            <img id="imgsmallpreview" class="gridpreview" alt="" src="@imgurl" onmouseover="SetLargeImageUrl('@imgurl');" />
+                        </td>
+                        <td class="gridcell" style="width:175px;color:#315581;text-align:right;"><b>Screen Content Name:</b></td>
+                        <td class="gridcell" style="width:185px;"><b>@Html.DisplayFor(modelItem => item.ScreenContentName)</b></td>
+                        <td class="gridcell" style="width:175px;color:#315581;text-align:right;"><b>Active:</b></td>
+                        <td class="gridcell" style="width:185px;">@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td class="gridcell" rowspan="2" style="width:100px;">
+                            <div class="gridlinkdiv"><span id="gridlink">@Html.ActionLink("Edit", "Edit", new { id = item.ScreenContentID })</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Screen Content Title:</b></td>
+                        <td class="gridcell">@Html.DisplayFor(modelItem => item.ScreenContentTitle)</td>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Screen Content Type:</b></td>
+                        <td class="gridcell">@Html.DisplayFor(modelItem => item.ScreenContentTypeName)</td>
+                    </tr>
+                </table>
+            </div>
+            if (colorindex == 0) { colorindex = 1; }
+            else { colorindex = 0; }
+        }
+    }
+    else
+    {
+            <div class="griddiv">No Data Available</div>
+    }
+    
+    <div id="divfooter" class="footerdiv">
+        <table style="border-spacing:0;border-collapse:collapse;" class="gridfootertable">
+            <tr>
+                <td style="text-align:left;"><span style="color:#FFFFFF;">Page @Html.Label((string)ViewData["PageNumber"]) of @Html.Label((string)ViewData["PageCount"]) (@Html.Label((string)ViewData["RecordCount"]) Total Items)</span></td>
+                <td style="text-align:right;">
+                    <span id="linkPrevious" class="previousnext" onclick="PreviousPage();">Previous</span>&nbsp;&nbsp;
+                    <span id="linkNext" class="previousnext" onclick="NextPage();">Next</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br /><br />
+    @Html.Hidden("txtPageCount", ViewData["PageCount"])
+    @Html.Hidden("txtPageNumber", ViewData["PageNumber"])
+
+}
