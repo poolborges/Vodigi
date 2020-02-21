@@ -20,7 +20,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Data;
+using System.Data.Entity;
 
 namespace osVodigiWeb6x.Models
 {
@@ -212,24 +212,6 @@ namespace osVodigiWeb6x.Models
                 return images;
             }
             catch { return new List<Image>(); }
-        }
-
-        private bool CopyExampleImage(int accountid, string filename)
-        {
-            try
-            {
-                string sourceimage = HttpContext.Current.Server.MapPath(@"~/ExampleImages/" + filename);
-                string newimage = HttpContext.Current.Server.MapPath(@"~/Media");
-                if (!newimage.EndsWith(@"\"))
-                    newimage += @"\";
-                System.IO.Directory.CreateDirectory(newimage + Convert.ToString(accountid) + @"\Images\");
-                newimage += Convert.ToString(accountid) + @"\Images\" + filename;
-                if (!System.IO.File.Exists(newimage))
-                    System.IO.File.Copy(sourceimage, newimage);
-
-                return true;
-            }
-            catch { return false; }
         }
 
         private Image CreateExampleImage(int accountid, string imagename, string originalfilename, string storedfilename, string tags)

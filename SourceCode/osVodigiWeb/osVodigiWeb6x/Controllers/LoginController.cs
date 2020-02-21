@@ -185,7 +185,7 @@ namespace osVodigiWeb6x.Controllers
 
                 ISystemMessageRepository msgrep = new EntitySystemMessageRepository();
                 IEnumerable<SystemMessage> msgs = msgrep.GetSystemMessagesByDate(DateTime.Today);
-                if (msgs != null && msgs.Count() > 0)
+                if (msgs != null && msgs.Any())
                 {
                     msgstext.Append("<b>System Messages:</b><br>");
                     msgstext.Append("<ul>");

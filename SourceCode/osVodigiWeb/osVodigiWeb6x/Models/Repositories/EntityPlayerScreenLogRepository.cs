@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------------------------- */
 
-using System.Data;
+using System.Data.Entity;
 
 namespace osVodigiWeb6x.Models
 {

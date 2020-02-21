@@ -61,5 +61,13 @@ namespace osVodigiWeb6x.Models
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
         }
 
+        public VodigiContext() : base("VodigiContext")
+        {
+            Database.SetInitializer<VodigiContext>(new CreateDatabaseIfNotExists<VodigiContext>());
+
+            //Database.SetInitializer<SchoolDBContext>(new DropCreateDatabaseIfModelChanges<SchoolDBContext>());
+            //Database.SetInitializer<SchoolDBContext>(new DropCreateDatabaseAlways<SchoolDBContext>());
+            //Database.SetInitializer<SchoolDBContext>(new SchoolDBInitializer());
+        }
     }
 }
