@@ -1,0 +1,20 @@
+[[doc]]
+= VodigiNext 
+:author: Paulo Borges
+:copyright: 2020-2020 Paulo Borges
+:revnumber: 
+:revdate: {docdatetime}
+:version-label!:
+:encoding: UTF-8
+:lang: pt_PT
+
+NOTE: Generated: {localdate} {localtime}
+
+
+[[doc.summary]]
+== Summary
+
+Future is coming 
+
+* .NET Core 3
+* Container (Docker)
