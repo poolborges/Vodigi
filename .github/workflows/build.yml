@@ -17,5 +17,5 @@ jobs:
 
     - name: MSBuild
       working-directory: SourceCode
-      run: msbuild osVodigiWeb/osVodigiWeb6x/osVodigiWeb6x.csproj
+      run: msbuild osVodigiWeb/osVodigiWeb6x/osVodigiWeb6x.csproj /t:Clean;Build /p:Configuration=Debug /p:TargetFramework=v4.0 /p:RestorePackages=true /p:SkipPostSharp=true
       
