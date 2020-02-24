@@ -14,8 +14,12 @@ jobs:
 
     - name: Setup msbuild
       uses: microsoft/setup-msbuild@v1.0.0
+    
+    - name: MSBuild Restore
+      working-directory: SourceCode
+      run:  msbuild /T:Restore osVodigiWeb/osVodigiWeb6x.sln
 
-    - name: MSBuild
+    - name: MSBuild Rebuild
       working-directory: SourceCode
       run: msbuild osVodigiWeb/osVodigiWeb6x/osVodigiWeb6x.csproj /t:rebuild /p:Configuration=Debug /p:TargetFramework=v4.0 /p:RestorePackages=true /p:SkipPostSharp=true
       
