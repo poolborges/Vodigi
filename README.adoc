@@ -18,6 +18,7 @@ NOTE: Generated: {localdate} {localtime}
 :url-ci-travis: https://travis-ci.org/poolborges/Vodigi/
 :url-ci-appveyor: https://ci.appveyor.com/project/poolborges/Vodigi
 :url-ci-github: https://github.com/poolborges/Vodigi/actions
+:url-repo-branch-v6: https://github.com/poolborges/Vodigi/tree/vodigi-6.0
 
 ifdef::status[]
 image:https://img.shields.io/badge/License-GPLv3-blue.svg[GPL v3 License, link=#copyright-and-license]
@@ -31,7 +32,7 @@ endif::[]
 This project is based on: 
 
 * Vodigi version 6.0 release at 10-06-2013. 
-* Original source can be found at branch vodigi-6.0
+* Branch vodigi-6.0 {url-repo-branch-v6}
 * Original repository:  http://sourceforge.net/projects/vodigi/files/
 
 == Future is coming 
