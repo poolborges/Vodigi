@@ -7,14 +7,38 @@
 :version-label!:
 :encoding: UTF-8
 :lang: pt_PT
+ifdef::env-github[]
+:branch: master
+:status:
+:imagesdir: images/
+endif::[]
 
 NOTE: Generated: {localdate} {localtime}
+
+:url-ci-travis: https://travis-ci.org/poolborges/Vodigi/
+:url-ci-appveyor: https://ci.appveyor.com/project/poolborges/Vodigi
+:url-ci-github: https://github.com/poolborges/Vodigi/actions
+
+ifdef::status[]
+image:https://img.shields.io/badge/License-GPLv3-blue.svg)[GPL v3 License, link=#copyright-and-license]
+image:https://github.com/poolborges/Vodigi/workflows/Build%20CI/badge.svg?branch=master[Build Status (Github CI), link={url-ci-github}]
+endif::[]
 
 
 [[doc.summary]]
 == Summary
 
-Future is coming 
+This project is based on: 
+
+* Vodigi version 6.0 release at 10-06-2013. 
+* Original source can be found at branch vodigi-6.0
+* Original repository:  http://sourceforge.net/projects/vodigi/files/
+
+== Future is coming 
 
 * .NET Core 3
 * Container (Docker)
+
+
+
+
