@@ -20,7 +20,7 @@ NOTE: Generated: {localdate} {localtime}
 :url-ci-github: https://github.com/poolborges/Vodigi/actions
 
 ifdef::status[]
-image:https://img.shields.io/badge/License-GPLv3-blue.svg)[GPL v3 License, link=#copyright-and-license]
+image:https://img.shields.io/badge/License-GPLv3-blue.svg[GPL v3 License, link=#copyright-and-license]
 image:https://github.com/poolborges/Vodigi/workflows/Build%20CI/badge.svg?branch=master[Build Status (Github CI), link={url-ci-github}]
 endif::[]
 
