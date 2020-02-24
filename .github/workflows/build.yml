@@ -1,0 +1,27 @@
+name: Build CI
+
+on:
+  push:
+    branches:
+    - master
+    paths: 
+      - '**'
+      - '!.editorconfig'
+      - '!.gitattributes'
+      - '!.gitignore'
+      - '!*.adoc'
+      - '!LICENSE'
+      
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@master
+
+    - name: Setup msbuild
+      uses: microsoft/setup-msbuild@v1.0.0
+
+    - name: MSBuild
+      working-directory: SourceCode
+      run: msbuild osVodigiWeb/osVodigiWeb6x/osVodigiWeb6x.csproj
