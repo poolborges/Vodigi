@@ -4,13 +4,6 @@ on:
   push:
     branches:
     - master
-    paths: 
-      - '**'
-      - '!.editorconfig'
-      - '!.gitattributes'
-      - '!.gitignore'
-      - '!*.adoc'
-      - '!LICENSE'
       
 jobs:
   build:
@@ -25,3 +18,4 @@ jobs:
     - name: MSBuild
       working-directory: SourceCode
       run: msbuild osVodigiWeb/osVodigiWeb6x/osVodigiWeb6x.csproj
+      
