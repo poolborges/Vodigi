@@ -48,22 +48,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 VideoPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -122,7 +113,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the Video folder 
-                ViewData["VideoFolder"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                ViewData["VideoFolder"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 ViewResult result = View(repository.GetVideoPage(pagestate.AccountID, pagestate.VideoName, pagestate.Tag, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
@@ -142,14 +133,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["FileList"] = new SelectList(BuildFileList(""), "Value", "Text", "");
@@ -172,20 +156,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     video = FillNulls(video);
-                    video.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    video.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     if (Request.Form["lstFile"] != null && !String.IsNullOrEmpty(Request.Form["lstFile"].ToString().Trim()))
@@ -220,10 +197,10 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.OriginalFilename; ;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.OriginalFilename; ;
                             oldvideo = Server.MapPath(oldvideo);
 
-                            string newvideo =  @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                            string newvideo =  @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                             newvideo = Server.MapPath(newvideo);
 
                             System.IO.File.Copy(oldvideo, newvideo);
@@ -262,17 +239,10 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Video video = repository.GetVideo(id);
-                ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(video);
@@ -292,14 +262,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -309,7 +272,7 @@ namespace osVodigiWeb6x.Controllers
                     string validation = ValidateInput(video);
                     if (!String.IsNullOrEmpty(validation))
                     {
-                        ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                        ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                         ViewData["ValidationMessage"] = validation;
                         return View(video);
                     }
@@ -339,14 +302,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -367,15 +323,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 string validation = String.Empty;
                 if (ModelState.IsValid)
@@ -415,7 +363,7 @@ namespace osVodigiWeb6x.Controllers
 
                     // Set NULLs to Empty Strings
                     video = FillNulls(video);
-                    video.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    video.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     video.OriginalFilename = Path.GetFileName(file.FileName);
@@ -433,10 +381,10 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.OriginalFilename;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.OriginalFilename;
                             oldvideo = Server.MapPath(oldvideo);
 
-                            string newvideo = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                            string newvideo = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                             newvideo = Server.MapPath(newvideo); 
 
                             System.IO.File.Copy(oldvideo, newvideo);
@@ -522,7 +470,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = @"~/UploadedFiles/"+ Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+            string path = @"~/UploadedFiles/"+ Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
             path = Server.MapPath(path);
 
             string[] vids = Directory.GetFiles(path);
@@ -534,7 +482,7 @@ namespace osVodigiWeb6x.Controllers
                 if (first)
                 {
                     first = false;
-                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
                     firstfile = previewfolder + fi.Name;
                 }
 
@@ -542,7 +490,7 @@ namespace osVodigiWeb6x.Controllers
                 item.Text = fi.Name;
                 item.Value = fi.Name;
                 if (item.Text == currentfile)
-                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + fi.Name;
+                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + fi.Name;
 
                 files.Add(item);
             }
@@ -570,9 +518,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["VideoPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.VideoName = String.Empty;

@@ -45,22 +45,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 PlayerGroupPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -136,14 +127,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -164,20 +148,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     playergroup = FillNulls(playergroup);
-                    playergroup.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    playergroup.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(playergroup);
                     if (!String.IsNullOrEmpty(validation))
@@ -210,14 +187,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 PlayerGroup playergroup = repository.GetPlayerGroup(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -239,14 +209,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -333,9 +296,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["PlayerGroupPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayerGroupName = String.Empty;

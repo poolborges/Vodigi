@@ -45,14 +45,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -73,14 +66,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -119,14 +105,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -148,14 +127,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -191,14 +163,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;
@@ -221,14 +186,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;
@@ -251,14 +209,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;

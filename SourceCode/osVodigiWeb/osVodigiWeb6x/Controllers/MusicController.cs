@@ -48,23 +48,14 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
 
                 // Initialize or get the page state using session
                 MusicPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -123,7 +114,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the music folder 
-                ViewData["MusicFolder"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+                ViewData["MusicFolder"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
 
                 ViewResult result = View(repository.GetMusicPage(pagestate.AccountID, pagestate.MusicName, pagestate.Tag, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
@@ -143,14 +134,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["FileList"] = new SelectList(BuildFileList(""), "Value", "Text", "");
@@ -174,20 +158,13 @@ namespace osVodigiWeb6x.Controllers
             try
             {
 
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     music = FillNulls(music);
-                    music.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    music.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     if (Request.Form["lstFile"] != null && !String.IsNullOrEmpty(Request.Form["lstFile"].ToString().Trim()))
@@ -222,10 +199,10 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the music
-                            string oldmusic = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.OriginalFilename;
+                            string oldmusic = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.OriginalFilename;
                             oldmusic = Server.MapPath(oldmusic);
 
-                            string newmusic = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
+                            string newmusic = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.StoredFilename;
                             newmusic = Server.MapPath(newmusic);
 
                             System.IO.File.Copy(oldmusic, newmusic);
@@ -264,17 +241,10 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 Music music = repository.GetMusic(id);
-                ViewData["MusicURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
+                ViewData["MusicURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.StoredFilename;
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(music);
@@ -294,14 +264,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -311,7 +274,7 @@ namespace osVodigiWeb6x.Controllers
                     string validation = ValidateInput(music);
                     if (!String.IsNullOrEmpty(validation))
                     {
-                        ViewData["MusicURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
+                        ViewData["MusicURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.StoredFilename;
                         ViewData["ValidationMessage"] = validation;
                         return View(music);
                     }
@@ -340,14 +303,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -368,15 +324,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 string validation = String.Empty;
                 if (ModelState.IsValid)
@@ -415,7 +363,7 @@ namespace osVodigiWeb6x.Controllers
 
                     // Set NULLs to Empty Strings
                     music = FillNulls(music);
-                    music.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    music.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     music.OriginalFilename = Path.GetFileName(file.FileName);
@@ -434,10 +382,10 @@ namespace osVodigiWeb6x.Controllers
                         {
                             // Move the music
                             string oldmusic = Server.MapPath(@"~/UploadedFiles");
-                            oldmusic += Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.OriginalFilename;
+                            oldmusic += Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.OriginalFilename;
 
                             string newmusic = Server.MapPath(@"~/Media");
-                            newmusic += Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
+                            newmusic += Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + music.StoredFilename;
 
                             System.IO.File.Copy(oldmusic, newmusic);
                             System.IO.File.Delete(oldmusic);
@@ -522,7 +470,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+            string path = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
             path = Server.MapPath(path);
 
             string[] imgs = Directory.GetFiles(path);
@@ -534,7 +482,7 @@ namespace osVodigiWeb6x.Controllers
                 if (first)
                 {
                     first = false;
-                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
                     firstfile = previewfolder + fi.Name;
                 }
 
@@ -542,7 +490,7 @@ namespace osVodigiWeb6x.Controllers
                 item.Text = fi.Name;
                 item.Value = fi.Name;
                 if (item.Text == currentfile)
-                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + fi.Name;
+                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/" + fi.Name;
 
                 files.Add(item);
             }
@@ -570,9 +518,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["MusicPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.MusicName = String.Empty;

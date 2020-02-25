@@ -37,14 +37,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Delete a schedule entry if specified
                 IPlayerGroupScheduleRepository schedulerep = new EntityPlayerGroupScheduleRepository();
@@ -89,14 +82,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 int playergroupid = Convert.ToInt32(Request.Form["txtPlayerGroupID"]);
                 int screenid = Convert.ToInt32(Request.Form["lstScreen"]);
@@ -271,7 +257,7 @@ namespace osVodigiWeb6x.Controllers
 
         private List<SelectListItem> BuildScreenList()
         {
-            int accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the screen list
             List<SelectListItem> screenitems = new List<SelectListItem>();

@@ -49,22 +49,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 SurveyPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -126,7 +117,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the image folder 
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 ViewResult result = View(repository.GetSurveyPage(pagestate.AccountID, pagestate.SurveyName, pagestate.OnlyApproved, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
@@ -147,19 +138,12 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["ImageList"] = new SelectList(BuildImageList(""), "Value", "Text", "");
                 ViewData["ImageUrl"] = firstfile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(CreateNewSurvey());
             }
@@ -179,23 +163,16 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     survey = FillNulls(survey);
-                    survey.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    survey.AccountID = AuthUtils.GetAccountId();
 
                     IImageRepository imgrep = new EntityImageRepository();
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), Request.Form["lstImage"]);
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), Request.Form["lstImage"]);
                     if (img != null)
                         survey.SurveyImageID = img.ImageID;
                     else
@@ -207,7 +184,7 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["ValidationMessage"] = validation;
                         ViewData["ImageList"] = new SelectList(BuildImageList(Request.Form["lstImage"]), "Value", "Text", Request.Form["lstImage"]);
                         ViewData["ImageUrl"] = selectedfile;
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
                         return View(survey);
                     }
                     else
@@ -236,14 +213,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Survey survey = repository.GetSurvey(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -252,7 +222,7 @@ namespace osVodigiWeb6x.Controllers
                 Image img = imgrep.GetImage(survey.SurveyImageID);
                 ViewData["ImageList"] = new SelectList(BuildImageList(img.StoredFilename), "Value", "Text", img.StoredFilename);
                 ViewData["ImageUrl"] = selectedfile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 ViewData["SurveyTable"] = BuildSurveyTable(survey);
 
@@ -273,14 +243,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -288,7 +251,7 @@ namespace osVodigiWeb6x.Controllers
                     survey = FillNulls(survey);
 
                     IImageRepository imgrep = new EntityImageRepository();
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), Request.Form["lstImage"]);
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), Request.Form["lstImage"]);
                     if (img != null)
                         survey.SurveyImageID = img.ImageID;
                     else
@@ -300,7 +263,7 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["ValidationMessage"] = validation;
                         ViewData["ImageList"] = new SelectList(BuildImageList(Request.Form["lstImage"]), "Value", "Text", Request.Form["lstImage"]);
                         ViewData["ImageUrl"] = selectedfile;
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         ViewData["SurveyTable"] = BuildSurveyTable(survey);
                         return View(survey);
@@ -330,14 +293,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Survey survey = repository.GetSurvey(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -346,7 +302,7 @@ namespace osVodigiWeb6x.Controllers
                 Image img = imgrep.GetImage(survey.SurveyImageID);
                 ViewData["ImageList"] = new SelectList(BuildImageList(img.StoredFilename), "Value", "Text", img.StoredFilename);
                 ViewData["ImageUrl"] = selectedfile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 ViewData["SurveyTable"] = BuildSurveyTableNoLinks(survey);
 
@@ -367,14 +323,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -406,14 +355,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Survey survey = repository.GetSurvey(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -422,7 +364,7 @@ namespace osVodigiWeb6x.Controllers
                 Image img = imgrep.GetImage(survey.SurveyImageID);
                 ViewData["ImageList"] = new SelectList(BuildImageList(img.StoredFilename), "Value", "Text", img.StoredFilename);
                 ViewData["ImageUrl"] = selectedfile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 ViewData["SurveyTable"] = BuildSurveyTableNoLinks(survey);
 
@@ -495,9 +437,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["SurveyPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.SurveyName = String.Empty;
@@ -677,15 +617,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildImageList(string currentfile)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;

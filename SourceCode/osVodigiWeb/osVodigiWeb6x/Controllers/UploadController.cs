@@ -35,19 +35,12 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["UploadMessage"] = String.Empty;
-                ViewData["ImageFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
-                ViewData["VideoFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
-                ViewData["MusicFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+                ViewData["ImageFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
+                ViewData["VideoFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
+                ViewData["MusicFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
 
                 if (Request.Files.Count > 0)
                 {
@@ -104,14 +97,15 @@ namespace osVodigiWeb6x.Controllers
 
         public ActionResult Delete(string filename, string filetype)
         {
+            User user = AuthUtils.CheckAuthUser();
             IUploadRepository uploadrep = new IOUploadRepository();
 
             if (filetype == "Image")
-                uploadrep.DeleteImageUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteImageUpload(AuthUtils.GetAccountId(), filename, Server.MapPath(@"~/UploadedFiles"));
             else if (filetype == "Video")
-                uploadrep.DeleteVideoUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteVideoUpload(AuthUtils.GetAccountId(), filename, Server.MapPath(@"~/UploadedFiles"));
             else
-                uploadrep.DeleteMusicUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteMusicUpload(AuthUtils.GetAccountId(), filename, Server.MapPath(@"~/UploadedFiles"));
 
             return RedirectToAction("Index");
         }

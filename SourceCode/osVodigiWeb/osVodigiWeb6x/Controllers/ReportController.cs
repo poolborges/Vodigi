@@ -46,14 +46,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 return View();
             }
@@ -71,22 +64,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportLoginLogPageState pagestate = GetReportLoginLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -173,9 +157,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ReportLoginLogPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.Username = String.Empty;
@@ -227,22 +209,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportActivityLogPageState pagestate = GetReportActivityLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -333,9 +306,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ReportActivityLogPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.Username = String.Empty;
@@ -399,22 +370,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportPlayerScreenLogPageState pagestate = GetReportPlayerScreenLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -503,9 +465,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ReportPlayerScreenLogPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayerName = String.Empty;
@@ -567,22 +527,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportPlayerScreenContentLogPageState pagestate = GetReportPlayerScreenContentLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -675,9 +626,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ReportPlayerScreenContentLogPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayerName = String.Empty;
@@ -751,19 +700,10 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Initialize or get the page state using session
                 ReportSurveyResultsPageState pagestate = GetReportSurveyResultsPageState();
@@ -821,9 +761,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ReportSurveyResultsPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.SurveyID = 0;
@@ -848,9 +786,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildReportSurveyResultsSurveyList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the approved surveys
             ISurveyRepository surveyrep = new EntitySurveyRepository();
@@ -980,14 +916,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["PlayerHeartbeatTable"] = BuildPlayerHeartbeatTable();
 
@@ -1006,9 +935,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
                 StringBuilder sb = new StringBuilder();
 
                 IPlayerRepository playerrep = new EntityPlayerRepository();

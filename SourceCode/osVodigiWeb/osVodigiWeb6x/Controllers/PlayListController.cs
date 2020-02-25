@@ -48,22 +48,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 PlayListPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -139,14 +130,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["VideoList"] = new SelectList(BuildVideoList(), "Value", "Text", "");
@@ -155,10 +139,8 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["PlayListVideoList"] = new SelectList(BuildPlayListVideoList(""), "Value", "Text", "");
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
-                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                int accountid = AuthUtils.GetAccountId();
+                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 return View(CreateNewPlayList());
             }
@@ -177,20 +159,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     playlist = FillNulls(playlist);
-                    playlist.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    playlist.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(playlist, Request.Form["txtPlayListVideos"].ToString());
                     if (!String.IsNullOrEmpty(validation))
@@ -202,10 +177,8 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["PlayListVideoList"] = new SelectList(BuildPlayListVideoList(Request.Form["txtPlayListVideos"].ToString()), "Value", "Text", "");
 
                         // Get the account id
-                        int accountid = 0;
-                        if (Session["UserAccountID"] != null)
-                            accountid = Convert.ToInt32(Session["UserAccountID"]);
-                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                        int accountid = AuthUtils.GetAccountId();
+                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                         return View(playlist);
                     }
@@ -227,7 +200,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Video vid = vidrep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Video vid = vidrep.GetVideoByGuid(AuthUtils.GetAccountId(), guid);
                                 if (vid != null)
                                 {
                                     PlayListVideoXref xref = new PlayListVideoXref();
@@ -260,14 +233,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 PlayList playlist = repository.GetPlayList(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -289,10 +255,8 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["PlayListVideoList"] = new SelectList(BuildPlayListVideoList(guids), "Value", "Text", "");
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
-                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                int accountid = AuthUtils.GetAccountId();
+                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 return View(playlist);
             }
@@ -311,14 +275,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -335,10 +292,8 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["PlayListVideoList"] = new SelectList(BuildPlayListVideoList(Request.Form["txtPlayListVideos"].ToString()), "Value", "Text", "");
 
                         // Get the account id
-                        int accountid = 0;
-                        if (Session["UserAccountID"] != null)
-                            accountid = Convert.ToInt32(Session["UserAccountID"]);
-                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                        int accountid = AuthUtils.GetAccountId();
+                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
                         return View(playlist);
                     }
                     else
@@ -362,7 +317,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Video vid = vidrep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Video vid = vidrep.GetVideoByGuid(AuthUtils.GetAccountId(), guid);
                                 if (vid != null)
                                 {
                                     PlayListVideoXref xref = new PlayListVideoXref();
@@ -443,9 +398,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["PlayListPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayListName = String.Empty;
@@ -506,15 +459,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildVideoList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active videos
             IVideoRepository vidrep = new EntityVideoRepository();
             IEnumerable<Video> vids = vidrep.GetAllVideos(accountid);
 
-            string videofolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+            string videofolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -547,7 +498,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 if (!String.IsNullOrEmpty(guid.Trim()))
                 {
-                    Video vid = vidrep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                    Video vid = vidrep.GetVideoByGuid(AuthUtils.GetAccountId(), guid.Trim());
                     if (vid != null)
                     {
                         SelectListItem item = new SelectListItem();

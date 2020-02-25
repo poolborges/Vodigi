@@ -48,23 +48,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
-
+                AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ImagePageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -123,7 +113,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the image folder 
-                ViewData["ImageFolder"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 ViewResult result = View(repository.GetImagePage(pagestate.AccountID, pagestate.ImageName, pagestate.Tag, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
@@ -143,14 +133,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["FileList"] = new SelectList(BuildFileList(""), "Value", "Text", "");
@@ -173,21 +156,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     image = FillNulls(image);
-                    image.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    image.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     if (Request.Form["lstFile"] != null && !String.IsNullOrEmpty(Request.Form["lstFile"].ToString().Trim()))
@@ -222,10 +197,10 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the image
-                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.OriginalFilename;
+                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.OriginalFilename;
                             oldimage = Server.MapPath(oldimage);  
 
-                            string newimage = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                            string newimage = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.StoredFilename;
                             newimage = Server.MapPath(newimage); 
 
                             System.IO.File.Copy(oldimage, newimage);
@@ -264,17 +239,10 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 Image image = repository.GetImage(id);
-                ViewData["ImageURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                ViewData["ImageURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.StoredFilename;
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(image);
@@ -294,14 +262,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -311,7 +272,7 @@ namespace osVodigiWeb6x.Controllers
                     string validation = ValidateInput(image);
                     if (!String.IsNullOrEmpty(validation))
                     {
-                        ViewData["ImageURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                        ViewData["ImageURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.StoredFilename;
                         ViewData["ValidationMessage"] = validation;
                         return View(image);
                     }
@@ -340,14 +301,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -368,15 +322,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 string validation = String.Empty;
                 if (ModelState.IsValid)
@@ -416,7 +362,7 @@ namespace osVodigiWeb6x.Controllers
 
                     // Set NULLs to Empty Strings
                     image = FillNulls(image);
-                    image.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    image.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     image.OriginalFilename = Path.GetFileName(file.FileName);
@@ -434,10 +380,10 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the image
-                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.OriginalFilename;
+                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.OriginalFilename;
                             oldimage = Server.MapPath(oldimage);
 
-                            string newimage = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                            string newimage = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + image.StoredFilename;
                             newimage = Server.MapPath(newimage);
 
                             System.IO.File.Copy(oldimage, newimage);
@@ -523,7 +469,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string path = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
             path = Server.MapPath(path);  
 
             string[] imgs = Directory.GetFiles(path);
@@ -535,14 +481,14 @@ namespace osVodigiWeb6x.Controllers
                 if (first)
                 {
                     first = false;
-                    firstfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + fi.Name;
+                    firstfile = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + fi.Name;
                 }
 
                 SelectListItem item = new SelectListItem();
                 item.Text = fi.Name;
                 item.Value = fi.Name;
                 if (item.Text == currentfile)
-                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + fi.Name;
+                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/" + fi.Name;
 
                 files.Add(item);
             }
@@ -570,9 +516,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["ImagePageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.ImageName = String.Empty;

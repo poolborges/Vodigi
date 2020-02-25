@@ -45,22 +45,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 PlayerPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -157,14 +148,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["PlayerGroupList"] = new SelectList(BuildPlayerGroupList(false), "Value", "Text");
                 ViewData["ValidationMessage"] = String.Empty;
@@ -186,20 +170,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     player = FillNulls(player);
-                    player.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    player.AccountID = AuthUtils.GetAccountId();
                     player.PlayerGroupID = Convert.ToInt32(Request.Form["lstPlayerGroup"]);
 
                     string validation = ValidateInput(player);
@@ -234,14 +211,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Player player = repository.GetPlayer(id);
 
@@ -265,14 +235,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -313,14 +276,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the player info
                 IPlayerRepository playerrep = new EntityPlayerRepository();
@@ -352,7 +308,7 @@ namespace osVodigiWeb6x.Controllers
                 IPlayerSettingAccountDefaultRepository accountdefaultrep = new EntityPlayerSettingAccountDefaultRepository();
                 foreach (PlayerSettingView settingview in settingviews)
                 {
-                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(Convert.ToInt32(Session["UserAccountID"]), settingview.PlayerSettingName);
+                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(AuthUtils.GetAccountId(), settingview.PlayerSettingName);
                     if (accountdefault != null)
                     {
                         settingview.PlayerSettingValue = accountdefault.PlayerSettingAccountDefaultValue;
@@ -394,14 +350,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 bool isid = true;
                 try
@@ -433,7 +382,7 @@ namespace osVodigiWeb6x.Controllers
                     }
 
                     // Override with any existing account defaults
-                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(Convert.ToInt32(Session["UserAccountID"]), id);
+                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(AuthUtils.GetAccountId(), id);
                     if (accountdefault != null)
                     {
                         playersetting.PlayerSettingID = 0;
@@ -470,14 +419,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -629,7 +571,7 @@ namespace osVodigiWeb6x.Controllers
             }
 
             IPlayerGroupRepository pgrep = new EntityPlayerGroupRepository();
-            IEnumerable<PlayerGroup> pgs = pgrep.GetAllPlayerGroups(Convert.ToInt32(Session["UserAccountID"]));
+            IEnumerable<PlayerGroup> pgs = pgrep.GetAllPlayerGroups(AuthUtils.GetAccountId());
             foreach (PlayerGroup pg in pgs)
             {
                 SelectListItem item = new SelectListItem();
@@ -652,9 +594,7 @@ namespace osVodigiWeb6x.Controllers
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
                 if (Session["PlayerPageState"] == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayerGroupID = 0;

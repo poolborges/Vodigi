@@ -114,6 +114,18 @@ namespace osVodigiWeb6x.Controllers
                     Account account = acctrep.GetAccount(user.AccountID);
                     Session["UserAccountName"] = account.AccountName;
 
+
+                    Session["LoginInfo"] = Utility.BuildUserAccountString(user.Username, account.AccountName);
+
+                    if (user.IsAdmin)
+                    {
+                        Session["txtIsAdmin"] = true;
+                    }
+                    else
+                    {
+                        Session["txtIsAdmin"] = false;
+                    }
+
                     // Make sure the Account Folders exist
                     string serverpath = Server.MapPath("~/UploadedFiles/");
                     System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Images");
@@ -149,6 +161,10 @@ namespace osVodigiWeb6x.Controllers
                 throw new Exceptions.AppControllerException("Login", "Validate POST", ex);
                 
             }
+        }
+
+        private void setSession() {
+
         }
 
         private string BuildFreeLinks()

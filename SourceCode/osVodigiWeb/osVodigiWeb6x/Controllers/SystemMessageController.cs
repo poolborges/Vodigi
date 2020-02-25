@@ -45,22 +45,14 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 // Initialize or get the page state using session
                 SystemMessagePageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
                 if (Request.Form["lstAscDesc"] != null)
@@ -128,14 +120,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -156,14 +142,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
                 {
@@ -199,14 +179,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 SystemMessage systemmessage = repository.GetSystemMessage(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -228,14 +202,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
                 {
@@ -270,14 +238,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                User user = AuthUtils.CheckAuthUser();
+                AuthUtils.CheckIfAdmin();
 
                 SystemMessage systemmessage = repository.GetSystemMessage(id);
 
