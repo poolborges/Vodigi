@@ -60,8 +60,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Create", ex);
+                
             }
         }
 
@@ -107,8 +107,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Create POST", ex);
+                
             }
         }
 
@@ -135,8 +135,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Edit", ex);
+                
             }
         }
 
@@ -178,8 +178,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Edit POST", ex);
+                
             }
         }
 
@@ -209,8 +209,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Delete", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Delete", ex);
+                
             }
         }
 
@@ -239,8 +239,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "MoveUp", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "MoveUp", ex);
+                
             }
         }
 
@@ -269,8 +269,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "MoveDown", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "MoveDown", ex);
+                
             }
         }
 

@@ -76,10 +76,8 @@ namespace osVodigiWeb6x.Controllers
                                     filetype = "Videos";
                                 else if (filename.ToLower().EndsWith(".wma") || filename.ToLower().EndsWith(".mp3"))
                                     filetype = "Music";
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath = "~/UploadedFiles/" + user.AccountID.ToString() + @"/" + filetype + @"/" + filename;
+                                string path = Server.MapPath(serverpath);
                                 if (!System.IO.File.Exists(path))
                                     file.SaveAs(path);
                                 else
@@ -95,8 +93,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Upload", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Upload", "Index", ex);
+                
             }
         }
 

@@ -131,8 +131,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Index", ex);
+                
             }
         }
 
@@ -160,8 +160,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Create", ex);
+                
             }
         }
 
@@ -222,15 +222,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the music
-                            string oldmusic = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldmusic.EndsWith(@"\"))
-                                oldmusic += @"\";
-                            oldmusic += Convert.ToString(Session["UserAccountID"]) + @"\Music\" + music.OriginalFilename;
+                            string oldmusic = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.OriginalFilename;
+                            oldmusic = Server.MapPath(oldmusic);
 
-                            string newmusic = Server.MapPath(@"~/Media");
-                            if (!newmusic.EndsWith(@"\"))
-                                newmusic += @"\";
-                            newmusic += Convert.ToString(Session["UserAccountID"]) + @"\Music\" + music.StoredFilename;
+                            string newmusic = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
+                            newmusic = Server.MapPath(newmusic);
 
                             System.IO.File.Copy(oldmusic, newmusic);
                             System.IO.File.Delete(oldmusic);
@@ -256,8 +252,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Create POST", ex);
+                
             }
         }
 
@@ -285,8 +281,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Edit", ex);
+                
             }
         }
 
@@ -332,8 +328,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Edit POST", ex);
+                
             }
         }
 
@@ -359,8 +355,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Upload", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Upload", ex);
+                
             }
         }
 
@@ -402,12 +398,9 @@ namespace osVodigiWeb6x.Controllers
                             }
                             else
                             {
-                                string filetype = "Music";
                                 string filename = Path.GetFileName(file.FileName);
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath = "~/UploadedFiles/" + user.AccountID.ToString() + @"/Music/" + filename;
+                                string path = Server.MapPath(serverpath);
                                 if (!System.IO.File.Exists(path))
                                     System.IO.File.Delete(path);
                                 file.SaveAs(path);
@@ -441,14 +434,10 @@ namespace osVodigiWeb6x.Controllers
                         {
                             // Move the music
                             string oldmusic = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldmusic.EndsWith(@"\"))
-                                oldmusic += @"\";
-                            oldmusic += Convert.ToString(Session["UserAccountID"]) + @"\Music\" + music.OriginalFilename;
+                            oldmusic += Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.OriginalFilename;
 
                             string newmusic = Server.MapPath(@"~/Media");
-                            if (!newmusic.EndsWith(@"\"))
-                                newmusic += @"\";
-                            newmusic += Convert.ToString(Session["UserAccountID"]) + @"\Music\" + music.StoredFilename;
+                            newmusic += Convert.ToString(Session["UserAccountID"]) + @"/Music/" + music.StoredFilename;
 
                             System.IO.File.Copy(oldmusic, newmusic);
                             System.IO.File.Delete(oldmusic);
@@ -472,8 +461,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Music", "Upload POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Music", "Upload POST", ex);
+                
             }
         }
 
@@ -533,10 +522,8 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = Server.MapPath(@"~/UploadedFiles");
-            if (!path.EndsWith(@"\"))
-                path += @"\";
-            path += Convert.ToString(Session["UserAccountID"]) + @"\Music\";
+            string path = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+            path = Server.MapPath(path);
 
             string[] imgs = Directory.GetFiles(path);
             bool first = true;

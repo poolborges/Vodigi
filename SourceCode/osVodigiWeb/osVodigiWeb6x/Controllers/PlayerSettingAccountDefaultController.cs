@@ -103,8 +103,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Index", ex);
+                
             }
         }
 
@@ -161,8 +161,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Edit", ex);
+                
             }
         }
 
@@ -218,8 +218,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Edit POST", ex);
+                
             }
         }
 

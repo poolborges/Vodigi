@@ -127,8 +127,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayList", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayList", "Index", ex);
+                
             }
         }
 
@@ -164,8 +164,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayList", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayList", "Create", ex);
+                
             }
         }
 
@@ -248,8 +248,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayList", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayList", "Create POST", ex);
+                
             }
         }
 
@@ -298,8 +298,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayList", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayList", "Edit", ex);
+                
             }
         }
 
@@ -382,8 +382,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayList", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayList", "Edit POST", ex);
+                
             }
         }
 

@@ -124,8 +124,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Index", ex);
+                
             }
         }
 
@@ -151,8 +151,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Create", ex);
+                
             }
         }
 
@@ -198,8 +198,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Create POST", ex);
+                
             }
         }
 
@@ -226,8 +226,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Edit", ex);
+                
             }
         }
 
@@ -272,8 +272,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Edit POST", ex);
+                
             }
         }
 

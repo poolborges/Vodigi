@@ -130,8 +130,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Index", ex);
+                
             }
         }
 
@@ -159,8 +159,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Create", ex);
+                
             }
         }
 
@@ -220,15 +220,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldvideo.EndsWith(@"\"))
-                                oldvideo += @"\";
-                            oldvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.OriginalFilename;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.OriginalFilename; ;
+                            oldvideo = Server.MapPath(oldvideo);
 
-                            string newvideo = Server.MapPath(@"~/Media");
-                            if (!newvideo.EndsWith(@"\"))
-                                newvideo += @"\";
-                            newvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.StoredFilename;
+                            string newvideo =  @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                            newvideo = Server.MapPath(newvideo);
 
                             System.IO.File.Copy(oldvideo, newvideo);
                             System.IO.File.Delete(oldvideo);
@@ -254,8 +250,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Create POST", ex);
+                
             }
         }
 
@@ -283,8 +279,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Edit", ex);
+                
             }
         }
 
@@ -330,8 +326,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Edit POST", ex);
+                
             }
         }
 
@@ -358,8 +354,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Upload", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Upload", ex);
+                
             }
         }
 
@@ -403,10 +399,8 @@ namespace osVodigiWeb6x.Controllers
                             {
                                 string filetype = "Videos";
                                 string filename = Path.GetFileName(file.FileName);
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath =  "~/UploadedFiles/" + user.AccountID.ToString() + @"/" + filetype + @"/" + filename;
+                                string path = Server.MapPath(serverpath);
                                 if (!System.IO.File.Exists(path))
                                     System.IO.File.Delete(path);
                                 file.SaveAs(path);
@@ -439,15 +433,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldvideo.EndsWith(@"\"))
-                                oldvideo += @"\";
-                            oldvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.OriginalFilename;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.OriginalFilename;
+                            oldvideo = Server.MapPath(oldvideo);
 
-                            string newvideo = Server.MapPath(@"~/Media");
-                            if (!newvideo.EndsWith(@"\"))
-                                newvideo += @"\";
-                            newvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.StoredFilename;
+                            string newvideo = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                            newvideo = Server.MapPath(newvideo); 
 
                             System.IO.File.Copy(oldvideo, newvideo);
                             System.IO.File.Delete(oldvideo);
@@ -471,8 +461,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Upload POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Upload POST", ex);
+                
             }
         }
 
@@ -532,10 +522,8 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = Server.MapPath(@"~/UploadedFiles");
-            if (!path.EndsWith(@"\"))
-                path += @"\";
-            path += Convert.ToString(Session["UserAccountID"]) + @"\Videos\";
+            string path = @"~/UploadedFiles/"+ Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+            path = Server.MapPath(path);
 
             string[] vids = Directory.GetFiles(path);
             bool first = true;

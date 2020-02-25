@@ -220,10 +220,9 @@ namespace osVodigiWeb6x.Models
             {
                 string sourceimage = HttpContext.Current.Server.MapPath(@"~/ExampleImages/" + storedfilename);
                 string newimage = HttpContext.Current.Server.MapPath(@"~/Media");
-                if (!newimage.EndsWith(@"\"))
-                    newimage += @"\";
-                System.IO.Directory.CreateDirectory(newimage + Convert.ToString(accountid) + @"\Images\");
-                newimage += Convert.ToString(accountid) + @"\Images\" + storedfilename;
+  
+                System.IO.Directory.CreateDirectory(newimage + @"/" + Convert.ToString(accountid) + @"/Images/");
+                newimage += Convert.ToString(accountid) + @"/Images/" + storedfilename;
 
                 if (!System.IO.File.Exists(newimage))
                     System.IO.File.Copy(sourceimage, newimage);
@@ -415,10 +414,9 @@ namespace osVodigiWeb6x.Models
             {
                 string sourcevideo = HttpContext.Current.Server.MapPath(@"~/ExampleVideos/" + storedfilename);
                 string newvideo = HttpContext.Current.Server.MapPath(@"~/Media");
-                if (!newvideo.EndsWith(@"\"))
-                    newvideo += @"\";
-                System.IO.Directory.CreateDirectory(newvideo + Convert.ToString(accountid) + @"\Videos\");
-                newvideo += Convert.ToString(accountid) + @"\Videos\" + storedfilename;
+     
+                System.IO.Directory.CreateDirectory(newvideo + @"/" + Convert.ToString(accountid) + @"/Videos/");
+                newvideo += Convert.ToString(accountid) + @"/Videos/" + storedfilename;
 
                 if (!System.IO.File.Exists(newvideo))
                     System.IO.File.Copy(sourcevideo, newvideo);
@@ -531,10 +529,9 @@ namespace osVodigiWeb6x.Models
             {
                 string sourcemusic = HttpContext.Current.Server.MapPath(@"~/ExampleMusic/" + storedfilename);
                 string newmusic = HttpContext.Current.Server.MapPath(@"~/Media");
-                if (!newmusic.EndsWith(@"\"))
-                    newmusic += @"\";
-                System.IO.Directory.CreateDirectory(newmusic + Convert.ToString(accountid) + @"\Music\");
-                newmusic += Convert.ToString(accountid) + @"\Music\" + storedfilename;
+
+                System.IO.Directory.CreateDirectory(newmusic + @"/" + Convert.ToString(accountid) + @"/Music/");
+                newmusic += Convert.ToString(accountid) + @"/Music/" + storedfilename;
 
                 if (!System.IO.File.Exists(newmusic))
                     System.IO.File.Copy(sourcemusic, newmusic);

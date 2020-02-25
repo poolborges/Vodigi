@@ -76,8 +76,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroupSchedule", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroupSchedule", "Edit", ex);
+                
             }
         }
 
@@ -133,8 +133,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroupSchedule", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroupSchedule", "Edit", ex);
+                
             }
         }
 

@@ -74,8 +74,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Login", "Validate", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Login", "Validate", ex);
             }
         }
 
@@ -116,19 +115,15 @@ namespace osVodigiWeb6x.Controllers
                     Session["UserAccountName"] = account.AccountName;
 
                     // Make sure the Account Folders exist
-                    string serverpath = Server.MapPath("~/UploadedFiles");
-                    if (!serverpath.EndsWith(@"\"))
-                        serverpath += @"\";
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Images");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Videos");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Music");
+                    string serverpath = Server.MapPath("~/UploadedFiles/");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Images");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Videos");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Music");
 
-                    serverpath = Server.MapPath("~/Media");
-                    if (!serverpath.EndsWith(@"\"))
-                        serverpath += @"\";
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Images");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Videos");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Music");
+                    serverpath = Server.MapPath("~/Media/");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Images");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Videos");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Music");
 
                     // Create example data for the account (if appropriate)
                     IPlayerGroupRepository pgrep = new EntityPlayerGroupRepository();
@@ -151,8 +146,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Login", "Validate POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Login", "Validate POST", ex);
+                
             }
         }
 

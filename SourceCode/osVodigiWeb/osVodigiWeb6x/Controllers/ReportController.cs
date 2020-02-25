@@ -59,8 +59,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "Index", ex);
+                
             }
         }
 
@@ -159,8 +159,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportLoginLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportLoginLog", ex);
+                
             }
         }
 
@@ -319,8 +319,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportLoginLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportLoginLog", ex);
+                
             }
         }
 
@@ -489,8 +489,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerScreenLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerScreenLog", ex);
+                
             }
         }
 
@@ -661,8 +661,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerScreenContentLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerScreenContentLog", ex);
+                
             }
         }
 
@@ -807,8 +807,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportSurveyResults", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportSurveyResults", ex);
+                
             }
         }
 
@@ -997,8 +997,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerHeartbeat", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerHeartbeat", ex);
+                
             }
         }
 

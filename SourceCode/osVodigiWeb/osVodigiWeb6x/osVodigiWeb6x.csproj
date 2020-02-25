@@ -292,6 +292,7 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Exceptions\AppControllerException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />
@@ -414,10 +415,12 @@
     <Content Include="Content\themes\base\all.css" />
     <Content Include="Content\themes\base\accordion.css" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\ApplicationError\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Views\Home\" />
+    <Folder Include="Exceptions\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />

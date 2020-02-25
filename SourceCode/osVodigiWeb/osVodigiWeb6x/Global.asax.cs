@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
+using osVodigiWeb6x.Controllers;
 
 namespace osVodigiWeb6x
 {
@@ -20,5 +21,34 @@ namespace osVodigiWeb6x
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
+        /*
+        public void Application_Error(Object sender, EventArgs e)
+        {
+            
+            Exception exception = Server.GetLastError();
+            Server.ClearError();
+
+            var routeData = new RouteData();
+            routeData.Values.Add("controller", "ApplicationError");
+            routeData.Values.Add("action", "Error");
+            routeData.Values.Add("exception", exception);
+
+            if (exception.GetType() == typeof(HttpException))
+            {
+                routeData.Values.Add("statusCode", ((HttpException)exception).GetHttpCode());
+            }
+            else
+            {
+                routeData.Values.Add("statusCode", 500);
+            }
+
+            Console.WriteLine("EXCEPTION handled by Application_Error: {0}", exception.ToString());
+
+            Response.TrySkipIisCustomErrors = true;
+            IController controller = new ApplicationErrorController();
+            controller.Execute(new RequestContext(new HttpContextWrapper(Context), routeData));
+            Response.End();
+            
+        }*/
     }
 }

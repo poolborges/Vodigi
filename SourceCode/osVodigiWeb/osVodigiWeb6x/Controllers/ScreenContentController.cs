@@ -137,7 +137,7 @@ namespace osVodigiWeb6x.Controllers
                     contentview.AccountID = screencontent.AccountID;
                     contentview.ScreenContentTypeID = screencontent.ScreenContentTypeID;
                     ScreenContentType sctype = sctrep.GetScreenContentType(screencontent.ScreenContentTypeID);
-                    contentview.ScreenContentTypeName = sctype.ScreenContentTypeName;
+                    contentview.ScreenContentTypeName = (sctype != null ? sctype.ScreenContentTypeName : "");
                     contentview.ScreenContentName = screencontent.ScreenContentName;
                     contentview.ScreenContentTitle = screencontent.ScreenContentTitle;
                     contentview.ThumbnailImageID = screencontent.ThumbnailImageID;
@@ -157,8 +157,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Index", ex);
+                
             }
         }
 
@@ -196,8 +196,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Create", ex);
+                
             }
         }
 
@@ -280,8 +280,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Create POST", ex);
+                
             }
         }
 
@@ -343,8 +343,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Edit", ex);
+                
             }
         }
 
@@ -428,8 +428,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Edit POST", ex);
+                
             }
         }
 

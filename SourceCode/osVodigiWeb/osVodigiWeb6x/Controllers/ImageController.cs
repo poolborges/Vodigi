@@ -131,8 +131,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Index", ex);
+                
             }
         }
 
@@ -160,8 +160,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Create", ex);
+                
             }
         }
 
@@ -222,15 +222,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the image
-                            string oldimage = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldimage.EndsWith(@"\"))
-                                oldimage += @"\";
-                            oldimage += Convert.ToString(Session["UserAccountID"]) + @"\Images\" + image.OriginalFilename;
+                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.OriginalFilename;
+                            oldimage = Server.MapPath(oldimage);  
 
-                            string newimage = Server.MapPath(@"~/Media");
-                            if (!newimage.EndsWith(@"\"))
-                                newimage += @"\";
-                            newimage += Convert.ToString(Session["UserAccountID"]) + @"\Images\" + image.StoredFilename;
+                            string newimage = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                            newimage = Server.MapPath(newimage); 
 
                             System.IO.File.Copy(oldimage, newimage);
                             System.IO.File.Delete(oldimage);
@@ -256,8 +252,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Create POST", ex);
+                
             }
         }
 
@@ -285,8 +281,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Edit", ex);
+                
             }
         }
 
@@ -332,8 +328,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Edit POST", ex);
+                
             }
         }
 
@@ -359,8 +355,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Upload", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Upload", ex);
+                
             }
         }
 
@@ -402,12 +398,10 @@ namespace osVodigiWeb6x.Controllers
                             }
                             else
                             {
-                                string filetype = "Images";
                                 string filename = Path.GetFileName(file.FileName);
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath = "~/UploadedFiles/" + user.AccountID.ToString() + @"/Images/" + filename;
+                                
+                                string path = Server.MapPath(serverpath);
                                 if (!System.IO.File.Exists(path))
                                     System.IO.File.Delete(path);
                                 file.SaveAs(path);
@@ -440,15 +434,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the image
-                            string oldimage = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldimage.EndsWith(@"\"))
-                                oldimage += @"\";
-                            oldimage += Convert.ToString(Session["UserAccountID"]) + @"\Images\" + image.OriginalFilename;
+                            string oldimage = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.OriginalFilename;
+                            oldimage = Server.MapPath(oldimage);
 
-                            string newimage = Server.MapPath(@"~/Media");
-                            if (!newimage.EndsWith(@"\"))
-                                newimage += @"\";
-                            newimage += Convert.ToString(Session["UserAccountID"]) + @"\Images\" + image.StoredFilename;
+                            string newimage = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + image.StoredFilename;
+                            newimage = Server.MapPath(newimage);
 
                             System.IO.File.Copy(oldimage, newimage);
                             System.IO.File.Delete(oldimage);
@@ -472,8 +462,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Image", "Upload POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Image", "Upload POST", ex);
+                
             }
         }
 
@@ -533,10 +523,8 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = Server.MapPath(@"~/UploadedFiles");
-            if (!path.EndsWith(@"\"))
-                path += @"\";
-            path += Convert.ToString(Session["UserAccountID"]) + @"\Images\";
+            string path = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            path = Server.MapPath(path);  
 
             string[] imgs = Directory.GetFiles(path);
             bool first = true;
@@ -547,8 +535,7 @@ namespace osVodigiWeb6x.Controllers
                 if (first)
                 {
                     first = false;
-                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
-                    firstfile = previewfolder + fi.Name;
+                    firstfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/" + fi.Name;
                 }
 
                 SelectListItem item = new SelectListItem();

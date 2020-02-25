@@ -77,8 +77,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 1", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1", ex);
+                
             }
         }
 
@@ -155,8 +155,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 1 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1 POST", ex);
+                
             }
         }
 
@@ -201,8 +201,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 2", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2", ex);
+                
             }
         }
 
@@ -274,8 +274,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 2 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2 POST", ex);
+                
             }
         }
 
@@ -318,8 +318,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                
             }
         }
 
@@ -391,8 +391,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                
             }
         }
 
@@ -433,8 +433,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                
             }
         }
 
@@ -501,8 +501,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                
             }
         }
 

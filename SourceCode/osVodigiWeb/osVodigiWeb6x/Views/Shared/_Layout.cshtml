@@ -54,8 +54,8 @@
             <img src="@Url.Content("~/Images/vodigi-logo-6.png")" alt="" style="position:relative; left:-200px; top:7px;" />
             <img src="@Url.Content("~/Images/vodigi-tag-6.png")" alt="" style="position:relative; left:200px;" />
         </div>
-        @if (Request.IsAuthenticated)
-        {
+        @if (Context.User.Identity.IsAuthenticated)
+        { }
             <div class="pagemenubar">
                 <div style="padding-left:25px;padding-top:5px;">
                     <ul id="dropdownmenu">
@@ -131,7 +131,7 @@
                     </ul>
                 </div>
             </div>
-        }
+   
             <div class="pagelogininfo">
                 <span style="float:left;padding-left:20px;">
                     @Html.Raw((string)ViewData["LoginInfo"])
