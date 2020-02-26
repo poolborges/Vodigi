@@ -6,6 +6,7 @@ using System.Web.Http;
 using System.Web.Mvc;
 using System.Web.Routing;
 using osVodigiWeb6x.Controllers;
+using osVodigiWeb6x.Exceptions;
 
 namespace osVodigiWeb6x
 {
@@ -21,7 +22,7 @@ namespace osVodigiWeb6x
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
         }
-        /*
+        /* 
         public void Application_Error(Object sender, EventArgs e)
         {
             
@@ -36,6 +37,16 @@ namespace osVodigiWeb6x
             if (exception.GetType() == typeof(HttpException))
             {
                 routeData.Values.Add("statusCode", ((HttpException)exception).GetHttpCode());
+            }
+            else if (exception.GetType() == typeof(NotAuthcException))
+            {
+                routeData.Values.Add("statusCode", 401);
+                // 401 Unauthorized - Authentication is required
+            }
+            else if (exception.GetType() == typeof(NotAuthzException))
+            {
+                routeData.Values.Add("statusCode", 403);
+                // 403 Forbidden - Permission is required
             }
             else
             {

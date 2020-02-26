@@ -7,16 +7,18 @@
 <script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
 <script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
 
-<h1 class="error">@(!String.IsNullOrEmpty(ViewBag.StatusCode) ? ViewBag.StatusCode : "500 Error"):</h1>
 
 
 <div class="textblock">
-    <span class="paragraphheader">Application Error</span><br />
-    <span class="paragraphtext">The application has generated the following error. Please click your Browser's <b>Back</b> button and try again.</span>
+    <h1>
+        <span class="paragraphheader">Application Error</span>
+    </h1>
+    <p>Status code: @(!String.IsNullOrEmpty(ViewBag.StatusCode) ? ViewBag.StatusCode : "500")</p>
+    <p class="paragraphtext">The application has generated the following error. Please click your Browser's <b>Back</b> button and try again.</p>
 </div>
 
-<h2>Error</h2>
 
 <div class="textblock">
+    <h2 class="paragraphheader">Error Detail</h2>
     <span class="errortext">@Html.Raw(ViewBag.ErrorMessage)</span>
 </div>

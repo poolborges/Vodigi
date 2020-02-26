@@ -1,6 +1,7 @@
 ﻿using System;
 using osVodigiWeb6x.Models;
 using System.Web;
+using osVodigiWeb6x.Exceptions;
 
 namespace osVodigiWeb6x
 {
@@ -13,7 +14,7 @@ namespace osVodigiWeb6x
 
             if (user == null || !user.IsAdmin)
             {
-                throw new Exception("You are not authorized (Admin role) to access this page.");
+                throw new NotAuthzException("Admin");
             }
             return user;
         }
@@ -25,7 +26,7 @@ namespace osVodigiWeb6x
 
             if (user == null)
             {
-                throw new Exception("You must be authenticate to access this page.");
+                throw new NotAuthcException();
             }
 
             return user;

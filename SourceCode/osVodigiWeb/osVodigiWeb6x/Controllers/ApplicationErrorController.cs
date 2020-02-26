@@ -21,6 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using osVodigiWeb6x.Exceptions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
@@ -48,7 +49,28 @@ namespace osVodigiWeb6x.Controllers
         public ActionResult Error(int statusCode, Exception exception)
         {
             Response.StatusCode = statusCode;
-            ViewBag.StatusCode = statusCode + " Error";
+            ViewBag.StatusCode = statusCode.ToString();
+            ViewBag.ErrorMessage = exception.ToString();
+
+
+            if (exception.GetType() == typeof(HttpException))
+            {
+                ViewBag.ErrorMessage = ((HttpException)exception).GetHtmlErrorMessage();
+            }
+            else if (exception.GetType() == typeof(NotAuthcException))
+            {
+                ViewBag.ErrorMessage = ((NotAuthcException)exception).Message;
+            }
+            else if (exception.GetType() == typeof(NotAuthzException))
+            {
+                ViewBag.ErrorMessage = ((NotAuthzException)exception).Message;
+            }
+            else
+            {
+                ViewBag.ErrorMessage = "Vodigi server internal error. Detail omited";
+            }
+
+
             return View();
         }
 

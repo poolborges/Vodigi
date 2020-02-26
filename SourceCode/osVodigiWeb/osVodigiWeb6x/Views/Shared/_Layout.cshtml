@@ -54,8 +54,8 @@
             <img src="@Url.Content("~/Images/vodigi-logo-6.png")" alt="" style="position:relative; left:-200px; top:7px;" />
             <img src="@Url.Content("~/Images/vodigi-tag-6.png")" alt="" style="position:relative; left:200px;" />
         </div>
-        @if (Context.User.Identity.IsAuthenticated)
-        { }
+        @if (/*AuthUtils.CheckAuthUser()*/true)
+        { 
             <div class="pagemenubar">
                 <div style="padding-left:25px;padding-top:5px;">
                     <ul id="dropdownmenu">
@@ -131,20 +131,23 @@
                     </ul>
                 </div>
             </div>
+       
    
             <div class="pagelogininfo">
-                <span style="float:left;padding-left:20px;">
-                    @Html.Raw((string)ViewData["LoginInfo"])
-                </span>
-                <span style="float:right;padding-right:20px;">
-                    <span id="adminlinklogoff">@Html.ActionLink("Logout", "Validate", "Login")</span>
-                    <span id="adminlinks" style="display:none;">
-                        <span id="adminlinkaccounts">@Html.ActionLink("Accounts", "Index", "Account")</span>
-                        <span id="adminlinkusers">@Html.ActionLink("Users", "Index", "User")</span>
-                        <span id="adminlinkmessages">@Html.ActionLink("Messages", "Index", "SystemMessage")</span>
+                <span style="float:left;padding-left:20px;">@Html.Raw(ViewData["LoginInfo"]/*AuthUtils.GetLoginInfo()*/)</span>
+                @if (/*AuthUtils.CheckIfAdmin()*/true){ }
+                    <span style="float:right;padding-right:20px;">
+                        <span id="adminlinklogoff">@Html.ActionLink("Logout", "Validate", "Login")</span>
+
+                        <span id="adminlinks">
+                            <span id="adminlinkaccounts">@Html.ActionLink("Accounts", "Index", "Account")</span>
+                            <span id="adminlinkusers">@Html.ActionLink("Users", "Index", "User")</span>
+                            <span id="adminlinkmessages">@Html.ActionLink("Messages", "Index", "SystemMessage")</span>
+                        </span>
                     </span>
-                </span>
+                
             </div>
+        }
         </header>
     <div class="page">
         <section id="sectionmain">

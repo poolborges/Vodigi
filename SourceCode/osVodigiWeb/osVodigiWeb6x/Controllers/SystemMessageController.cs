@@ -45,7 +45,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 // Initialize or get the page state using session
@@ -120,7 +119,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 ViewData["ValidationMessage"] = String.Empty;
@@ -142,7 +140,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
@@ -179,7 +176,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 SystemMessage systemmessage = repository.GetSystemMessage(id);
@@ -202,7 +198,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
@@ -238,7 +233,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 SystemMessage systemmessage = repository.GetSystemMessage(id);

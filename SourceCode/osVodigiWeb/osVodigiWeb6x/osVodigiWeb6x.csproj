@@ -293,8 +293,9 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Exceptions\AppControllerException.cs" />
-    <Compile Include="Controllers\AbstractVodigiController.cs" />
     <Compile Include="Helpers\AuthUtils.cs" />
+    <Compile Include="Exceptions\NotAuthcException.cs" />
+    <Compile Include="Exceptions\NotAuthzException.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\FilterConfig.cs" />

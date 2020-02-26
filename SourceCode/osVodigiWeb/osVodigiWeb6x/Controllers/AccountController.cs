@@ -44,7 +44,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
 

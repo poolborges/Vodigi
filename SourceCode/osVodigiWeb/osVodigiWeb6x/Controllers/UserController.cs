@@ -46,7 +46,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 // Initialize or get the page state using session
@@ -146,7 +145,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User user = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 ViewData["AccountList"] = new SelectList(BuildAccountList(0), "Value", "Text", "");
@@ -169,7 +167,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
@@ -213,7 +210,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 User user = repository.GetUser(id);
@@ -237,7 +233,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth= AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
@@ -279,7 +274,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 User user = repository.GetUser(id);
@@ -302,7 +296,6 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                User userAuth = AuthUtils.CheckAuthUser();
                 AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
