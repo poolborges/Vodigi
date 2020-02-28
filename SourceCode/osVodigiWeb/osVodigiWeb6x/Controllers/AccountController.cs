@@ -220,7 +220,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateAccount(account);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Account", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Account", "Edit",
                                                     "Edited account '" + account.AccountName + "' - ID: " + account.AccountID.ToString());
 
                     return RedirectToAction("Index");

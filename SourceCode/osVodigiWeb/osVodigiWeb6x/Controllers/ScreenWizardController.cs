@@ -130,7 +130,7 @@ namespace osVodigiWeb6x.Controllers
                         else
                             repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 1",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Wizard Step 1",
                             "Step 1 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         return RedirectToAction("Step2", new { id = screen.ScreenID });
@@ -232,7 +232,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 2",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Wizard Step 2",
                             "Step 2 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         if (screen.IsInteractive)
@@ -331,7 +331,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 3",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Wizard Step 3",
                             "Step 3 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         if (screen.IsInteractive)
@@ -430,7 +430,7 @@ namespace osVodigiWeb6x.Controllers
                             }
                         }
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 4",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Wizard Step 4",
                             "Step 4 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         return RedirectToAction("Index", "Screen");

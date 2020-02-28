@@ -218,7 +218,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateMusic(music);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Music", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Music", "Add",
                                 "Added music '" + music.MusicName + "' - ID: " + music.MusicID.ToString());
 
                         return RedirectToAction("Index");
@@ -281,7 +281,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateMusic(music);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Music", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Music", "Edit",
                             "Edited music '" + music.MusicName + "' - ID: " + music.MusicID.ToString());
 
                     return RedirectToAction("Index");
@@ -398,7 +398,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateMusic(music);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Music", "Upload",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Music", "Upload",
                                 "Added music '" + music.MusicName + "' - ID: " + music.MusicID.ToString());
 
                         return RedirectToAction("Index");

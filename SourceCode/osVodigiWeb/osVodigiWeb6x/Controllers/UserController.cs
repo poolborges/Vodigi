@@ -188,7 +188,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateUser(user);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "User", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "User", "Add",
                             "Added user '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                         return RedirectToAction("Index");
@@ -252,7 +252,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateUser(user);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "User", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "User", "Edit",
                         "Edited user '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                     return RedirectToAction("Index");
@@ -313,7 +313,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateUser(user);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "User", "Change Password",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "User", "Change Password",
                         "Changed password for '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                     return RedirectToAction("Index");

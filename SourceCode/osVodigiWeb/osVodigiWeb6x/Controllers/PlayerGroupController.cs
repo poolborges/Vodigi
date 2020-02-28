@@ -165,7 +165,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.CreatePlayerGroup(playergroup);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player Group", "Add",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Player Group", "Add",
                             "Added player group '" + playergroup.PlayerGroupName + "' - ID: " + playergroup.PlayerGroupID.ToString());
 
                     return RedirectToAction("Index");
@@ -225,7 +225,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdatePlayerGroup(playergroup);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player Group", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Player Group", "Edit",
                             "Edited player group '" + playergroup.PlayerGroupName + "' - ID: " + playergroup.PlayerGroupID.ToString());
 
                     return RedirectToAction("Index");

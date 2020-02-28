@@ -216,7 +216,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateVideo(video);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Video", "Add",
                             "Added video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                         return RedirectToAction("Index");
@@ -279,7 +279,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateVideo(video);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Video", "Edit",
                         "Edited video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                     return RedirectToAction("Index");
@@ -398,7 +398,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateVideo(video);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Upload",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Video", "Upload",
                                 "Added video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                         return RedirectToAction("Index");

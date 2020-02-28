@@ -216,7 +216,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateImage(image);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Image", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Image", "Add",
                                 "Added image '" + image.ImageName + "' - ID: " + image.ImageID.ToString());
 
                         return RedirectToAction("Index");
@@ -279,7 +279,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateImage(image);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Image", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Image", "Edit",
                             "Edited image '" + image.ImageName + "' - ID: " + image.ImageID.ToString());
 
                     return RedirectToAction("Index");
@@ -397,7 +397,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateImage(image);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Image", "Upload",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Image", "Upload",
                                 "Added image '" + image.ImageName + "' - ID: " + image.ImageID.ToString());
 
                         return RedirectToAction("Index");

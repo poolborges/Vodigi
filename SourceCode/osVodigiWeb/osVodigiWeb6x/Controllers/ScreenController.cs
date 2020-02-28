@@ -260,7 +260,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Add",
                             "Added screen '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         // Create a xref for each screen content in the screen
@@ -380,7 +380,7 @@ namespace osVodigiWeb6x.Controllers
                         // Update the screen
                         repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen", "Edit",
                             "Edited screen '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         IScreenScreenContentXrefRepository xrefrep = new EntityScreenScreenContentXrefRepository();

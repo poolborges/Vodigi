@@ -246,7 +246,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateScreenContent(screencontent);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen Content", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen Content", "Add",
                             "Added screen content '" + screencontent.ScreenContentName + "' - ID: " + screencontent.ScreenContentID.ToString());
 
                         return RedirectToAction("Index");
@@ -380,7 +380,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.UpdateScreenContent(screencontent);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen Content", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Screen Content", "Edit",
                             "Edited screen content '" + screencontent.ScreenContentName + "' - ID: " + screencontent.ScreenContentID.ToString());
 
                         return RedirectToAction("Index");

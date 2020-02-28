@@ -191,7 +191,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateSurvey(survey);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Survey", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Survey", "Add",
                             "Added survey '" + survey.SurveyName + "' - ID: " + survey.SurveyID.ToString());
 
                         return RedirectToAction("Edit", "Survey", new { id = survey.SurveyID });
@@ -271,7 +271,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateSurvey(survey);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Survey", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Survey", "Edit",
                                                     "Edited survey '" + survey.SurveyName + "' - ID: " + survey.SurveyID.ToString());
 
                     return RedirectToAction("Index");
@@ -333,7 +333,7 @@ namespace osVodigiWeb6x.Controllers
                     survey.IsApproved = true;
                     repository.UpdateSurvey(survey);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Survey", "Approve",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Survey", "Approve",
                                                     "Approved survey '" + survey.SurveyName + "' - ID: " + survey.SurveyID.ToString());
 
                     return RedirectToAction("Index");

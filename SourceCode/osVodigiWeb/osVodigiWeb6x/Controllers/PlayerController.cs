@@ -189,7 +189,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.CreatePlayer(player);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player", "Add",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Player", "Add",
                             "Added player '" + player.PlayerName + "' - ID: " + player.PlayerID.ToString());
 
                     return RedirectToAction("Index");
@@ -254,7 +254,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdatePlayer(player);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Player", "Edit",
                             "Edited player '" + player.PlayerName + "' - ID: " + player.PlayerID.ToString());
 
                     return RedirectToAction("Index");
@@ -443,13 +443,13 @@ namespace osVodigiWeb6x.Controllers
                     if (playersetting.PlayerSettingID == 0)
                     {
                         playersettingrep.CreatePlayerSetting(playersetting);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSetting", "Create",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "PlayerSetting", "Create",
                                 "Created player setting '" + playersetting.PlayerSettingName + "' with value '" + playersetting.PlayerSettingValue + "'");
                     }
                     else
                     {
                         playersettingrep.UpdatePlayerSetting(playersetting);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSetting", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "PlayerSetting", "Edit",
                                 "Updated player setting '" + playersetting.PlayerSettingName + "' to value '" + playersetting.PlayerSettingValue + "'");
                     }
 

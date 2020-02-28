@@ -198,7 +198,7 @@ namespace osVodigiWeb6x.Controllers
                         // Create the timeline
                         repository.CreateTimeline(timeline);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Timeline", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Timeline", "Add",
                             "Added timeline '" + timeline.TimelineName + "' - ID: " + timeline.TimelineID.ToString());
 
                         string[] guids;
@@ -406,7 +406,7 @@ namespace osVodigiWeb6x.Controllers
                         // Update the timeline
                         repository.UpdateTimeline(timeline);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Timeline", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Timeline", "Edit",
                             "Edited timeline '" + timeline.TimelineName + "' - ID: " + timeline.TimelineID.ToString());
 
                         string[] guids;

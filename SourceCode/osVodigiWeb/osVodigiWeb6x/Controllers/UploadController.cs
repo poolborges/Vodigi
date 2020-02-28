@@ -114,7 +114,7 @@ namespace osVodigiWeb6x.Controllers
         {
             IUploadRepository uploadrep = new IOUploadRepository();
 
-            User user = (User)Session["User"];
+            User user = AuthUtils.CheckAuthUser();
 
             List<Upload> images = uploadrep.GetImageUploads(user.AccountID, Server.MapPath(@"~/UploadedFiles")).ToList();
             List<Upload> videos = uploadrep.GetVideoUploads(user.AccountID, Server.MapPath(@"~/UploadedFiles")).ToList();

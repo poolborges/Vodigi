@@ -187,7 +187,7 @@ namespace osVodigiWeb6x.Controllers
                         // Create the playlist
                         repository.CreatePlayList(playlist);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Play List", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Play List", "Add",
                                 "Added play list '" + playlist.PlayListName + "' - ID: " + playlist.PlayListID.ToString());
 
                         IPlayListVideoXrefRepository xrefrep = new EntityPlayListVideoXrefRepository();
@@ -301,7 +301,7 @@ namespace osVodigiWeb6x.Controllers
                         // Update the playlist
                         repository.UpdatePlayList(playlist);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Play List", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Play List", "Edit",
                                 "Edited play list '" + playlist.PlayListName + "' - ID: " + playlist.PlayListID.ToString());
 
                         IPlayListVideoXrefRepository xrefrep = new EntityPlayListVideoXrefRepository();

@@ -196,7 +196,7 @@ namespace osVodigiWeb6x.Controllers
                         slideshow.TransitionType = Request.Form["lstTransitionType"].ToString();
                         repository.CreateSlideShow(slideshow);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Slide Show", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Slide Show", "Add",
                             "Added slide show '" + slideshow.SlideShowName + "' - ID: " + slideshow.SlideShowID.ToString());
 
                         ISlideShowImageXrefRepository xrefrep = new EntitySlideShowImageXrefRepository();
@@ -354,7 +354,7 @@ namespace osVodigiWeb6x.Controllers
                         slideshow.TransitionType = Request.Form["lstTransitionType"].ToString();
                         repository.UpdateSlideShow(slideshow);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Slide Show", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Slide Show", "Edit",
                             "Edited slide show '" + slideshow.SlideShowName + "' - ID: " + slideshow.SlideShowID.ToString());
 
                         ISlideShowImageXrefRepository xrefrep = new EntitySlideShowImageXrefRepository();

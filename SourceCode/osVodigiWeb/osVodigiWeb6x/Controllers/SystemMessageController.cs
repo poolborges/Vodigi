@@ -154,7 +154,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateSystemMessage(systemmessage);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "SystemMessage", "Add",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "SystemMessage", "Add",
                             "Added system message '" + systemmessage.SystemMessageTitle + "' - ID: " + systemmessage.SystemMessageID.ToString());
 
                         return RedirectToAction("Index", "SystemMessage", new { id = systemmessage.SystemMessageID });
@@ -211,7 +211,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateSystemMessage(systemmessage);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "System Message", "Edit",
+                    CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "System Message", "Edit",
                                                     "Edited system message '" + systemmessage.SystemMessageTitle + "' - ID: " + systemmessage.SystemMessageID.ToString());
 
                     return RedirectToAction("Index");

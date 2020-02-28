@@ -177,13 +177,13 @@ namespace osVodigiWeb6x.Controllers
                     if (accountdefault.PlayerSettingAccountDefaultID == 0)
                     {
                         accountdefaultrep.CreatePlayerSettingAccountDefault(accountdefault);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSettingAccountDefault", "Create",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "PlayerSettingAccountDefault", "Create",
                                 "Created player setting '" + accountdefault.PlayerSettingName + "' with value '" + accountdefault.PlayerSettingAccountDefaultValue + "'");
                     }
                     else
                     {
                         accountdefaultrep.UpdatePlayerSettingAccountDefault(accountdefault);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSettingAccountDefault", "Edit",
+                        CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "PlayerSettingAccountDefault", "Edit",
                                 "Updated player setting '" + accountdefault.PlayerSettingName + "' to value '" + accountdefault.PlayerSettingAccountDefaultValue + "'");
                     }
 
