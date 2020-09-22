@@ -41,5 +41,24 @@ This project is based on:
 * Container (Docker)
 
 
+== osVodigi Next
+
+----
+dotnet new classlib -o osVodigi.Domain
+dotnet new api -o osVodigi.WebApi
+dotnet new webapp -o osVodigi.WebApp
+dotnet new sln
+dotnet sln add osVodigi.Domain
+dotnet sln add osVodigi.WebApi
+dotnet sln add osVodigi.WebApp
+dotnet add osVodigi.WebApi reference osVodigi.Domain
+dotnet add osVodigi.WebApp reference osVodigi.Domain
+----
+
+
+== Reference
+
+TODO...
+
 
 
