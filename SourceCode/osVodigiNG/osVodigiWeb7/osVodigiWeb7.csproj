@@ -37,6 +37,7 @@
     <Folder Include="Models\ViewModel\" />
     <Folder Include="Areas\Backoffice\Views\Dashboard\" />
     <Folder Include="Areas\Backoffice\Views\Shared\Components\" />
+    <Folder Include="wwwroot\images\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Areas\Administration\_ViewStart.cshtml" />
@@ -58,6 +59,38 @@
     <Content Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
     <Content Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
     <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
+    <Content Remove="wwwroot\images\account-icon.png" />
+    <Content Remove="wwwroot\images\banner1.svg" />
+    <Content Remove="wwwroot\images\banner2.svg" />
+    <Content Remove="wwwroot\images\banner3.svg" />
+    <Content Remove="wwwroot\images\image-icon.png" />
+    <Content Remove="wwwroot\images\logo.png" />
+    <Content Remove="wwwroot\images\menubar.png" />
+    <Content Remove="wwwroot\images\message-icon.png" />
+    <Content Remove="wwwroot\images\music.png" />
+    <Content Remove="wwwroot\images\music-icon.png" />
+    <Content Remove="wwwroot\images\no-image-available.jpg" />
+    <Content Remove="wwwroot\images\playergroup-icon.png" />
+    <Content Remove="wwwroot\images\player-icon.png" />
+    <Content Remove="wwwroot\images\playersetting-icon.png" />
+    <Content Remove="wwwroot\images\playlist-icon.png" />
+    <Content Remove="wwwroot\images\progress-bar.gif" />
+    <Content Remove="wwwroot\images\report-icon.png" />
+    <Content Remove="wwwroot\images\screencontent-icon.png" />
+    <Content Remove="wwwroot\images\screen-icon.png" />
+    <Content Remove="wwwroot\images\slideshow-icon.png" />
+    <Content Remove="wwwroot\images\survey-icon.png" />
+    <Content Remove="wwwroot\images\timeline-icon.png" />
+    <Content Remove="wwwroot\images\user-icon.png" />
+    <Content Remove="wwwroot\images\video-icon.png" />
+    <Content Remove="wwwroot\images\video-small.png" />
+    <Content Remove="wwwroot\images\vodigi-logo.png" />
+    <Content Remove="wwwroot\images\vodigi-logo-6.png" />
+    <Content Remove="wwwroot\images\vodigi-logo-oval.png" />
+    <Content Remove="wwwroot\images\vodigi-logo-oval-small.png" />
+    <Content Remove="wwwroot\images\vodigi-logo-tag.png" />
+    <Content Remove="wwwroot\images\vodigi-tag.png" />
+    <Content Remove="wwwroot\images\vodigi-tag-6.png" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\Classes\Account.cs" />
@@ -106,5 +139,39 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="mono_crash.mem.8544.1.blob" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\images\account-icon.png" />
+    <None Include="wwwroot\images\banner1.svg" />
+    <None Include="wwwroot\images\banner2.svg" />
+    <None Include="wwwroot\images\banner3.svg" />
+    <None Include="wwwroot\images\image-icon.png" />
+    <None Include="wwwroot\images\logo.png" />
+    <None Include="wwwroot\images\menubar.png" />
+    <None Include="wwwroot\images\message-icon.png" />
+    <None Include="wwwroot\images\music.png" />
+    <None Include="wwwroot\images\music-icon.png" />
+    <None Include="wwwroot\images\no-image-available.jpg" />
+    <None Include="wwwroot\images\playergroup-icon.png" />
+    <None Include="wwwroot\images\player-icon.png" />
+    <None Include="wwwroot\images\playersetting-icon.png" />
+    <None Include="wwwroot\images\playlist-icon.png" />
+    <None Include="wwwroot\images\progress-bar.gif" />
+    <None Include="wwwroot\images\report-icon.png" />
+    <None Include="wwwroot\images\screencontent-icon.png" />
+    <None Include="wwwroot\images\screen-icon.png" />
+    <None Include="wwwroot\images\slideshow-icon.png" />
+    <None Include="wwwroot\images\survey-icon.png" />
+    <None Include="wwwroot\images\timeline-icon.png" />
+    <None Include="wwwroot\images\user-icon.png" />
+    <None Include="wwwroot\images\video-icon.png" />
+    <None Include="wwwroot\images\video-small.png" />
+    <None Include="wwwroot\images\vodigi-logo.png" />
+    <None Include="wwwroot\images\vodigi-logo-6.png" />
+    <None Include="wwwroot\images\vodigi-logo-oval.png" />
+    <None Include="wwwroot\images\vodigi-logo-oval-small.png" />
+    <None Include="wwwroot\images\vodigi-logo-tag.png" />
+    <None Include="wwwroot\images\vodigi-tag.png" />
+    <None Include="wwwroot\images\vodigi-tag-6.png" />
   </ItemGroup>
 </Project>
