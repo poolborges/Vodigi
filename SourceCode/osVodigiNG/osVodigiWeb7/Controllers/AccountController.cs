@@ -23,11 +23,11 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using osVodigiWeb7.Extensions;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.Controllers
 {
     public class AccountController : AbstractVodigiController
     {

@@ -19,7 +19,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public interface ISystemMessageRepository
     {

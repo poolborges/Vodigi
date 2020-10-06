@@ -19,7 +19,7 @@
 using System.Data;
 using Microsoft.EntityFrameworkCore;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerScreenContentLogRepository : IPlayerScreenContentLogRepository
     {

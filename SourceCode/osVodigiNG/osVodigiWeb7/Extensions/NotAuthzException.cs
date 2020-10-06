@@ -1,5 +1,5 @@
 ﻿using System;
-namespace osVodigiWeb6x.Exceptions
+namespace osVodigiWeb7x.Exceptions
 {
     [Serializable]
     public class NotAuthzException : Exception

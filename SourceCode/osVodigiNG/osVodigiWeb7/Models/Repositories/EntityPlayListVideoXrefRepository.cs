@@ -19,7 +19,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class EntityPlayListVideoXrefRepository : IPlayListVideoXrefRepository
     {

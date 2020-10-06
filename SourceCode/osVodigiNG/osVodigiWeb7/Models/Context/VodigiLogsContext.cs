@@ -20,7 +20,7 @@ using Microsoft.EntityFrameworkCore;
 //using System.Data.Entity;
 //using System.Data.Entity.ModelConfiguration.Conventions;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class VodigiLogsContext : DbContext
     {

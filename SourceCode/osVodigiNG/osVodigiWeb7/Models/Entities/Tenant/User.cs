@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class User
     {

@@ -18,7 +18,7 @@
 
 using System.Data;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerScreenLogRepository : IPlayerScreenLogRepository
     {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.Controllers
 {
     public class SurveyPageState
     {

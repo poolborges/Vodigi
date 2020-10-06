@@ -18,7 +18,7 @@
 
 using System;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public interface IActivityLogRepository
     {

@@ -27,11 +27,11 @@ using Microsoft.AspNetCore.Http.Extensions;
 using osVodigiWeb7.Extensions;
 using System.Text;
 using System.Configuration;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.Controllers
 {
     public class SurveyController : AbstractVodigiController
     {

@@ -21,9 +21,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 
-namespace osVodigiWeb6x
+namespace osVodigiWeb7x
 {
     public class Helpers
     {

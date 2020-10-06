@@ -1,13 +1,13 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using osVodigiWeb6x;
+using osVodigiWeb7x;
 using osVodigiWeb7.Extensions;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.Controllers
 {
     public abstract class AbstractVodigiController : Controller
     {

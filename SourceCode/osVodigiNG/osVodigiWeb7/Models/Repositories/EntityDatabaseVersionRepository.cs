@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Data;
 
-namespace osVodigiWeb6x.Models
+namespace osVodigiWeb7x.Models
 {
     public class EntityDatabaseVersionRepository : IDatabaseVersionRepository
     {

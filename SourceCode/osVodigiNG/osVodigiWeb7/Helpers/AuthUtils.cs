@@ -1,10 +1,10 @@
 ﻿using System;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 using System.Web;
-using osVodigiWeb6x.Exceptions;
+using osVodigiWeb7x.Exceptions;
 using Microsoft.AspNetCore.Http;
 
-namespace osVodigiWeb6x
+namespace osVodigiWeb7x
 {
     public class AuthUtils
     {

@@ -26,9 +26,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using osVodigiWeb7.Extensions;
 using System.Text;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x.Models;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.Controllers
 {
     public class ReportController : Controller
     {

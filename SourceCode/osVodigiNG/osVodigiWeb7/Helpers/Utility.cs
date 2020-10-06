@@ -21,7 +21,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 
-namespace osVodigiWeb6x
+namespace osVodigiWeb7x
 {
     public class Utility
     {
