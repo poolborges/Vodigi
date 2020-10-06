@@ -91,8 +91,6 @@
     <Content Remove="wwwroot\images\vodigi-logo-tag.png" />
     <Content Remove="wwwroot\images\vodigi-tag.png" />
     <Content Remove="wwwroot\images\vodigi-tag-6.png" />
-    <Content Remove="wwwroot\css\site_.css" />
-    <Content Remove="wwwroot\css\site_.min.css" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Models\Classes\Account.cs" />
@@ -175,7 +173,5 @@
     <None Include="wwwroot\images\vodigi-logo-tag.png" />
     <None Include="wwwroot\images\vodigi-tag.png" />
     <None Include="wwwroot\images\vodigi-tag-6.png" />
-    <None Include="wwwroot\css\site_.css" />
-    <None Include="wwwroot\css\site_.min.css" />
   </ItemGroup>
 </Project>
