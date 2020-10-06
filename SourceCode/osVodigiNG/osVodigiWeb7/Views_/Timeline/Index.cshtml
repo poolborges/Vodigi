@@ -1,0 +1,113 @@
+﻿@model IEnumerable<osVodigiWeb6x.Models.Timeline>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) == 1) {
+            $("#linkPrevious").hide();
+        }
+        if (parseInt(pagenumber) == parseInt(pagecount)) {
+            $("#linkNext").hide();
+        }
+    });
+    function NextPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        var pagecount = $("#txtPageCount").val();
+        if (parseInt(pagenumber) < parseInt(pagecount)) {
+            $("#txtPageNumber").val(parseInt(pagenumber) + 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function PreviousPage() {
+        var pagenumber = $("#txtPageNumber").val();
+        if (parseInt(pagenumber) > 1) {
+            $("#txtPageNumber").val(parseInt(pagenumber) - 1);
+            document.getElementById("formSearch").submit();
+        }
+    }
+    function ResetPageCount() {
+        $("#txtPageNumber").val(1);
+    }
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/timeline-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Timelines</span><span id="addlink">@Html.ActionLink("Add Timeline", "Create")</span><br />
+                <span class="paragraphtext">The following is a list of timelines that match the search parameters below.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("Index", "Timeline", FormMethod.Post, new { id = "formSearch" }))
+{    
+    <div class="searchdiv">
+        <table class="searchtable">
+            <tr>
+                <td class="searchcell"><b>Timeline Name:&nbsp;</b><br />@Html.TextBox("txtTimelineName", (string)ViewData["TimelineName"], new { @style = "width:150px;font-size:10px;" })</td>
+                <td class="searchcell"><b>Tag:</b><br />@Html.TextBox("txtTag", (string)ViewData["Tag"], new { @style = "width:150px;font-size:10px;" })</td>
+                <td class="searchcell"><b>Include Inactive:</b><br />@Html.CheckBox("chkIncludeInactive", (bool)ViewData["IncludeInactive"])</td>
+                <td class="searchcell"><b>Sort By:</b><br />@Html.DropDownList("lstSortBy", (SelectList)ViewData["SortByList"], new { @style = "font-size:10px;" })@Html.DropDownList("lstAscDesc", (SelectList)ViewData["AscDescList"], new { @style = "font-size:10px;" })</td>
+                <td class="searchcell" style="vertical-align:bottom;"><input type="submit" class="search" value="Search" onclick="ResetPageCount()" /></td>
+            </tr>
+        </table>    
+    </div>
+
+    if (Model.Count() > 0)
+    {
+        string[] colors = { "#FFFFFF", "#EEEEEE" };
+        int colorindex = 0;
+        foreach (var item in Model)
+        {
+            <div class="griddiv" style="background-color:@colors[colorindex]">
+                <table style="border-spacing:0;border-collapse:collapse;width:920px;margin-left:auto;margin-right:auto;">
+                    <tr>
+                        <td class="gridcell" style="width:200px;color:#315581;text-align:right;"><b>Timeline Name:</b></td>
+                        <td class="gridcell" style="width:210px;"><b>@Html.DisplayFor(modelItem => item.TimelineName)</b></td>
+                        <td class="gridcell" style="width:200px;color:#315581;text-align:right;"><b>Active:</b></td>
+                        <td class="gridcell" style="width:210px;">@Html.DisplayFor(modelItem => item.IsActive)</td>
+                        <td class="gridcell" style="width:100px;">
+                            <div class="gridlinkdiv"><span id="gridlink">@Html.ActionLink("Edit", "Edit", new { id = item.TimelineID })</span></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell"style="color:#315581;text-align:right;"><b>Tags:</b></td>
+                        <td class="gridcell" colspan="3">@Html.DisplayFor(modelItem => item.Tags)</td>
+                        <td class="gridcell"></td>
+                    </tr>
+                </table>
+            </div>
+            if (colorindex == 0) { colorindex = 1; }
+            else { colorindex = 0; }
+        }
+    }
+    else
+    {
+            <div class="griddiv">No Data Available</div>
+    }
+    
+    <div id="divfooter" class="footerdiv">
+        <table style="border-spacing:0;border-collapse:collapse;" class="gridfootertable">
+            <tr>
+                <td style="text-align:left;"><span style="color:#FFFFFF;">Page @Html.Label((string)ViewData["PageNumber"]) of @Html.Label((string)ViewData["PageCount"]) (@Html.Label((string)ViewData["RecordCount"]) Total Items)</span></td>
+                <td style="text-align:right;">
+                    <span id="linkPrevious" class="previousnext" onclick="PreviousPage();">Previous</span>&nbsp;&nbsp;
+                    <span id="linkNext" class="previousnext" onclick="NextPage();">Next</span>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <br /><br />
+    @Html.Hidden("txtPageCount", ViewData["PageCount"])
+    @Html.Hidden("txtPageNumber", ViewData["PageNumber"])
+
+}

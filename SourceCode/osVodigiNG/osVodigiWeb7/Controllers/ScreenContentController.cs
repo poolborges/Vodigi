@@ -20,23 +20,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Configuration;
 using osVodigiWeb6x.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class ScreenContentController : Controller
+    public class ScreenContentController : AbstractVodigiController
     {
         IScreenContentRepository repository;
         string firstfile = String.Empty;
         string selectedfile = String.Empty;
 
-        public ScreenContentController()
-            : this(new EntityScreenContentRepository())
-        { }
-
-        public ScreenContentController(IScreenContentRepository paramrepository)
+        public ScreenContentController(IScreenContentRepository paramrepository,
+            IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
         {
             repository = paramrepository;
         }
@@ -48,30 +52,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ScreenContentPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.ScreenContentName = Request.Form["txtScreenContentName"].ToString().Trim();
                     pagestate.ScreenContentTypeID = Convert.ToInt32(Request.Form["lstScreenContentTypeList"]);
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -123,7 +118,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the image folder 
-                ViewData["ImageFolder"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 // Need to return the stored filename and content type name
                 IEnumerable<ScreenContent> screencontents = repository.GetScreenContentPage(pagestate.AccountID, pagestate.ScreenContentName, pagestate.ScreenContentTypeID, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount);
@@ -137,7 +132,7 @@ namespace osVodigiWeb6x.Controllers
                     contentview.AccountID = screencontent.AccountID;
                     contentview.ScreenContentTypeID = screencontent.ScreenContentTypeID;
                     ScreenContentType sctype = sctrep.GetScreenContentType(screencontent.ScreenContentTypeID);
-                    contentview.ScreenContentTypeName = sctype.ScreenContentTypeName;
+                    contentview.ScreenContentTypeName = (sctype != null ? sctype.ScreenContentTypeName : "");
                     contentview.ScreenContentName = screencontent.ScreenContentName;
                     contentview.ScreenContentTitle = screencontent.ScreenContentTitle;
                     contentview.ThumbnailImageID = screencontent.ThumbnailImageID;
@@ -157,8 +152,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Index", ex);
+                
             }
         }
 
@@ -169,14 +164,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["ImageList"] = new SelectList(BuildThumbnailImageList(""), "Value", "Text", "");
@@ -190,14 +178,14 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["ScreenContentSurveys"] = new SelectList(BuildSurveyList(0), "Value", "Text", "");
                 ViewData["ScreenContentTimelines"] = new SelectList(BuildTimelineList(0), "Value", "Text", "");
 
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(CreateNewScreenContent());
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Create", ex);
+                
             }
         }
 
@@ -209,24 +197,17 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screencontent = FillNulls(screencontent);
-                    screencontent.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screencontent.AccountID = AuthUtils.GetAccountId();
                     screencontent.ScreenContentTypeID = Convert.ToInt32(Request.Form["lstScreenContentTypeList"]);
 
                     IImageRepository imgrep = new EntityImageRepository();
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), Request.Form["lstImage"]);
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), Request.Form["lstImage"]);
                     if (img != null)
                         screencontent.ThumbnailImageID = img.ImageID;
                     else
@@ -247,7 +228,7 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["ScreenContentSurveys"] = new SelectList(BuildSurveyList(0), "Value", "Text", "");
                         ViewData["ScreenContentTimelines"] = new SelectList(BuildTimelineList(0), "Value", "Text", Request.Form["lstScreenContentTimelines"]);
 
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(screencontent);
                     }
@@ -269,7 +250,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateScreenContent(screencontent);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen Content", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen Content", "Add",
                             "Added screen content '" + screencontent.ScreenContentName + "' - ID: " + screencontent.ScreenContentID.ToString());
 
                         return RedirectToAction("Index");
@@ -280,8 +261,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Create POST", ex);
+                
             }
         }
 
@@ -292,14 +273,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ScreenContent screencontent = repository.GetScreenContent(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -337,14 +311,14 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["ScreenContentSurveys"] = new SelectList(BuildSurveyList(currentsurveyid), "Value", "Text", "");
                 ViewData["ScreenContentTimelines"] = new SelectList(BuildTimelineList(currenttimelineid), "Value", "Text", "");
 
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(screencontent);
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Edit", ex);
+                
             }
         }
 
@@ -356,25 +330,18 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screencontent = FillNulls(screencontent);
 
-                    screencontent.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screencontent.AccountID = AuthUtils.GetAccountId();
                     screencontent.ScreenContentTypeID = Convert.ToInt32(Request.Form["lstScreenContentTypeList"]);
 
                     IImageRepository imgrep = new EntityImageRepository();
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), Request.Form["lstImage"]);
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), Request.Form["lstImage"]);
                     if (img != null)
                         screencontent.ThumbnailImageID = img.ImageID;
                     else
@@ -395,7 +362,7 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["ScreenContentSurveys"] = new SelectList(BuildSurveyList(0), "Value", "Text", "");
                         ViewData["ScreenContentTimelines"] = new SelectList(BuildTimelineList(0), "Value", "Text", Request.Form["lstScreenContentTimelines"]);
 
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(screencontent);
                     }
@@ -417,7 +384,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.UpdateScreenContent(screencontent);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen Content", "Edit",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen Content", "Edit",
                             "Edited screen content '" + screencontent.ScreenContentName + "' - ID: " + screencontent.ScreenContentID.ToString());
 
                         return RedirectToAction("Index");
@@ -428,8 +395,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenContent", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenContent", "Edit POST", ex);
+                
             }
         }
 
@@ -508,15 +475,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildThumbnailImageList(string currentfile)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string imagefolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -543,9 +508,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildImageList(int currentimageid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
@@ -577,9 +540,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildVideoList(int currentvideoid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active videos
             IVideoRepository vidrep = new EntityVideoRepository();
@@ -611,9 +572,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildSlideShowList(int currentslideshowid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active slide shows
             ISlideShowRepository ssrep = new EntitySlideShowRepository();
@@ -645,9 +604,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildPlayListList(int currentplaylistid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active play lists
             IPlayListRepository plrep = new EntityPlayListRepository();
@@ -679,9 +636,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildSurveyList(int currentsurveyid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the approved surveys
             ISurveyRepository srep = new EntitySurveyRepository();
@@ -713,9 +668,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildTimelineList(int currenttimelineid)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active timelines
             ITimelineRepository tlrep = new EntityTimelineRepository();
@@ -749,28 +702,6 @@ namespace osVodigiWeb6x.Controllers
             try
             {
                 ScreenContentPageState pagestate = new ScreenContentPageState();
-
-
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ScreenContentPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.ScreenContentName = String.Empty;
-                    pagestate.ScreenContentTypeID = 0;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "ScreenContentName";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["ScreenContentPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ScreenContentPageState)Session["ScreenContentPageState"];
-                }
                 return pagestate;
             }
             catch { return new ScreenContentPageState(); }
@@ -778,7 +709,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ScreenContentPageState pagestate)
         {
-            Session["ScreenContentPageState"] = pagestate;
+            
         }
 
         private ScreenContent FillNulls(ScreenContent screencontent)

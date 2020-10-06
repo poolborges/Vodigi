@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
@@ -45,14 +49,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -60,8 +57,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Create", ex);
+                
             }
         }
 
@@ -73,14 +70,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -97,7 +87,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateSurveyQuestion(surveyquestion);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "SurveyQuestion", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "SurveyQuestion", "Add",
                             "Added survey question '" + surveyquestion.SurveyQuestionText + "' - ID: " + surveyquestion.SurveyQuestionID.ToString());
 
                         return RedirectToAction("Edit", "Survey", new { id = surveyquestion.SurveyID });
@@ -107,8 +97,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Create POST", ex);
+                
             }
         }
 
@@ -119,14 +109,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -135,8 +118,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Edit", ex);
+                
             }
         }
 
@@ -148,14 +131,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -168,7 +144,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateSurveyQuestion(surveyquestion);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "SurveyQuestion", "Edit",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "SurveyQuestion", "Edit",
                                                     "Edited survey question '" + surveyquestion.SurveyQuestionText + "' - ID: " + surveyquestion.SurveyQuestionID.ToString());
 
                     return RedirectToAction("Edit", "Survey", new { id = surveyquestion.SurveyID });
@@ -178,8 +154,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Edit POST", ex);
+                
             }
         }
 
@@ -191,14 +167,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;
@@ -209,8 +178,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "Delete", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "Delete", ex);
+                
             }
         }
 
@@ -221,14 +190,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;
@@ -239,8 +201,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "MoveUp", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "MoveUp", ex);
+                
             }
         }
 
@@ -251,14 +213,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SurveyQuestion surveyquestion = repository.GetSurveyQuestion(id);
                 int surveyid = surveyquestion.SurveyID;
@@ -269,8 +224,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SurveyQuestion", "MoveDown", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SurveyQuestion", "MoveDown", ex);
+                
             }
         }
 

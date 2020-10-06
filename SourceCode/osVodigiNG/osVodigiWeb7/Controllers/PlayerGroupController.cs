@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
@@ -45,30 +49,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 PlayerGroupPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.PlayerGroupName = Request.Form["txtPlayerGroupName"].ToString().Trim();
                     pagestate.Description = Request.Form["txtDescription"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -124,8 +119,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Index", ex);
+                
             }
         }
 
@@ -136,14 +131,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -151,8 +139,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Create", ex);
+                
             }
         }
 
@@ -164,20 +152,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     playergroup = FillNulls(playergroup);
-                    playergroup.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    playergroup.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(playergroup);
                     if (!String.IsNullOrEmpty(validation))
@@ -188,7 +169,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.CreatePlayerGroup(playergroup);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player Group", "Add",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Player Group", "Add",
                             "Added player group '" + playergroup.PlayerGroupName + "' - ID: " + playergroup.PlayerGroupID.ToString());
 
                     return RedirectToAction("Index");
@@ -198,8 +179,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Create POST", ex);
+                
             }
         }
 
@@ -210,14 +191,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 PlayerGroup playergroup = repository.GetPlayerGroup(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -226,8 +200,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Edit", ex);
+                
             }
         }
 
@@ -239,14 +213,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -262,7 +229,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdatePlayerGroup(playergroup);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player Group", "Edit",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Player Group", "Edit",
                             "Edited player group '" + playergroup.PlayerGroupName + "' - ID: " + playergroup.PlayerGroupID.ToString());
 
                     return RedirectToAction("Index");
@@ -272,8 +239,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroup", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroup", "Edit POST", ex);
+                
             }
         }
 
@@ -327,15 +294,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                PlayerGroupPageState pagestate = new PlayerGroupPageState();
+                PlayerGroupPageState pagestate = HttpContext.Session.Get<PlayerGroupPageState>("PlayerGroupPageState");
 
 
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["PlayerGroupPageState"] == null)
+                if (pagestate == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
 
                     pagestate.AccountID = accountid;
                     pagestate.PlayerGroupName = String.Empty;
@@ -344,11 +309,7 @@ namespace osVodigiWeb6x.Controllers
                     pagestate.SortBy = "PlayerGroupName";
                     pagestate.AscDesc = "Ascending";
                     pagestate.PageNumber = 1;
-                    Session["PlayerGroupPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (PlayerGroupPageState)Session["PlayerGroupPageState"];
+                    SavePageState(pagestate);
                 }
                 return pagestate;
             }
@@ -357,7 +318,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(PlayerGroupPageState pagestate)
         {
-            Session["PlayerGroupPageState"] = pagestate;
+            HttpContext.Session.Set<PlayerGroupPageState>("PlayerGroupPageState", pagestate);
         }
 
         private PlayerGroup FillNulls(PlayerGroup playergroup)

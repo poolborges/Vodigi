@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
@@ -45,19 +49,10 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // This is the list we are building to display
                 List<PlayerSettingAccountDefaultView> accountdefaultviews = new List<PlayerSettingAccountDefaultView>();
@@ -103,8 +98,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Index", ex);
+                
             }
         }
 
@@ -115,14 +110,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 bool isid = true;
                 try
@@ -145,7 +133,7 @@ namespace osVodigiWeb6x.Controllers
                     if (systemdefault != null)
                     {
                         accountdefault.PlayerSettingAccountDefaultID = 0;
-                        accountdefault.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                        accountdefault.AccountID = AuthUtils.GetAccountId();
                         accountdefault.PlayerSettingName = systemdefault.PlayerSettingName;
                         accountdefault.PlayerSettingTypeID = systemdefault.PlayerSettingTypeID;
                         accountdefault.PlayerSettingAccountDefaultValue = systemdefault.PlayerSettingSystemDefaultValue;
@@ -161,8 +149,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Edit", ex);
+                
             }
         }
 
@@ -174,14 +162,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -200,13 +181,13 @@ namespace osVodigiWeb6x.Controllers
                     if (accountdefault.PlayerSettingAccountDefaultID == 0)
                     {
                         accountdefaultrep.CreatePlayerSettingAccountDefault(accountdefault);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSettingAccountDefault", "Create",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "PlayerSettingAccountDefault", "Create",
                                 "Created player setting '" + accountdefault.PlayerSettingName + "' with value '" + accountdefault.PlayerSettingAccountDefaultValue + "'");
                     }
                     else
                     {
                         accountdefaultrep.UpdatePlayerSettingAccountDefault(accountdefault);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSettingAccountDefault", "Edit",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "PlayerSettingAccountDefault", "Edit",
                                 "Updated player setting '" + accountdefault.PlayerSettingName + "' to value '" + accountdefault.PlayerSettingAccountDefaultValue + "'");
                     }
 
@@ -218,8 +199,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSettingAccountDefault", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSettingAccountDefault", "Edit POST", ex);
+                
             }
         }
 

@@ -20,22 +20,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Text;
 using System.Configuration;
 using osVodigiWeb6x.Models;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Hosting;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class LoginController : Controller
+    public class LoginController : AbstractVodigiController
     {
         ILoginRepository repository;
 
-        public LoginController()
-            : this(new EntityLoginRepository())
-        { }
-
-        public LoginController(ILoginRepository paramrepository)
+        public LoginController(ILoginRepository paramrepository, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
         {
             repository = paramrepository;
         }
@@ -48,18 +51,11 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                Session.Abandon();
-
-                // Redirect to https is required
-                if (ConfigurationManager.AppSettings["RequireHTTPS"] == "true")
-                {
-                    if (Request.Url.AbsoluteUri.StartsWith("http://"))
-                        Response.Redirect(Request.Url.AbsoluteUri.Replace("http://", "https://"));
-                }
+//TODO check if alreday logged
 
                 // Display the free links if appropriate
                 ViewData["FreeLinks"] = "";
-                if (ConfigurationManager.AppSettings["ShowFreeLinks"] == "true")
+                if (_configuration.GetValue<bool>("ShowFreeLinks") == true)
                     ViewData["FreeLinks"] = BuildFreeLinks();
 
                 // Display the system messages, if any
@@ -74,8 +70,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Login", "Validate", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Login", "Validate", ex);
             }
         }
 
@@ -91,7 +86,7 @@ namespace osVodigiWeb6x.Controllers
                 User user = repository.ValidateLogin(Request.Form["txtUsername"].ToString(), Request.Form["txtPassword"].ToString());
 
                 ViewData["FreeLinks"] = "";
-                if (ConfigurationManager.AppSettings["ShowFreeLinks"] == "true")
+                if (_configuration.GetValue<bool>("ShowFreeLinks") == true)
                     ViewData["FreeLinks"] = BuildFreeLinks();
 
                 // Display the system messages, if any
@@ -108,33 +103,39 @@ namespace osVodigiWeb6x.Controllers
                 }
                 else
                 {
-                    Session["User"] = user;
-                    Session["UserAccountID"] = user.AccountID;
+                    HttpContext.Session.Set<User>("User", user);
+                    HttpContext.Session.SetInt32("UserAccountID", user.AccountID);
 
                     IAccountRepository acctrep = new EntityAccountRepository();
                     Account account = acctrep.GetAccount(user.AccountID);
-                    Session["UserAccountName"] = account.AccountName;
+                    HttpContext.Session.SetString("UserAccountName", account.AccountName);
+
+
+                    HttpContext.Session.SetString("LoginInfo", Utility.BuildUserAccountString(user.Username, account.AccountName));
+
+                    if (user.IsAdmin)
+                    {
+                        HttpContext.Session.SetString("txtIsAdmin", true.ToString());
+                    }
+                    else
+                    {
+                        HttpContext.Session.SetString("txtIsAdmin", false.ToString());
+                    }
 
                     // Make sure the Account Folders exist
-                    string serverpath = Server.MapPath("~/UploadedFiles");
-                    if (!serverpath.EndsWith(@"\"))
-                        serverpath += @"\";
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Images");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Videos");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Music");
+                    string serverpath = GetHostFolder("~/UploadedFiles/");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Images");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Videos");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Music");
 
-                    serverpath = Server.MapPath("~/Media");
-                    if (!serverpath.EndsWith(@"\"))
-                        serverpath += @"\";
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Images");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Videos");
-                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"\Music");
+                    serverpath = GetHostFolder("~/Media/");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Images");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Videos");
+                    System.IO.Directory.CreateDirectory(serverpath + user.AccountID.ToString() + @"/Music");
 
                     // Create example data for the account (if appropriate)
                     IPlayerGroupRepository pgrep = new EntityPlayerGroupRepository();
                     IEnumerable<PlayerGroup> groups = pgrep.GetAllPlayerGroups(account.AccountID);
-                    if (groups == null || groups.Count() == 0)
-                        acctrep.CreateExampleData(account.AccountID);
 
                     // Log the login
                     ILoginLogRepository llrep = new EntityLoginLogRepository();
@@ -151,9 +152,13 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Login", "Validate POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Login", "Validate POST", ex);
+                
             }
+        }
+
+        private void setSession() {
+
         }
 
         private string BuildFreeLinks()
@@ -185,7 +190,7 @@ namespace osVodigiWeb6x.Controllers
 
                 ISystemMessageRepository msgrep = new EntitySystemMessageRepository();
                 IEnumerable<SystemMessage> msgs = msgrep.GetSystemMessagesByDate(DateTime.Today);
-                if (msgs != null && msgs.Count() > 0)
+                if (msgs != null && msgs.Any())
                 {
                     msgstext.Append("<b>System Messages:</b><br>");
                     msgstext.Append("<ul>");

@@ -20,14 +20,20 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Text;
 using System.Configuration;
 using osVodigiWeb6x.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class TimelineController : Controller
+    public class TimelineController : AbstractVodigiController
     {
         ITimelineRepository repository;
         string firstimagefile = String.Empty;
@@ -35,11 +41,9 @@ namespace osVodigiWeb6x.Controllers
         string firstvideofile = String.Empty;
         string selectedvideofile = String.Empty;
 
-        public TimelineController()
-            : this(new EntityTimelineRepository())
-        { }
-
-        public TimelineController(ITimelineRepository paramrepository)
+        public TimelineController(ITimelineRepository paramrepository,
+            IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
         {
             repository = paramrepository;
         }
@@ -51,30 +55,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 TimelinePageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.TimelineName = Request.Form["txtTimelineName"].ToString().Trim();
                     pagestate.Tag = Request.Form["txtTag"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -130,8 +125,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Timeline", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Timeline", "Index", ex);
+                
             }
         }
 
@@ -142,14 +137,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the Image, Music, and Video lists
                 ViewData["ImageList"] = new SelectList(BuildImageList(), "Value", "Text", "");
@@ -160,9 +148,9 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["TimelineMedia"] = String.Empty;
                 ViewData["TimelineMusic"] = String.Empty;
                 ViewData["ImageUrl"] = firstimagefile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
                 ViewData["VideoUrl"] = firstvideofile;
-                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                ViewData["VideoFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -170,8 +158,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Timeline", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Timeline", "Create", ex);
+                
             }
         }
 
@@ -183,20 +171,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     timeline = FillNulls(timeline);
-                    timeline.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    timeline.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(timeline);
                     if (!String.IsNullOrEmpty(validation))
@@ -210,9 +191,9 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["TimelineMedia"] = Request.Form["txtTimelineMedia"].ToString(); ;
                         ViewData["TimelineMusic"] = Request.Form["txtTimelineMusic"].ToString(); ;
                         ViewData["ImageUrl"] = firstimagefile;
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
                         ViewData["VideoUrl"] = firstvideofile;
-                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                        ViewData["VideoFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                         return View(timeline);
                     }
@@ -221,7 +202,7 @@ namespace osVodigiWeb6x.Controllers
                         // Create the timeline
                         repository.CreateTimeline(timeline);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Timeline", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Timeline", "Add",
                             "Added timeline '" + timeline.TimelineName + "' - ID: " + timeline.TimelineID.ToString());
 
                         string[] guids;
@@ -236,7 +217,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Image image = imagerep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Image image = imagerep.GetImageByGuid(AuthUtils.GetAccountId(), guid);
                                 if (image != null)
                                 {
                                     TimelineImageXref xref = new TimelineImageXref();
@@ -258,7 +239,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Video video = videorep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Video video = videorep.GetVideoByGuid(AuthUtils.GetAccountId(), guid);
                                 if (video != null)
                                 {
                                     TimelineVideoXref xref = new TimelineVideoXref();
@@ -280,7 +261,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid);
                                 if (music != null)
                                 {
                                     TimelineMusicXref xref = new TimelineMusicXref();
@@ -301,8 +282,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Timeline", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Timeline", "Create POST", ex);
+                
             }
         }
 
@@ -313,14 +294,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Timeline timeline = repository.GetTimeline(id);
 
@@ -329,9 +303,9 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["MusicList"] = new SelectList(BuildMusicList(), "Value", "Text", "");
                 ViewData["VideoList"] = new SelectList(BuildVideoList(), "Value", "Text", "");
                 ViewData["ImageUrl"] = firstimagefile;
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
                 ViewData["VideoUrl"] = firstvideofile;
-                ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                ViewData["VideoFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 List<TimelineMediaSort> media = new List<TimelineMediaSort>();
 
@@ -392,8 +366,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Timeline", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Timeline", "Edit", ex);
+                
             }
         }
 
@@ -405,20 +379,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     timeline = FillNulls(timeline);
-                    timeline.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    timeline.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(timeline);
                     if (!String.IsNullOrEmpty(validation))
@@ -432,9 +399,9 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["TimelineMedia"] = Request.Form["txtTimelineMedia"].ToString(); ;
                         ViewData["TimelineMusic"] = Request.Form["txtTimelineMusic"].ToString(); ;
                         ViewData["ImageUrl"] = firstimagefile;
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
                         ViewData["VideoUrl"] = firstvideofile;
-                        ViewData["VideoFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                        ViewData["VideoFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                         return View(timeline);
                     }
@@ -443,7 +410,7 @@ namespace osVodigiWeb6x.Controllers
                         // Update the timeline
                         repository.UpdateTimeline(timeline);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Timeline", "Edit",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Timeline", "Edit",
                             "Edited timeline '" + timeline.TimelineName + "' - ID: " + timeline.TimelineID.ToString());
 
                         string[] guids;
@@ -465,7 +432,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Image image = imagerep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Image image = imagerep.GetImageByGuid(AuthUtils.GetAccountId(), guid);
                                 if (image != null)
                                 {
                                     TimelineImageXref xref = new TimelineImageXref();
@@ -486,7 +453,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Video video = videorep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Video video = videorep.GetVideoByGuid(AuthUtils.GetAccountId(), guid);
                                 if (video != null)
                                 {
                                     TimelineVideoXref xref = new TimelineVideoXref();
@@ -507,7 +474,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid);
                                 if (music != null)
                                 {
                                     TimelineMusicXref xref = new TimelineMusicXref();
@@ -528,8 +495,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Timeline", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Timeline", "Edit POST", ex);
+                
             }
         }
 
@@ -584,28 +551,6 @@ namespace osVodigiWeb6x.Controllers
             try
             {
                 TimelinePageState pagestate = new TimelinePageState();
-
-
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["TimelinePageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.TimelineName = String.Empty;
-                    pagestate.Tag = String.Empty;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "TimelineName";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["TimelinePageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (TimelinePageState)Session["TimelinePageState"];
-                }
                 return pagestate;
             }
             catch { return new TimelinePageState(); }
@@ -613,7 +558,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(TimelinePageState pagestate)
         {
-            Session["TimelinePageState"] = pagestate;
+            
         }
 
         private Timeline CreateNewTimeline()
@@ -651,15 +596,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildImageList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string imagefolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -684,15 +627,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildMusicList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active music files
             IMusicRepository musicrep = new EntityMusicRepository();
             IEnumerable<Music> musics = musicrep.GetAllMusics(accountid);
 
-            string musicfolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+            string musicfolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             foreach (Music music in musics)
@@ -710,15 +651,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildVideoList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active videos
             IVideoRepository vidrep = new EntityVideoRepository();
             IEnumerable<Video> vids = vidrep.GetAllVideos(accountid);
 
-            string videofolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+            string videofolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -752,7 +691,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 if (!String.IsNullOrEmpty(guid.Trim()))
                 {
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), guid.Trim());
                     if (img != null)
                     {
                         SelectListItem item = new SelectListItem();
@@ -763,7 +702,7 @@ namespace osVodigiWeb6x.Controllers
                     }
                     else
                     {
-                        Video vid = vidrep.GetVideoByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                        Video vid = vidrep.GetVideoByGuid(AuthUtils.GetAccountId(), guid.Trim());
                         if (vid != null)
                         {
                             SelectListItem item = new SelectListItem();
@@ -790,7 +729,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 if (!String.IsNullOrEmpty(guid.Trim()))
                 {
-                    Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                    Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid.Trim());
                     if (music != null)
                     {
                         SelectListItem item = new SelectListItem();

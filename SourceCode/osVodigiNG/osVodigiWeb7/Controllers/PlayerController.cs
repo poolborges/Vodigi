@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
@@ -28,10 +32,6 @@ namespace osVodigiWeb6x.Controllers
     public class PlayerController : Controller
     {
         IPlayerRepository repository;
-
-        public PlayerController()
-            : this(new EntityPlayerRepository())
-        { }
 
         public PlayerController(IPlayerRepository paramrepository)
         {
@@ -45,30 +45,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 PlayerPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.PlayerGroupID = Convert.ToInt32(Request.Form["lstPlayerGroup"].ToString().Trim());
                     pagestate.PlayerName = Request.Form["txtPlayerName"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -145,8 +136,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Index", ex);
+                
             }
         }
 
@@ -157,14 +148,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["PlayerGroupList"] = new SelectList(BuildPlayerGroupList(false), "Value", "Text");
                 ViewData["ValidationMessage"] = String.Empty;
@@ -173,8 +157,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Create", ex);
+                
             }
         }
 
@@ -186,20 +170,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     player = FillNulls(player);
-                    player.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    player.AccountID = AuthUtils.GetAccountId();
                     player.PlayerGroupID = Convert.ToInt32(Request.Form["lstPlayerGroup"]);
 
                     string validation = ValidateInput(player);
@@ -212,7 +189,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.CreatePlayer(player);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player", "Add",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Player", "Add",
                             "Added player '" + player.PlayerName + "' - ID: " + player.PlayerID.ToString());
 
                     return RedirectToAction("Index");
@@ -222,8 +199,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Create POST", ex);
+                
             }
         }
 
@@ -234,14 +211,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Player player = repository.GetPlayer(id);
 
@@ -252,8 +222,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Edit", ex);
+                
             }
         }
 
@@ -265,14 +235,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -291,7 +254,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdatePlayer(player);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Player", "Edit",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Player", "Edit",
                             "Edited player '" + player.PlayerName + "' - ID: " + player.PlayerID.ToString());
 
                     return RedirectToAction("Index");
@@ -301,8 +264,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Edit POST", ex);
+                
             }
         }
 
@@ -313,14 +276,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the player info
                 IPlayerRepository playerrep = new EntityPlayerRepository();
@@ -352,7 +308,7 @@ namespace osVodigiWeb6x.Controllers
                 IPlayerSettingAccountDefaultRepository accountdefaultrep = new EntityPlayerSettingAccountDefaultRepository();
                 foreach (PlayerSettingView settingview in settingviews)
                 {
-                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(Convert.ToInt32(Session["UserAccountID"]), settingview.PlayerSettingName);
+                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(AuthUtils.GetAccountId(), settingview.PlayerSettingName);
                     if (accountdefault != null)
                     {
                         settingview.PlayerSettingValue = accountdefault.PlayerSettingAccountDefaultValue;
@@ -371,9 +327,6 @@ namespace osVodigiWeb6x.Controllers
                     }
                 }
 
-                // Save the current playerid in session so we can come back to this page
-                Session["ConfigurePlayerID"] = id;
-
                 settingviews.Sort();
                 ViewResult result = View(settingviews);
                 result.ViewName = "Configure";
@@ -381,8 +334,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Player", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Player", "Index", ex);
+                
             }
         }
 
@@ -394,32 +347,23 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
-                bool isid = true;
-                try
-                {
-                    int x = Convert.ToInt32(id);
-                }
-                catch { isid = false; }
+                int settingId = Convert.ToInt32(id);
 
-                PlayerSetting playersetting = new PlayerSetting();
+                //var playerId = HttpContext.Session.GetInt32("ConfigurePlayerID");
+
                 IPlayerSettingSystemDefaultRepository systemdefaultrep = new EntityPlayerSettingSystemDefaultRepository();
                 IPlayerSettingAccountDefaultRepository accountdefaultrep = new EntityPlayerSettingAccountDefaultRepository();
 
-                if (isid)
-                {
-                    IPlayerSettingRepository playersettingrep = new EntityPlayerSettingRepository();
-                    playersetting = playersettingrep.GetByPlayerSettingID(Convert.ToInt32(id));
-                }
-                else
+
+                IPlayerSettingRepository playersettingrep = new EntityPlayerSettingRepository();
+                PlayerSetting playersetting = playersettingrep.GetByPlayerSettingID(settingId);
+
+                var playerId = playersetting.PlayerID;
+
+
+                /*
                 {
                     // Get the system default values
                     PlayerSettingSystemDefault systemdefault = systemdefaultrep.GetByPlayerSettingName(id);
@@ -433,7 +377,7 @@ namespace osVodigiWeb6x.Controllers
                     }
 
                     // Override with any existing account defaults
-                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(Convert.ToInt32(Session["UserAccountID"]), id);
+                    PlayerSettingAccountDefault accountdefault = accountdefaultrep.GetByPlayerSettingName(AuthUtils.GetAccountId(), id);
                     if (accountdefault != null)
                     {
                         playersetting.PlayerSettingID = 0;
@@ -443,12 +387,13 @@ namespace osVodigiWeb6x.Controllers
                         playersetting.PlayerSettingValue = accountdefault.PlayerSettingAccountDefaultValue;
                     }
                 }
+                */
 
                 IPlayerSettingTypeRepository typerep = new EntityPlayerSettingTypeRepository();
                 ViewData["PlayerSettingTypeName"] = typerep.GetPlayerSettingType(playersetting.PlayerSettingTypeID).PlayerSettingTypeName;
                 ViewData["PlayerSettingDescription"] = systemdefaultrep.GetByPlayerSettingName(playersetting.PlayerSettingName).PlayerSettingDescription;
                 IPlayerRepository playerrep = new EntityPlayerRepository();
-                Player player = playerrep.GetPlayer(Convert.ToInt32(Session["ConfigurePlayerID"]));
+                Player player = playerrep.GetPlayer(playerId);
                 ViewData["PlayerID"] = player.PlayerID;
                 ViewData["PlayerName"] = player.PlayerName;
                 ViewData["ValidationMessage"] = String.Empty;
@@ -457,8 +402,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSetting", "EditSetting", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSetting", "EditSetting", ex);
+                
             }
         }
 
@@ -468,16 +413,14 @@ namespace osVodigiWeb6x.Controllers
         [HttpPost]
         public ActionResult EditSetting(PlayerSetting playersetting)
         {
+
+            //var playerId = HttpContext.Session.GetInt32("ConfigurePlayerID"); //TODO Convert.ToInt32(Session["ConfigurePlayerID"]);
+
+            var playerId = playersetting.PlayerID;
+
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -489,7 +432,7 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["PlayerSettingDescription"] = systemdefaultrep.GetByPlayerSettingName(playersetting.PlayerSettingName).PlayerSettingDescription;
                         ViewData["PlayerSettingTypeName"] = typerep.GetPlayerSettingType(playersetting.PlayerSettingTypeID).PlayerSettingTypeName;
                         IPlayerRepository playerrep = new EntityPlayerRepository();
-                        Player player = playerrep.GetPlayer(Convert.ToInt32(Session["ConfigurePlayerID"]));
+                        Player player = playerrep.GetPlayer(playerId);
                         ViewData["PlayerID"] = player.PlayerID;
                         ViewData["PlayerName"] = player.PlayerName;
 
@@ -501,26 +444,26 @@ namespace osVodigiWeb6x.Controllers
                     if (playersetting.PlayerSettingID == 0)
                     {
                         playersettingrep.CreatePlayerSetting(playersetting);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSetting", "Create",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "PlayerSetting", "Create",
                                 "Created player setting '" + playersetting.PlayerSettingName + "' with value '" + playersetting.PlayerSettingValue + "'");
                     }
                     else
                     {
                         playersettingrep.UpdatePlayerSetting(playersetting);
-                        CommonMethods.CreateActivityLog((User)Session["User"], "PlayerSetting", "Edit",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "PlayerSetting", "Edit",
                                 "Updated player setting '" + playersetting.PlayerSettingName + "' to value '" + playersetting.PlayerSettingValue + "'");
                     }
 
 
-                    return RedirectToAction("Configure", new { id = Session["ConfigurePlayerID"] });
+                    return RedirectToAction("Configure", new { id = playerId });
                 }
 
                 return View(playersetting);
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerSetting", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerSetting", "Edit POST", ex);
+                
             }
         }
 
@@ -629,7 +572,7 @@ namespace osVodigiWeb6x.Controllers
             }
 
             IPlayerGroupRepository pgrep = new EntityPlayerGroupRepository();
-            IEnumerable<PlayerGroup> pgs = pgrep.GetAllPlayerGroups(Convert.ToInt32(Session["UserAccountID"]));
+            IEnumerable<PlayerGroup> pgs = pgrep.GetAllPlayerGroups(AuthUtils.GetAccountId());
             foreach (PlayerGroup pg in pgs)
             {
                 SelectListItem item = new SelectListItem();
@@ -646,29 +589,25 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                PlayerPageState pagestate = new PlayerPageState();
-
+                PlayerPageState pagestate = HttpContext.Session.Get<PlayerPageState>("PlayerPageState");
 
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["PlayerPageState"] == null)
+                if (pagestate == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
+                    int accountid = AuthUtils.GetAccountId();
+                    pagestate = new PlayerPageState
+                    {
+                        AccountID = accountid,
+                        PlayerGroupID = 0,
+                        PlayerName = String.Empty,
+                        IncludeInactive = false,
+                        SortBy = "PlayerName",
+                        AscDesc = "Ascending",
+                        PageNumber = 1
+                    };
+                    SavePageState(pagestate);
+                }
 
-                    pagestate.AccountID = accountid;
-                    pagestate.PlayerGroupID = 0;
-                    pagestate.PlayerName = String.Empty;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "PlayerName";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["PlayerPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (PlayerPageState)Session["PlayerPageState"];
-                }
                 return pagestate;
             }
             catch { return new PlayerPageState(); }
@@ -676,7 +615,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(PlayerPageState pagestate)
         {
-            Session["PlayerPageState"] = pagestate;
+            HttpContext.Session.Set<PlayerPageState>("PlayerPageState", pagestate);
         }
 
         private Player FillNulls(Player player)

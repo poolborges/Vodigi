@@ -1,0 +1,247 @@
+﻿@model osVodigiWeb6x.Models.Timeline
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+    });
+
+    // Videos
+    function ShowVideoPreview() {
+        $("#vidVideoPreview").show();
+        var path = $("#txtVideoFolder").val();
+        var newfile = $("#lstVideo option:selected").val();
+        $("#vidVideoPreview").attr("src", path + newfile);
+    }
+    function AddVideoToTimeline() {
+        var videoname = $("#lstVideo option:selected").text();
+        var filename = $("#lstVideo option:selected").val();
+        var option = new Option(videoname + " (Video)", filename, false, false);
+        $('#lstTimelineMedia').append(option);
+        PopulateTimelineMediaStore();
+    }
+
+    // Images
+    function ShowImagePreview() {
+        $("#imgImagePreview").show();
+        var path = $("#txtImageFolder").val();
+        var newfile = $("#lstImage option:selected").val();
+        $("#imgImagePreview").attr("src", path + newfile);
+    }
+    function AddImageToTimeline() {
+        var imagename = $("#lstImage option:selected").text();
+        var filename = $("#lstImage option:selected").val();
+        var option = new Option(imagename + " (Image)", filename, false, false);
+        $('#lstTimelineMedia').append(option);
+        PopulateTimelineMediaStore();
+    }
+
+    // Timeline Media
+    function ShowTimelineMediaPreview() {
+        var itemtext = $("#lstTimelineMedia option:selected").text();
+        if (itemtext.search("(Video)") > -1) {
+            $("#imgTimelineMediaPreview").hide();
+            $("#vidTimelineMediaPreview").show();
+            var path = $("#txtVideoFolder").val();
+            var newfile = $("#lstTimelineMedia option:selected").val();
+            $("#vidTimelineMediaPreview").attr("src", path + newfile);
+        }
+        else {
+            $("#vidTimelineMediaPreview").attr("src", "");
+            $("#vidTimelineMediaPreview").hide();
+            $("#imgTimelineMediaPreview").show();
+            var path = $("#txtImageFolder").val();
+            var newfile = $("#lstTimelineMedia option:selected").val();
+            $("#imgTimelineMediaPreview").attr("src", path + newfile);
+        }
+    }
+    function RemoveMediaFromTimeline() {
+        $("#lstTimelineMedia option:selected").remove();
+        PopulateTimelineMediaStore();
+    }
+    function MoveMediaItemUp() {
+        $('#lstTimelineMedia option:selected').each(function () {
+            $(this).insertBefore($(this).prev());
+        });
+        PopulateTimelineMediaStore();
+    }
+    function MoveMediaItemDown() {
+        $('#lstTimelineMedia option:selected').each(function () {
+            $(this).insertAfter($(this).next());
+        });
+        PopulateTimelineMediaStore();
+    }
+    function PopulateTimelineMediaStore() {
+        var media = '';
+        $('#lstTimelineMedia > option').each(function () {
+            media += '|' + this.value;
+        });
+        $('#txtTimelineMedia').attr("value", media);
+    }
+
+    // Music
+    function AddMusicToTimeline() {
+        var musicname = $("#lstMusic option:selected").text();
+        var filename = $("#lstMusic option:selected").val();
+        var option = new Option(musicname, filename, false, false);
+        $('#lstTimelineMusic').append(option);
+        PopulateMusicStore();
+    }
+    function RemoveMusicFromTimeline() {
+        $("#lstTimelineMusic option:selected").remove();
+        PopulateMusicStore();
+    }
+    function MoveMusicItemUp() {
+        $('#lstTimelineMusic option:selected').each(function () {
+            $(this).insertBefore($(this).prev());
+        });
+        PopulateMusicStore();
+    }
+    function MoveMusicItemDown() {
+        $('#lstTimelineMusic option:selected').each(function () {
+            $(this).insertAfter($(this).next());
+        });
+        PopulateMusicStore();
+    }
+    function PopulateMusicStore() {
+        var music = '';
+        $('#lstTimelineMusic > option').each(function () {
+            music += '|' + this.value;
+        });
+        $('#txtTimelineMusic').attr("value", music);
+    }
+
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/timeline-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Add Timeline</span><br />
+                <span class="paragraphtext">Please enter the appropriate information to add a new timeline. </span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm()) {
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Add Timeline</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Timeline Name: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.TimelineName, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Tags: </b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.Tags, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Image Duration (secs): <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.DurationInSecs, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Mute Music on Playback: </b></td>
+            <td class="formsecondary">
+                @Html.EditorFor(model => model.MuteMusicOnPlayback) Check to mute music when videos play
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Active: </b></td>
+            <td class="formprimary">
+                @Html.EditorFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary" style="vertical-align: top;">
+                <br />
+                <b>Available Images</b><br />
+                @Html.DropDownList("lstImage", (SelectList)ViewData["ImageList"], new { @style = "width:320px;", onchange = @"ShowImagePreview();", size = 1 })
+                <span class="addmediatotimeline" onclick="AddImageToTimeline();">Add-></span>
+                <br />
+                <b>Available Videos</b><br />
+                @Html.DropDownList("lstVideo", (SelectList)ViewData["VideoList"], new { @style = "width:320px;", onchange = @"ShowVideoPreview();", size = 1 })
+                <span class="addmediatotimeline" onclick="AddVideoToTimeline();">Add-></span>
+                <br />
+                <b>Preview</b><br />
+                <img id="imgImagePreview" alt="" src='@Url.Content((string)ViewData["ImageURL"])' class="timelineimagepreview" />
+                &nbsp;&nbsp;
+                <video id="vidVideoPreview" width="175" height="150" controls autoplay src='@Url.Content((string)ViewData["VideoURL"])'>
+                   Your browser does not support video.
+                </video>
+                <br />
+            </td>
+            <td class="formsecondary" style="vertical-align: top;">
+                <br />
+                <b>Timeline Media <span class="required">*</span></b>
+                <span class="modifytimelinelist" onclick="RemoveMediaFromTimeline();" style="margin-left: 20px;">Remove</span>
+                <span class="modifytimelinelist" onclick="MoveMediaItemUp();">Move Up</span>
+                <span class="modifytimelinelist" onclick="MoveMediaItemDown();">Move Down</span>
+                <br />
+                @Html.DropDownList("lstTimelineMedia", (SelectList)ViewData["TimelineMediaList"], new { @style = "width:320px;", onchange = @"ShowTimelineMediaPreview();", size = 4 })
+                <br /><br />
+                <img id="imgTimelineMediaPreview" src='@Url.Content((string)ViewData["ImageURL"])' alt="" class="timelineimagepreview" style="display: none;"  />
+                &nbsp;&nbsp;
+                <video id="vidTimelineMediaPreview" width="175" height="150" controls autoplay src="" style="display: none;">
+                   Your browser does not support video.
+                </video>
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary" style="vertical-align: top;">
+                <br />
+                <b>Available Music</b><br />
+                @Html.DropDownList("lstMusic", (SelectList)ViewData["MusicList"], new { @style = "width:320px;", size = 3 })
+                <span class="addmediatotimeline" onclick="AddMusicToTimeline();">Add-></span>
+                <br />
+            </td>
+            <td class="formprimary" style="vertical-align: top;">
+                <br />
+                <b>Timeline Music</b>
+                <span class="modifytimelinelist" onclick="RemoveMusicFromTimeline();" style="margin-left: 20px;">Remove</span>
+                <span class="modifytimelinelist" onclick="MoveMusicItemUp();">Move Up</span>
+                <span class="modifytimelinelist" onclick="MoveMusicItemDown();">Move Down</span>
+                <br />
+                @Html.DropDownList("lstTimelineMusic", (SelectList)ViewData["TimelineMusicList"], new { @style = "width:320px;", size = 3 })
+                <br /><br />
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+    @Html.Hidden("txtImageFolder", ViewData["ImageFolder"])
+    @Html.Hidden("txtMusicFolder", ViewData["MusicFolder"])
+    @Html.Hidden("txtVideoFolder", ViewData["VideoFolder"])
+    @Html.Hidden("txtTimelineMusic", ViewData["TimelineMusic"])
+    @Html.Hidden("txtTimelineMedia", ViewData["TimelineMedia"])
+}
+
+<script type="text/javascript" lang="javascript">
+    // Only allow 0-9 in the Interval field
+    $('#DurationInSecs').keyup(function (event) {
+        this.value = this.value.replace(/[^0-9\.]/g, '');
+    });
+</script>
+
+<br /><br />
+

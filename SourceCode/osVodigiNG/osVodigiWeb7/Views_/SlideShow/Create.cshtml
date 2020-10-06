@@ -1,0 +1,190 @@
+﻿@model osVodigiWeb6x.Models.SlideShow
+
+@{
+    ViewBag.Title = "Create";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<script type="text/javascript" lang="javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+    });
+    function ShowPreview() {
+        var path = $("#txtImageFolder").val();
+        var newfile = $("#lstImage option:selected").val();
+        $("#imgPreview").attr("src", path + newfile);
+    }
+    function ShowSlideShowPreview() {
+        $("#imgSlideShowPreview").show();
+        var path = $("#txtImageFolder").val();
+        var newfile = $("#lstSlideShowImages option:selected").val();
+        $("#imgSlideShowPreview").attr("src", path + newfile);
+    }
+    function AddToSlideShow() {
+        var imagename = $("#lstImage option:selected").text();
+        var filename = $("#lstImage option:selected").val();
+        var option = new Option(imagename, filename, false, false);
+        $('#lstSlideShowImages').append(option);
+        PopulateImagesStore();
+    }
+    function RemoveFromSlideShow() {
+        $("#lstSlideShowImages option:selected").remove();
+        PopulateImagesStore();
+    }
+    function MoveItemUp() {
+        $('#lstSlideShowImages option:selected').each(function () {
+            $(this).insertBefore($(this).prev());
+        });
+        PopulateImagesStore();
+    }
+    function MoveItemDown() {
+        $('#lstSlideShowImages option:selected').each(function () {
+            $(this).insertAfter($(this).next());
+        });
+        PopulateImagesStore();
+    }
+    function PopulateImagesStore() {
+        var images = '';
+        $('#lstSlideShowImages > option').each(function () {
+            images += '|' + this.value;
+        });
+        $('#txtSlideShowImages').attr("value", images);
+    }
+    function AddMusicToSlideShow() {
+        var musicname = $("#lstMusic option:selected").text();
+        var filename = $("#lstMusic option:selected").val();
+        var option = new Option(musicname, filename, false, false);
+        $('#lstSlideShowMusic').append(option);
+        PopulateMusicStore();
+    }
+    function RemoveMusicFromSlideShow() {
+        $("#lstSlideShowMusic option:selected").remove();
+        PopulateMusicStore();
+    }
+    function MoveMusicItemUp() {
+        $('#lstSlideShowMusic option:selected').each(function () {
+            $(this).insertBefore($(this).prev());
+        });
+        PopulateMusicStore();
+    }
+    function MoveMusicItemDown() {
+        $('#lstSlideShowMusic option:selected').each(function () {
+            $(this).insertAfter($(this).next());
+        });
+        PopulateMusicStore();
+    }
+    function PopulateMusicStore() {
+        var images = '';
+        $('#lstSlideShowMusic > option').each(function () {
+            images += '|' + this.value;
+        });
+        $('#txtSlideShowMusic').attr("value", images);
+    }
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/slideshow-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Add Slide Show</span><br />
+                <span class="paragraphtext">Please enter the appropriate information to add a new slide show.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm()) {
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Add Slide Show</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Slide Show Name: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.SlideShowName, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Tags: </b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.Tags, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Interval in Seconds: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.IntervalInSecs, new { @style = "width:300px;", maxlength = 128 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Slide Transition: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.DropDownList("lstTransitionType", (SelectList)ViewData["TransitionTypeList"], new { @style = "width:300px;" })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Active: </b></td>
+            <td class="formprimary">
+                @Html.EditorFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary" style="vertical-align: top;height:100px;">
+                <b>Available Music</b><br />
+                @Html.DropDownList("lstMusic", (SelectList)ViewData["MusicList"], new { @style = "width:320px;", size = 5 })
+                <span class="addimagetoslideshow" onclick="AddMusicToSlideShow();">Add-></span>
+            </td>
+            <td class="formsecondary" style="vertical-align: top;height:100px;">
+                <b>Slide Show Music</b>
+                <span class="modifyslideshowimagelist" onclick="RemoveMusicFromSlideShow();" style="margin-left: 20px;">Remove</span>
+                <span class="modifyslideshowimagelist" onclick="MoveMusicItemUp();">Move Up</span>
+                <span class="modifyslideshowimagelist" onclick="MoveMusicItemDown();">Move Down</span>
+                <br />
+                @Html.DropDownList("lstSlideShowMusic", (SelectList)ViewData["SlideShowMusicList"], new { @style = "width:320px;", size = 5 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary" style="vertical-align: top;height:525px;">
+                <b>Available Images</b><br />
+                @Html.DropDownList("lstImage", (SelectList)ViewData["ImageList"], new { @style = "width:320px;", onchange = @"ShowPreview();", size = 10 })
+                <span class="addimagetoslideshow" onclick="AddToSlideShow();">Add-></span>
+                <br /><br />
+                <img id="imgPreview" alt="" src='@Url.Content((string)ViewData["ImageURL"])' class="slideshowpreview" />
+            </td>
+            <td class="formprimary" style="vertical-align: top;height:525px;">
+                <b>Slide Show Images</b>
+                <span class="modifyslideshowimagelist" onclick="RemoveFromSlideShow();" style="margin-left: 20px;">Remove</span>
+                <span class="modifyslideshowimagelist" onclick="MoveItemUp();">Move Up</span>
+                <span class="modifyslideshowimagelist" onclick="MoveItemDown();">Move Down</span>
+                <br />
+                @Html.DropDownList("lstSlideShowImages", (SelectList)ViewData["SlideShowImageList"], new { @style = "width:320px;", onchange = @"ShowSlideShowPreview();", size = 10 })
+                <br /><br />
+                <img id="imgSlideShowPreview" src='@Url.Content((string)ViewData["ImageURL"])' alt="" class="slideshowpreview" style="display: none;"  />
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+    @Html.Hidden("txtImageFolder", ViewData["ImageFolder"])
+    @Html.Hidden("txtSlideShowImages", ViewData["SlideShowImages"])
+    @Html.Hidden("txtSlideShowMusic", ViewData["SlideShowMusic"])
+}
+
+<script type="text/javascript" lang="javascript">
+    // Only allow 0-9 in the Interval field
+    $('#IntervalInSecs').keyup(function (event) {
+        this.value = this.value.replace(/[^0-9\.]/g, '');
+    });
+</script>
+
+<br /><br />
+

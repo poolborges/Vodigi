@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Text;
 using osVodigiWeb6x.Models;
 
@@ -33,29 +37,23 @@ namespace osVodigiWeb6x.Controllers
         //
         // GET: /PlayerGroupSchedule/Edit/5
 
-        public ActionResult Edit(int id)
+        public ActionResult Edit([FromQuery(Name = "delete")] string scheduleid,
+            [FromQuery(Name = "deleteall")] string deleteall,
+            int id)
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Delete a schedule entry if specified
                 IPlayerGroupScheduleRepository schedulerep = new EntityPlayerGroupScheduleRepository();
-                string scheduleid = Request.QueryString["delete"];
+
                 if (!String.IsNullOrEmpty(scheduleid))
                 {
                     schedulerep.DeletePlayerGroupSchedule(Convert.ToInt32(scheduleid));
                 }
 
                 // Delete all schedule entries if specified
-                string deleteall = Request.QueryString["deleteall"];
                 if (!String.IsNullOrEmpty(deleteall))
                 {
                     schedulerep.DeletePlayerGroupSchedulesByPlayerGroup(id);
@@ -76,8 +74,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroupSchedule", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroupSchedule", "Edit", ex);
+                
             }
         }
 
@@ -89,14 +87,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 int playergroupid = Convert.ToInt32(Request.Form["txtPlayerGroupID"]);
                 int screenid = Convert.ToInt32(Request.Form["lstScreen"]);
@@ -133,8 +124,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("PlayerGroupSchedule", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("PlayerGroupSchedule", "Edit", ex);
+                
             }
         }
 
@@ -146,7 +137,7 @@ namespace osVodigiWeb6x.Controllers
                 IPlayerGroupScheduleRepository schedulerep = new EntityPlayerGroupScheduleRepository();
                 List<PlayerGroupSchedule> schedules = schedulerep.GetPlayerGroupSchedulesByPlayerGroup(playergroupid).ToList();
 
-                string uri = Request.Url.AbsoluteUri;
+                string uri = Request.GetDisplayUrl();
                 if (uri.Contains("?"))
                     uri = uri.Substring(0, uri.IndexOf('?'));
 
@@ -237,7 +228,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 string html = String.Empty;
                 IScreenRepository screenrep = new EntityScreenRepository();
-                string uri = Request.Url.AbsoluteUri;
+                string uri = Request.GetDisplayUrl();
                 if (uri.Contains("?"))
                     uri = uri.Substring(0, uri.IndexOf('?'));
 
@@ -271,7 +262,7 @@ namespace osVodigiWeb6x.Controllers
 
         private List<SelectListItem> BuildScreenList()
         {
-            int accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the screen list
             List<SelectListItem> screenitems = new List<SelectListItem>();

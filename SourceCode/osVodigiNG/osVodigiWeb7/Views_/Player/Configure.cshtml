@@ -1,0 +1,63 @@
+﻿@model IEnumerable<osVodigiWeb6x.Models.PlayerSettingView>
+
+@{
+    ViewBag.Title = "Configure";
+}
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/playersetting-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Player Settings</span><span id="addlink">@Html.ActionLink("Back to List", "Index", "Player")</span><br />
+                <span class="paragraphtext">The following is a list of the player settings for player <b>@Html.Raw(Model.First().PlayerName)</b>.</span> 
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+    
+    @if (Model.Count() > 0)
+    {
+        string[] colors = { "#FFFFFF", "#EEEEEE" };
+        int colorindex = 0;
+        foreach (var item in Model)
+        {
+            <div class="griddiv" style="background-color:@colors[colorindex]">
+                <table style="border-spacing:0;border-collapse:collapse;width:920px;margin-left:auto;margin-right:auto;">
+                    <tr>
+                        <td class="gridcell" style="width:150px;color:#315581;text-align:right;"><b>Player Setting Name:</b></td>
+                        <td class="gridcell" style="width:150px;"><b>@Html.DisplayFor(modelItem => item.PlayerSettingName)</b></td>
+                        <td class="gridcell" style="width:150px;color:#315581;text-align:right;"><b>Type:</b></td>
+                        <td class="gridcell" style="width:360px;">@Html.DisplayFor(modelItem => item.PlayerSettingTypeName)</td>
+                        <td class="gridcell" style="width:100px;">
+                            <div class="gridlinkdiv">
+                                @if (item.PlayerSettingID == 0)
+                                {
+                                    <span id="gridlink">@Html.ActionLink("Edit", "EditSetting", new { id = item.PlayerSettingName })</span>
+                                }
+                                else
+                                {
+                                    <span id="gridlink">@Html.ActionLink("Edit", "EditSetting", new { id = item.PlayerSettingID })</span>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Setting Value:</b></td>
+                        <td class="gridcell" >@Html.DisplayFor(modelItem => item.PlayerSettingValue)</td>
+                        <td class="gridcell" style="color:#315581;text-align:right;"><b>Description:</b></td>
+                        <td class="gridcell" >@Html.DisplayFor(modelItem => item.PlayerSettingDescription)</td>
+                    </tr>
+                </table>
+            </div>
+            if (colorindex == 0) { colorindex = 1; }
+            else { colorindex = 0; }
+        }
+    }
+    else
+    {
+            <div class="griddiv">No Data Available</div>
+    }
+    <br /><br />

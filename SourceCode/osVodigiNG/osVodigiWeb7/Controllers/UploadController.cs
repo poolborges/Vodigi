@@ -20,14 +20,25 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.IO;
 using osVodigiWeb6x.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class UploadController : Controller
+    public class UploadController : AbstractVodigiController
     {
+        public UploadController(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
+        {
+        }
+
         //
         // GET: /Upload/
 
@@ -35,27 +46,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["UploadMessage"] = String.Empty;
-                ViewData["ImageFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
-                ViewData["VideoFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
-                ViewData["MusicFolder"] = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+                ViewData["ImageFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
+                ViewData["VideoFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
+                ViewData["MusicFolder"] = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
 
-                if (Request.Files.Count > 0)
+                
+                if (Request.Form.Files.Count > 0)
                 {
                     // Only one file is allowed per upload
-                    HttpPostedFileBase file = Request.Files[0];
+                    var file = Request.Form.Files[0];
                     if (file != null)
                     {
-                        if (file.ContentLength > 208000000)
+                        if (file.Length > 208000000)
                         {
                             ViewData["UploadMessage"] = "Uploaded files must be 200MB or less.";
                         }
@@ -76,12 +81,13 @@ namespace osVodigiWeb6x.Controllers
                                     filetype = "Videos";
                                 else if (filename.ToLower().EndsWith(".wma") || filename.ToLower().EndsWith(".mp3"))
                                     filetype = "Music";
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath = "~/UploadedFiles/" + user.AccountID.ToString() + @"/" + filetype + @"/" + filename;
+                                string path = GetHostFolder(serverpath);
                                 if (!System.IO.File.Exists(path))
-                                    file.SaveAs(path);
+                                    using (var stream = System.IO.File.Open(path, FileMode.Create))
+                                    {
+                                        file.CopyToAsync(stream);
+                                    }
                                 else
                                     ViewData["UploadMessage"] = "A file already exists with this name.";
                             }
@@ -95,8 +101,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Upload", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Upload", "Index", ex);
+                
             }
         }
 
@@ -106,14 +112,15 @@ namespace osVodigiWeb6x.Controllers
 
         public ActionResult Delete(string filename, string filetype)
         {
+            User user = AuthUtils.CheckAuthUser();
             IUploadRepository uploadrep = new IOUploadRepository();
 
             if (filetype == "Image")
-                uploadrep.DeleteImageUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteImageUpload(AuthUtils.GetAccountId(), filename, GetHostFolder(@"~/UploadedFiles"));
             else if (filetype == "Video")
-                uploadrep.DeleteVideoUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteVideoUpload(AuthUtils.GetAccountId(), filename, GetHostFolder(@"~/UploadedFiles"));
             else
-                uploadrep.DeleteMusicUpload(Convert.ToInt32(Session["UserAccountID"]), filename, Server.MapPath(@"~/UploadedFiles"));
+                uploadrep.DeleteMusicUpload(AuthUtils.GetAccountId(), filename, GetHostFolder(@"~/UploadedFiles"));
 
             return RedirectToAction("Index");
         }
@@ -122,11 +129,11 @@ namespace osVodigiWeb6x.Controllers
         {
             IUploadRepository uploadrep = new IOUploadRepository();
 
-            User user = (User)Session["User"];
+            User user = HttpContext.Session.Get<User>("User");
 
-            List<Upload> images = uploadrep.GetImageUploads(user.AccountID, Server.MapPath(@"~/UploadedFiles")).ToList();
-            List<Upload> videos = uploadrep.GetVideoUploads(user.AccountID, Server.MapPath(@"~/UploadedFiles")).ToList();
-            List<Upload> musics = uploadrep.GetMusicUploads(user.AccountID, Server.MapPath(@"~/UploadedFiles")).ToList();
+            List<Upload> images = uploadrep.GetImageUploads(user.AccountID, GetHostFolder(@"~/UploadedFiles")).ToList();
+            List<Upload> videos = uploadrep.GetVideoUploads(user.AccountID, GetHostFolder(@"~/UploadedFiles")).ToList();
+            List<Upload> musics = uploadrep.GetMusicUploads(user.AccountID, GetHostFolder(@"~/UploadedFiles")).ToList();
 
             List<Upload> uploads = new List<Upload>();
             foreach (Upload image in images)

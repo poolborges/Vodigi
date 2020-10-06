@@ -20,23 +20,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.IO;
 using osVodigiWeb6x.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class VideoController : Controller
+    public class VideoController : AbstractVodigiController
     {
         IVideoRepository repository;
         string firstfile = String.Empty;
         string selectedfile = String.Empty;
 
-        public VideoController()
-            : this(new EntityVideoRepository())
-        { }
 
-        public VideoController(IVideoRepository paramrepository)
+        public VideoController(IVideoRepository paramrepository, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
         {
             repository = paramrepository;
         }
@@ -48,30 +52,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 VideoPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.VideoName = Request.Form["txtVideoName"].ToString().Trim();
                     pagestate.Tag = Request.Form["txtTag"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -122,7 +117,7 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // Set the Video folder 
-                ViewData["VideoFolder"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                ViewData["VideoFolder"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
 
                 ViewResult result = View(repository.GetVideoPage(pagestate.AccountID, pagestate.VideoName, pagestate.Tag, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
@@ -130,8 +125,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Index", ex);
+                
             }
         }
 
@@ -142,14 +137,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["FileList"] = new SelectList(BuildFileList(""), "Value", "Text", "");
@@ -159,8 +147,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Create", ex);
+                
             }
         }
 
@@ -172,23 +160,16 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     video = FillNulls(video);
-                    video.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    video.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
-                    if (Request.Form["lstFile"] != null && !String.IsNullOrEmpty(Request.Form["lstFile"].ToString().Trim()))
+                    if (!String.IsNullOrEmpty(Request.Form["lstFile"]) && !String.IsNullOrEmpty(Request.Form["lstFile"].ToString().Trim()))
                     {
                         video.OriginalFilename = Request.Form["lstFile"].ToString().Trim();
                         if (video.OriginalFilename != "0")
@@ -220,15 +201,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldvideo.EndsWith(@"\"))
-                                oldvideo += @"\";
-                            oldvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.OriginalFilename;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.OriginalFilename; ;
+                            oldvideo = GetHostFolder(oldvideo);
 
-                            string newvideo = Server.MapPath(@"~/Media");
-                            if (!newvideo.EndsWith(@"\"))
-                                newvideo += @"\";
-                            newvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.StoredFilename;
+                            string newvideo =  @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
+                            newvideo = GetHostFolder(newvideo);
 
                             System.IO.File.Copy(oldvideo, newvideo);
                             System.IO.File.Delete(oldvideo);
@@ -243,7 +220,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateVideo(video);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Video", "Add",
                             "Added video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                         return RedirectToAction("Index");
@@ -254,8 +231,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Create POST", ex);
+                
             }
         }
 
@@ -266,25 +243,18 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Video video = repository.GetVideo(id);
-                ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(video);
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Edit", ex);
+                
             }
         }
 
@@ -296,14 +266,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -313,14 +276,14 @@ namespace osVodigiWeb6x.Controllers
                     string validation = ValidateInput(video);
                     if (!String.IsNullOrEmpty(validation))
                     {
-                        ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + video.StoredFilename;
+                        ViewData["VideoURL"] = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
                         ViewData["ValidationMessage"] = validation;
                         return View(video);
                     }
 
                     repository.UpdateVideo(video);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Edit",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Video", "Edit",
                         "Edited video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                     return RedirectToAction("Index");
@@ -330,8 +293,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Edit POST", ex);
+                
             }
         }
 
@@ -343,14 +306,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -358,8 +314,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Upload", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Upload", ex);
+                
             }
         }
 
@@ -371,24 +327,16 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 string validation = String.Empty;
                 if (ModelState.IsValid)
                 {
                     // Only one file is allowed per upload
-                    HttpPostedFileBase file = Request.Files[0];
-                    if (file != null && file.ContentLength > 0 && !String.IsNullOrEmpty(file.FileName))
+                    var file = Request.Form.Files[0];
+                    if (file != null && file.Length > 0 && !String.IsNullOrEmpty(file.FileName))
                     {
-                        if (file.ContentLength > 208000000)
+                        if (file.Length > 208000000)
                         {
                             ViewData["ValidationMessage"] = "Uploaded files must be 200MB or less.";
                         }
@@ -403,13 +351,15 @@ namespace osVodigiWeb6x.Controllers
                             {
                                 string filetype = "Videos";
                                 string filename = Path.GetFileName(file.FileName);
-                                string serverpath = Server.MapPath("~/UploadedFiles");
-                                if (!serverpath.EndsWith(@"\"))
-                                    serverpath += @"\";
-                                string path = serverpath + user.AccountID.ToString() + @"\" + filetype + @"\" + filename;
+                                string serverpath =  "~/UploadedFiles/" + user.AccountID.ToString() + @"/" + filetype + @"/" + filename;
+                                string path = GetHostFolder(serverpath);
                                 if (!System.IO.File.Exists(path))
-                                    System.IO.File.Delete(path);
-                                file.SaveAs(path);
+                                    System.IO.File.Create(path);
+
+                                using (var stream = System.IO.File.Open(path, FileMode.Create))
+                                {
+                                    file.CopyToAsync(stream);
+                                }
                             }
                         }
                     }
@@ -421,7 +371,7 @@ namespace osVodigiWeb6x.Controllers
 
                     // Set NULLs to Empty Strings
                     video = FillNulls(video);
-                    video.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    video.AccountID = AuthUtils.GetAccountId();
                     Guid fileguid = Guid.NewGuid();
 
                     video.OriginalFilename = Path.GetFileName(file.FileName);
@@ -439,15 +389,11 @@ namespace osVodigiWeb6x.Controllers
                         try
                         {
                             // Move the video
-                            string oldvideo = Server.MapPath(@"~/UploadedFiles");
-                            if (!oldvideo.EndsWith(@"\"))
-                                oldvideo += @"\";
-                            oldvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.OriginalFilename;
+                            string oldvideo = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.OriginalFilename;
+                            oldvideo = GetHostFolder(oldvideo);
 
-                            string newvideo = Server.MapPath(@"~/Media");
-                            if (!newvideo.EndsWith(@"\"))
-                                newvideo += @"\";
-                            newvideo += Convert.ToString(Session["UserAccountID"]) + @"\Videos\" + video.StoredFilename;
+                            string newvideo = @"~/Media/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + video.StoredFilename;
+                            newvideo = GetHostFolder(newvideo); 
 
                             System.IO.File.Copy(oldvideo, newvideo);
                             System.IO.File.Delete(oldvideo);
@@ -460,7 +406,7 @@ namespace osVodigiWeb6x.Controllers
 
                         repository.CreateVideo(video);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Video", "Upload",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Video", "Upload",
                                 "Added video '" + video.VideoName + "' - ID: " + video.VideoID.ToString());
 
                         return RedirectToAction("Index");
@@ -471,8 +417,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Video", "Upload POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Video", "Upload POST", ex);
+                
             }
         }
 
@@ -532,10 +478,8 @@ namespace osVodigiWeb6x.Controllers
             // Build the file list
             List<SelectListItem> files = new List<SelectListItem>();
 
-            string path = Server.MapPath(@"~/UploadedFiles");
-            if (!path.EndsWith(@"\"))
-                path += @"\";
-            path += Convert.ToString(Session["UserAccountID"]) + @"\Videos\";
+            string path = @"~/UploadedFiles/"+ Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
+            path = GetHostFolder(path);
 
             string[] vids = Directory.GetFiles(path);
             bool first = true;
@@ -546,7 +490,7 @@ namespace osVodigiWeb6x.Controllers
                 if (first)
                 {
                     first = false;
-                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/";
+                    string previewfolder = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/";
                     firstfile = previewfolder + fi.Name;
                 }
 
@@ -554,7 +498,7 @@ namespace osVodigiWeb6x.Controllers
                 item.Text = fi.Name;
                 item.Value = fi.Name;
                 if (item.Text == currentfile)
-                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(Session["UserAccountID"]) + @"/Videos/" + fi.Name;
+                    selectedfile = @"~/UploadedFiles/" + Convert.ToString(AuthUtils.GetAccountId()) + @"/Videos/" + fi.Name;
 
                 files.Add(item);
             }
@@ -576,28 +520,24 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                VideoPageState pagestate = new VideoPageState();
+                VideoPageState pagestate = HttpContext.Session.Get<VideoPageState>("VideoPageState");
 
 
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["VideoPageState"] == null)
+                if (pagestate == null)
                 {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.VideoName = String.Empty;
-                    pagestate.Tag = String.Empty;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "VideoName";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["VideoPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (VideoPageState)Session["VideoPageState"];
+                    int accountid = AuthUtils.GetAccountId();
+                    pagestate = new VideoPageState
+                    {
+                        AccountID = accountid,
+                        VideoName = String.Empty,
+                        Tag = String.Empty,
+                        IncludeInactive = false,
+                        SortBy = "VideoName",
+                        AscDesc = "Ascending",
+                        PageNumber = 1
+                    };
+                    SavePageState(pagestate);
                 }
                 return pagestate;
             }
@@ -606,7 +546,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(VideoPageState pagestate)
         {
-            Session["VideoPageState"] = pagestate;
+            HttpContext.Session.Set<VideoPageState>("VideoPageState", pagestate);
         }
 
         private Video FillNulls(Video video)

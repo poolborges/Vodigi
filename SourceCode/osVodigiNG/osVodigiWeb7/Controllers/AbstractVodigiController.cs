@@ -5,16 +5,19 @@ using osVodigiWeb6x;
 using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
     public abstract class AbstractVodigiController : Controller
     {
-        private readonly IHostingEnvironment _hostingEnvironment;
+        protected readonly IWebHostEnvironment _hostingEnvironment;
+        protected readonly IConfiguration _configuration;
 
-        public AbstractVodigiController(IHostingEnvironment hostingEnvironment)
+        public AbstractVodigiController(IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
         {
-            _hostingEnvironment = hostingEnvironment;
+            _hostingEnvironment = webHostEnvironment;
+            _configuration = configuration;
         }
 
         protected User checkIfAdmin()
@@ -62,12 +65,26 @@ namespace osVodigiWeb6x.Controllers
 
         protected string GetWebRootPath() 
         {
+            //Where www folder is, public by defalt
             return _hostingEnvironment.WebRootPath;
         }
 
         protected string GetContentRootPath()
         {
+            //Where binary and private file are
             return _hostingEnvironment.ContentRootPath;
         }
+
+        protected string GetUploadFolder() {
+
+            return System.IO.Path.Combine(GetWebRootPath(), "UploadedFiles");
+        }
+
+        protected string GetHostFolder(String folder)
+        {
+
+            return System.IO.Path.Combine(GetWebRootPath(), folder);
+        }
+
     }
 }

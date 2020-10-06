@@ -20,7 +20,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Configuration;
 using osVodigiWeb6x.Models;
 
@@ -49,14 +54,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Screen screen = CreateNewScreen();
                 if (id > 0)
@@ -77,8 +75,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 1", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1", ex);
+                
             }
         }
 
@@ -90,20 +88,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screen = FillNulls(screen);
-                    screen.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screen.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(screen);
                     if (!String.IsNullOrEmpty(validation))
@@ -155,8 +146,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 1 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1 POST", ex);
+                
             }
         }
 
@@ -167,14 +158,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Screen screen = repository.GetScreen(id);
                 string mainfeaturetype = String.Empty;
@@ -201,8 +185,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 2", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2", ex);
+                
             }
         }
 
@@ -211,20 +195,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screen = FillNulls(screen);
-                    screen.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screen.AccountID = AuthUtils.GetAccountId();
 
                     string mainfeaturetype = Request.Form["txtMainFeatureType"];
                     screen.SlideShowID = 0;
@@ -274,8 +251,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 2 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2 POST", ex);
+                
             }
         }
 
@@ -286,14 +263,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Screen screen = repository.GetScreen(id);
                 IImageRepository imgrep = new EntityImageRepository();
@@ -309,17 +279,15 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["ScreenID"] = id;
                 
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                int accountid = AuthUtils.GetAccountId();
+                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(screen);
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                
             }
         }
 
@@ -328,25 +296,18 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screen = FillNulls(screen);
-                    screen.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screen.AccountID = AuthUtils.GetAccountId();
 
                     string buttonimageguid = Request.Form["lstButtonImage"];
 
                     IImageRepository imgrep = new EntityImageRepository();
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), buttonimageguid);
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), buttonimageguid);
                     if (img != null)
                         screen.ButtonImageID = img.ImageID;
                     else
@@ -366,10 +327,8 @@ namespace osVodigiWeb6x.Controllers
                         else
                             ViewData["ImageUrl"] = firstfile;
 
-                        int accountid = 0;
-                        if (Session["UserAccountID"] != null)
-                            accountid = Convert.ToInt32(Session["UserAccountID"]);
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        int accountid = AuthUtils.GetAccountId();
+                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(screen);
                     }
@@ -391,8 +350,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                
             }
         }
 
@@ -403,14 +362,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 Screen screen = repository.GetScreen(id);
 
@@ -433,8 +385,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                
             }
         }
 
@@ -443,20 +395,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     screen = FillNulls(screen);
-                    screen.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    screen.AccountID = AuthUtils.GetAccountId();
 
                     if (String.IsNullOrEmpty(Request.Form["txtScreenScreenContent"]))
                     {
@@ -501,8 +446,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("ScreenWizard", "Step 3 POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                
             }
         }
 
@@ -568,9 +513,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildTimelineList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the timeline list
             List<SelectListItem> items = new List<SelectListItem>();
@@ -599,9 +542,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildSlideShowList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the slide show list
             List<SelectListItem> items = new List<SelectListItem>();
@@ -630,9 +571,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildPlayListList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the play list list
             List<SelectListItem> items = new List<SelectListItem>();
@@ -661,15 +600,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildImageList(string currentfile)
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -696,9 +633,7 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildScreenContentList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Build the screen content list
             List<SelectListItem> items = new List<SelectListItem>();

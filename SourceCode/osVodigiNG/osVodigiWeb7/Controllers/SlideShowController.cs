@@ -20,23 +20,27 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Configuration;
 using osVodigiWeb6x.Models;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class SlideShowController : Controller
+    public class SlideShowController : AbstractVodigiController
     {
         ISlideShowRepository repository;
         string firstfile = String.Empty;
         string selectedfile = String.Empty;
 
-        public SlideShowController()
-            : this(new EntitySlideShowRepository())
-        { }
 
-        public SlideShowController(ISlideShowRepository paramrepository)
+        public SlideShowController(ISlideShowRepository paramrepository, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+            : base(webHostEnvironment, configuration)
         {
             repository = paramrepository;
         }
@@ -48,30 +52,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 SlideShowPageState pagestate = GetPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
                     pagestate.SlideShowName = Request.Form["txtSlideShowName"].ToString().Trim();
                     pagestate.Tag = Request.Form["txtTag"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -127,8 +122,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SlideShow", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SlideShow", "Index", ex);
+                
             }
         }
 
@@ -139,14 +134,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["ValidationMessage"] = String.Empty;
                 ViewData["ImageList"] = new SelectList(BuildImageList(), "Value", "Text", "");
@@ -159,17 +147,15 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["TransitionTypeList"] = new SelectList(BuildTransitionTypeList(), "Value", "Text", "");
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                int accountid = AuthUtils.GetAccountId();
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(CreateNewSlideShow());
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SlideShow", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SlideShow", "Create", ex);
+                
             }
         }
 
@@ -181,20 +167,13 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
                     // Set NULLs to Empty Strings
                     slideshow = FillNulls(slideshow);
-                    slideshow.AccountID = Convert.ToInt32(Session["UserAccountID"]);
+                    slideshow.AccountID = AuthUtils.GetAccountId();
 
                     string validation = ValidateInput(slideshow, Request.Form["txtSlideShowImages"].ToString());
                     if (!String.IsNullOrEmpty(validation))
@@ -210,10 +189,8 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["TransitionTypeList"] = new SelectList(BuildTransitionTypeList(), "Value", "Text", Request.Form["lstTransitionType"].ToString());
 
                         // Get the account id
-                        int accountid = 0;
-                        if (Session["UserAccountID"] != null)
-                            accountid = Convert.ToInt32(Session["UserAccountID"]);
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        int accountid = AuthUtils.GetAccountId();
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(slideshow);
                     }
@@ -223,7 +200,7 @@ namespace osVodigiWeb6x.Controllers
                         slideshow.TransitionType = Request.Form["lstTransitionType"].ToString();
                         repository.CreateSlideShow(slideshow);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Slide Show", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Slide Show", "Add",
                             "Added slide show '" + slideshow.SlideShowName + "' - ID: " + slideshow.SlideShowID.ToString());
 
                         ISlideShowImageXrefRepository xrefrep = new EntitySlideShowImageXrefRepository();
@@ -238,7 +215,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), guid);
                                 if (img != null)
                                 {
                                     SlideShowImageXref xref = new SlideShowImageXref();
@@ -258,7 +235,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid);
                                 if (music != null)
                                 {
                                     SlideShowMusicXref xref = new SlideShowMusicXref();
@@ -279,8 +256,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SlideShow", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SlideShow", "Create POST", ex);
+                
             }
         }
 
@@ -291,14 +268,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 SlideShow slideshow = repository.GetSlideShow(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -337,17 +307,15 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["TransitionTypeList"] = new SelectList(BuildTransitionTypeList(), "Value", "Text", slideshow.TransitionType);
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                int accountid = AuthUtils.GetAccountId();
+                ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                 return View(slideshow);
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SlideShow", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SlideShow", "Edit", ex);
+                
             }
         }
 
@@ -359,14 +327,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 if (ModelState.IsValid)
                 {
@@ -386,10 +347,8 @@ namespace osVodigiWeb6x.Controllers
                         ViewData["TransitionTypeList"] = new SelectList(BuildTransitionTypeList(), "Value", "Text", slideshow.TransitionType);
 
                         // Get the account id
-                        int accountid = 0;
-                        if (Session["UserAccountID"] != null)
-                            accountid = Convert.ToInt32(Session["UserAccountID"]);
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+                        int accountid = AuthUtils.GetAccountId();
+                        ViewData["ImageFolder"] = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(slideshow);
                     }
@@ -399,7 +358,7 @@ namespace osVodigiWeb6x.Controllers
                         slideshow.TransitionType = Request.Form["lstTransitionType"].ToString();
                         repository.UpdateSlideShow(slideshow);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Slide Show", "Edit",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Slide Show", "Edit",
                             "Edited slide show '" + slideshow.SlideShowName + "' - ID: " + slideshow.SlideShowID.ToString());
 
                         ISlideShowImageXrefRepository xrefrep = new EntitySlideShowImageXrefRepository();
@@ -418,7 +377,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), guid);
                                 if (img != null)
                                 {
                                     SlideShowImageXref xref = new SlideShowImageXref();
@@ -438,7 +397,7 @@ namespace osVodigiWeb6x.Controllers
                         {
                             if (!String.IsNullOrEmpty(guid.Trim()))
                             {
-                                Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid);
+                                Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid);
                                 if (music != null)
                                 {
                                     SlideShowMusicXref xref = new SlideShowMusicXref();
@@ -459,8 +418,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("SlideShow", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("SlideShow", "Edit POST", ex);
+                
             }
         }
 
@@ -516,27 +475,6 @@ namespace osVodigiWeb6x.Controllers
             {
                 SlideShowPageState pagestate = new SlideShowPageState();
 
-
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["SlideShowPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.SlideShowName = String.Empty;
-                    pagestate.Tag = String.Empty;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "SlideShowName";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["SlideShowPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (SlideShowPageState)Session["SlideShowPageState"];
-                }
                 return pagestate;
             }
             catch { return new SlideShowPageState(); }
@@ -544,7 +482,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(SlideShowPageState pagestate)
         {
-            Session["SlideShowPageState"] = pagestate;
+            
         }
 
         private SlideShow CreateNewSlideShow()
@@ -584,15 +522,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildImageList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
             IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Images/";
+            string imagefolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -617,15 +553,13 @@ namespace osVodigiWeb6x.Controllers
         private List<SelectListItem> BuildMusicList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the active music files
             IMusicRepository musicrep = new EntityMusicRepository();
             IEnumerable<Music> musics = musicrep.GetAllMusics(accountid);
 
-            string musicfolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(Session["UserAccountID"]) + @"/Music/";
+            string musicfolder = _configuration.GetValue<string>("MediaRootFolder") + Convert.ToString(AuthUtils.GetAccountId()) + @"/Music/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             foreach (Music music in musics)
@@ -651,7 +585,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 if (!String.IsNullOrEmpty(guid.Trim()))
                 {
-                    Image img = imgrep.GetImageByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                    Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), guid.Trim());
                     if (img != null)
                     {
                         SelectListItem item = new SelectListItem();
@@ -677,7 +611,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 if (!String.IsNullOrEmpty(guid.Trim()))
                 {
-                    Music music = musicrep.GetMusicByGuid(Convert.ToInt32(Session["UserAccountID"]), guid.Trim());
+                    Music music = musicrep.GetMusicByGuid(AuthUtils.GetAccountId(), guid.Trim());
                     if (music != null)
                     {
                         SelectListItem item = new SelectListItem();

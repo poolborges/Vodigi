@@ -16,14 +16,17 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------------------------- */
 
+
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
 using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Models;
 
 namespace osVodigiWeb6x.Controllers
 {
-    public class ApplicationErrorController : Controller
+    public class ErrorController : Controller
     {
         public ActionResult Index()
         {

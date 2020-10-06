@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Text.RegularExpressions;
 using osVodigiWeb6x.Models;
 
@@ -46,24 +50,17 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                ViewData["LoginInfo"] = "<b>User:</b> " + currentuser.Username + "&nbsp; &nbsp; &nbsp;<b>Account:</b> " + Session["UserAccountName"];
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 // Initialize or get the page state using session
                 UserPageState pagestate = GetPageState();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = Convert.ToInt32(Request.Form["lstAccount"]);
                     pagestate.Username = Request.Form["txtUsername"].ToString().Trim();
-                    if (Request.Form["chkIncludeInactive"].ToLower().StartsWith("true"))
+                    if (Request.Form["chkIncludeInactive"].ToString().ToLower().StartsWith("true"))
                         pagestate.IncludeInactive = true;
                     else
                         pagestate.IncludeInactive = false;
@@ -140,8 +137,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Index", ex);
+                
             }
         }
 
@@ -152,14 +149,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 ViewData["AccountList"] = new SelectList(BuildAccountList(0), "Value", "Text", "");
                 ViewData["ValidationMessage"] = String.Empty;
@@ -168,8 +158,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Create", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Create", ex);
+                
             }
         }
 
@@ -181,14 +171,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
                 {
@@ -209,7 +192,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.CreateUser(user);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "User", "Add",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Add",
                             "Added user '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                         return RedirectToAction("Index");
@@ -219,8 +202,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Create POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Create POST", ex);
+                
             }
         }
 
@@ -231,14 +214,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                ViewData["LoginInfo"] = "<b>User:</b> " + currentuser.Username + "&nbsp; &nbsp; &nbsp;<b>Account:</b> " + Session["UserAccountName"];
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 User user = repository.GetUser(id);
                 ViewData["AccountList"] = new SelectList(BuildAccountList(user.AccountID), "Value", "Text", user.AccountID.ToString());
@@ -248,8 +224,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Edit", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Edit", ex);
+                
             }
         }
 
@@ -261,14 +237,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
                 {
@@ -287,7 +256,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateUser(user);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "User", "Edit",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Edit",
                         "Edited user '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                     return RedirectToAction("Index");
@@ -297,8 +266,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Edit POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Edit POST", ex);
+                
             }
         }
 
@@ -309,13 +278,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 User user = repository.GetUser(id);
                 ViewData["ValidationMessage"] = String.Empty;
@@ -324,8 +287,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "Update Password", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "Update Password", ex);
+                
             }
         }
 
@@ -337,14 +300,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User currentuser = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (currentuser.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    throw new Exception("You are not authorized to access this page.");
+                AuthUtils.CheckIfAdmin();
 
                 if (ModelState.IsValid)
                 {
@@ -361,7 +317,7 @@ namespace osVodigiWeb6x.Controllers
 
                     repository.UpdateUser(user);
 
-                    CommonMethods.CreateActivityLog((User)Session["User"], "User", "Change Password",
+                    CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Change Password",
                         "Changed password for '" + user.Username + "' - ID: " + user.UserID.ToString());
 
                     return RedirectToAction("Index");
@@ -371,8 +327,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("User", "UpdatePassword POST", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("User", "UpdatePassword POST", ex);
+                
             }
         }
 
@@ -477,24 +433,23 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                UserPageState pagestate = new UserPageState();
+                UserPageState pagestate = HttpContext.Session.Get<UserPageState>("UserPageState");
 
 
                 // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["UserPageState"] == null)
+                if (pagestate == null)
                 {
                     int accountid = 0;
-                    pagestate.AccountID = accountid;
-                    pagestate.Username = String.Empty;
-                    pagestate.IncludeInactive = false;
-                    pagestate.SortBy = "Username";
-                    pagestate.AscDesc = "Ascending";
-                    pagestate.PageNumber = 1;
-                    Session["UserPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (UserPageState)Session["UserPageState"];
+                    pagestate = new UserPageState
+                    {
+                        AccountID = accountid,
+                        Username = String.Empty,
+                        IncludeInactive = false,
+                        SortBy = "Username",
+                        AscDesc = "Ascending",
+                        PageNumber = 1
+                    };
+                    SavePageState(pagestate);
                 }
                 return pagestate;
             }
@@ -503,7 +458,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(UserPageState pagestate)
         {
-            Session["UserPageState"] = pagestate;
+            HttpContext.Session.Set<UserPageState>("UserPageState", pagestate);
         }
 
         private User FillNulls(User user)

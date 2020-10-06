@@ -1,0 +1,79 @@
+﻿@model osVodigiWeb6x.Models.Survey
+
+@{
+    ViewBag.Title = "View";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/survey-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">View Approved Survey</span><br />
+                <span class="paragraphtext">The following survey has been approved and cannot be modified.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm())
+{
+    
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">View Approved Survey</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Survey Name: </b></td>
+            <td class="formprimary">
+                @Html.DisplayTextFor(model => model.SurveyName)
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Description: </b></td>
+            <td class="formsecondary">
+                @Html.DisplayTextFor(model => model.SurveyDescription)
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary" style="vertical-align:top;"><b>Survey Image: </b></td>
+            <td class="formprimary">
+               <img id="imgPreview" alt="" src='@Url.Content((string)ViewData["ImageURL"])' class="slideshowpreview" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Active: </b></td>
+            <td class="formsecondary">
+                @Html.DisplayFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2">
+                <div id="returnlink">
+                    @Html.ActionLink("Back to List", "Index")
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+    <div class="textblock">
+        <span class="paragraphheader">Survey Contents</span><br />
+    </div>
+    @Html.Raw((string)ViewData["SurveyTable"])
+    <br /><br />
+    
+    @Html.Hidden("txtImageFolder", ViewData["ImageFolder"])
+    @Html.HiddenFor(model => model.SurveyID)
+    @Html.HiddenFor(model => model.AccountID)
+    @Html.HiddenFor(model => model.SurveyName)
+    @Html.HiddenFor(model => model.SurveyDescription)
+    @Html.HiddenFor(model => model.SurveyImageID)
+    @Html.HiddenFor(model => model.IsApproved)
+    @Html.HiddenFor(model => model.IsActive)
+}
+

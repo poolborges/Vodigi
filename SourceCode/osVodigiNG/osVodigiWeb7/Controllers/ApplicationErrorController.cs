@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using osVodigiWeb6x.Exceptions;
 using osVodigiWeb6x.Models;
 
@@ -35,7 +39,8 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                ApplicationError error = (ApplicationError)Session["ApplicationError"];
+                ApplicationError error = HttpContext.Session.Get<ApplicationError>("ApplicationError"); 
+
                 ViewData["Controller"] = error.Controller;
                 ViewData["Action"] = error.Action;
                 ViewData["ErrorMessage"] = error.ErrorMessage;
@@ -52,12 +57,7 @@ namespace osVodigiWeb6x.Controllers
             ViewBag.StatusCode = statusCode.ToString();
             ViewBag.ErrorMessage = exception.ToString();
 
-
-            if (exception.GetType() == typeof(HttpException))
-            {
-                ViewBag.ErrorMessage = ((HttpException)exception).GetHtmlErrorMessage();
-            }
-            else if (exception.GetType() == typeof(NotAuthcException))
+            if (exception.GetType() == typeof(NotAuthcException))
             {
                 ViewBag.ErrorMessage = ((NotAuthcException)exception).Message;
             }

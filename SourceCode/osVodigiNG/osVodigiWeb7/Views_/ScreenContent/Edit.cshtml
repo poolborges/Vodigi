@@ -1,0 +1,145 @@
+﻿@model osVodigiWeb6x.Models.ScreenContent
+
+@{
+    ViewBag.Title = "Edit";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    $(function () {
+        $("input:text:visible:first").focus();
+        ShowTypeProperties();
+    });
+    function ShowPreview() {
+        var path = $("#txtImageFolder").val();
+        var newfile = $("#lstImage option:selected").val();
+        $("#imgPreview").attr("src", path + newfile);
+    }
+    function ShowTypeProperties() {
+        var selectedtype = $("#lstScreenContentTypeList option:selected").text();
+        $("#divImage").hide();
+        $("#divSlideShow").hide();
+        $("#divVideo").hide();
+        $("#divPlayList").hide();
+        $("#divWebAddress").hide();
+        $("#divSurvey").hide();
+        $("#divTimeline").hide();
+        if (selectedtype == "Image") {
+            $("#divImage").show();
+        }
+        else if (selectedtype == "Slide Show") {
+            $("#divSlideShow").show();
+        }
+        else if (selectedtype == "Video") {
+            $("#divVideo").show();
+        }
+        else if (selectedtype == "Play List") {
+            $("#divPlayList").show();
+        }
+        else if (selectedtype == "Web Site") {
+            $("#divWebAddress").show();
+        }
+        else if (selectedtype == "Survey") {
+            $("#divSurvey").show();
+        }
+        else if (selectedtype == "Timeline") {
+            $("#divTimeline").show();
+        }
+}
+</script>
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/screencontent-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Edit Screen Content</span><br />
+                <span class="paragraphtext">Please update the appropriate information below.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm()) {
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Edit Screen Content</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Screen Content Name: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.ScreenContentName, new { @style = "width:300px;", maxlength = 64 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Screen Content Title: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.ScreenContentTitle, new { @style = "width:300px;", maxlength = 64 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary" style="vertical-align:top;"><b>Screen Content Type: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.DropDownList("lstScreenContentTypeList", (SelectList)ViewData["ScreenContentTypeList"], new { @style = "width:300px;", onchange = @"ShowTypeProperties();" })
+                <br />
+                <div id="divImage" style="display:inline;font-size:10px;">
+                    <br /><b>Select Image:</b><br /> 
+                    @Html.DropDownList("lstScreenContentImages", (SelectList)ViewData["ScreenContentImages"], new { @style = "width:300px;" })
+                </div>
+                <div id="divSlideShow" style="display:none;font-size:10px;">
+                    <br /><b>Select Slide Show:</b><br /> 
+                    @Html.DropDownList("lstScreenContentSlideShows", (SelectList)ViewData["ScreenContentSlideShows"], new { @style = "width:300px;" })
+                </div>
+                <div id="divVideo" style="display:none;font-size:10px;">
+                    <br /><b>Select Video:</b><br /> 
+                    @Html.DropDownList("lstScreenContentVideos", (SelectList)ViewData["ScreenContentVideos"], new { @style = "width:300px;" })
+                </div>
+                <div id="divPlayList" style="display:none;font-size:10px;">
+                    <br /><b>Select Play List:</b><br /> 
+                    @Html.DropDownList("lstScreenContentPlayLists", (SelectList)ViewData["ScreenContentPlayLists"], new { @style = "width:300px;" })
+                </div>
+                <div id="divWebAddress" style="display:none;font-size:10px;">
+                    <br /><b>Enter Web Address:</b><br /> 
+                    @Html.TextBoxFor(model => model.CustomField1, new { @style = "width:300px;", maxlength = 256 })
+                </div>
+                <div id="divSurvey" style="display:none;font-size:10px;">
+                    <br /><b>Select Survey:</b><br /> 
+                    @Html.DropDownList("lstScreenContentSurveys", (SelectList)ViewData["ScreenContentSurveys"], new { @style = "width:300px;" })
+                </div>
+                <div id="divTimeline" style="display:none;font-size:10px;">
+                    <br /><b>Select Timeline:</b><br /> 
+                    @Html.DropDownList("lstScreenContentTimelines", (SelectList)ViewData["ScreenContentTimelines"], new { @style = "width:300px;" })
+                </div>
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary" style="vertical-align:top;"><b>Thumbnail Image: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.DropDownList("lstImage", (SelectList)ViewData["ImageList"], new { @style = "width:300px;", onchange = @"ShowPreview();" })<br />
+                <img id="imgPreview" alt="" src='@Url.Content((string)ViewData["ImageURL"])' class="slideshowpreview" />
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Active: </b></td>
+            <td class="formprimary">
+                @Html.EditorFor(model => model.IsActive)
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+    @Html.Hidden("txtImageFolder", ViewData["ImageFolder"])
+    @Html.HiddenFor(model => model.CustomField2)
+    @Html.HiddenFor(model => model.CustomField3)
+    @Html.HiddenFor(model => model.CustomField4)
+    @Html.HiddenFor(model => model.ScreenContentID)
+    @Html.HiddenFor(model => model.AccountID)
+}
+
+<br /><br />

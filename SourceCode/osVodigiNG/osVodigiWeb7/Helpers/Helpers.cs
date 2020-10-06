@@ -33,7 +33,9 @@ namespace osVodigiWeb6x
             error.Controller = controller;
             error.Action = action;
             error.ErrorMessage = errormessage;
-            HttpContext.Current.Session["ApplicationError"] = error;
+            //HttpContext.Current.Session["ApplicationError"] = error;
+            //HttpContext.Session.Set<ApplicationError>("ApplicationError", error);
+
         }
     }
 

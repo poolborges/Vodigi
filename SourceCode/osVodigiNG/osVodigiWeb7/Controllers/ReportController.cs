@@ -20,7 +20,11 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using System.Web.Mvc;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using osVodigiWeb7.Extensions;
 using System.Text;
 using osVodigiWeb6x.Models;
 
@@ -46,21 +50,14 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 return View();
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "Index", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "Index", ex);
+                
             }
         }
 
@@ -71,28 +68,19 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportLoginLogPageState pagestate = GetReportLoginLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
-                    pagestate.Username = Request.Form["txtUsername"].Trim();
+                    pagestate.Username = Request.Form["txtUsername"].ToString().Trim();
                     DateTime startdate = DateTime.Today.AddDays(-30);
                     DateTime enddate = DateTime.Today;
                     try
@@ -159,8 +147,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportLoginLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportLoginLog", ex);
+                
             }
         }
 
@@ -170,26 +158,6 @@ namespace osVodigiWeb6x.Controllers
             {
                 ReportLoginLogPageState pagestate = new ReportLoginLogPageState();
 
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ReportLoginLogPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.Username = String.Empty;
-                    pagestate.StartDate = DateTime.Today.AddDays(-30).ToShortDateString();
-                    pagestate.EndDate = DateTime.Today.ToShortDateString();
-                    pagestate.SortBy = "LoginDateTime";
-                    pagestate.AscDesc = "Desc";
-                    pagestate.PageNumber = 1;
-                    Session["ReportLoginLogPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ReportLoginLogPageState)Session["ReportLoginLogPageState"];
-                }
                 return pagestate;
             }
             catch { return new ReportLoginLogPageState(); }
@@ -197,7 +165,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ReportLoginLogPageState pagestate)
         {
-            Session["ReportLoginLogPageState"] = pagestate;
+            
         }
 
         private List<SelectListItem> BuildReportLoginLogSortByList()
@@ -227,30 +195,21 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportActivityLogPageState pagestate = GetReportActivityLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
-                    pagestate.Username = Request.Form["txtUsername"].Trim();
-                    pagestate.EntityType = Request.Form["txtEntityType"].Trim();
-                    pagestate.EntityAction = Request.Form["txtEntityAction"].Trim();
+                    pagestate.Username = Request.Form["txtUsername"].ToString().Trim();
+                    pagestate.EntityType = Request.Form["txtEntityType"].ToString().Trim();
+                    pagestate.EntityAction = Request.Form["txtEntityAction"].ToString().Trim();
                     DateTime startdate = DateTime.Today.AddDays(-30);
                     DateTime enddate = DateTime.Today;
                     try
@@ -319,8 +278,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportLoginLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportLoginLog", ex);
+                
             }
         }
 
@@ -330,28 +289,6 @@ namespace osVodigiWeb6x.Controllers
             {
                 ReportActivityLogPageState pagestate = new ReportActivityLogPageState();
 
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ReportActivityLogPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.Username = String.Empty;
-                    pagestate.EntityType = String.Empty;
-                    pagestate.EntityAction = String.Empty;
-                    pagestate.StartDate = DateTime.Today.AddDays(-30).ToShortDateString();
-                    pagestate.EndDate = DateTime.Today.ToShortDateString();
-                    pagestate.SortBy = "ActivityDateTime";
-                    pagestate.AscDesc = "Desc";
-                    pagestate.PageNumber = 1;
-                    Session["ReportActivityLogPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ReportActivityLogPageState)Session["ReportActivityLogPageState"];
-                }
                 return pagestate;
             }
             catch { return new ReportActivityLogPageState(); }
@@ -359,7 +296,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ReportActivityLogPageState pagestate)
         {
-            Session["ReportActivityLogPageState"] = pagestate;
+            
         }
 
         private List<SelectListItem> BuildReportActivityLogSortByList()
@@ -399,29 +336,20 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportPlayerScreenLogPageState pagestate = GetReportPlayerScreenLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
-                    pagestate.PlayerName = Request.Form["txtPlayerName"].Trim();
-                    pagestate.ScreenName = Request.Form["txtScreenName"].Trim();
+                    pagestate.PlayerName = Request.Form["txtPlayerName"].ToString().Trim();
+                    pagestate.ScreenName = Request.Form["txtScreenName"].ToString().Trim();
                     DateTime startdate = DateTime.Today.AddDays(-30);
                     DateTime enddate = DateTime.Today;
                     try
@@ -489,8 +417,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerScreenLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerScreenLog", ex);
+                
             }
         }
 
@@ -499,28 +427,6 @@ namespace osVodigiWeb6x.Controllers
             try
             {
                 ReportPlayerScreenLogPageState pagestate = new ReportPlayerScreenLogPageState();
-
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ReportPlayerScreenLogPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.PlayerName = String.Empty;
-                    pagestate.ScreenName = String.Empty;
-                    pagestate.StartDate = DateTime.Today.AddDays(-30).ToShortDateString();
-                    pagestate.EndDate = DateTime.Today.ToShortDateString();
-                    pagestate.SortBy = "DisplayDateTime";
-                    pagestate.AscDesc = "Desc";
-                    pagestate.PageNumber = 1;
-                    Session["ReportPlayerScreenLogPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ReportPlayerScreenLogPageState)Session["ReportPlayerScreenLogPageState"];
-                }
                 return pagestate;
             }
             catch { return new ReportPlayerScreenLogPageState(); }
@@ -528,7 +434,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ReportPlayerScreenLogPageState pagestate)
         {
-            Session["ReportPlayerScreenLogPageState"] = pagestate;
+            
         }
 
         private List<SelectListItem> BuildReportPlayerScreenLogSortByList()
@@ -567,31 +473,22 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Initialize or get the page state using session
                 ReportPlayerScreenContentLogPageState pagestate = GetReportPlayerScreenContentLogPageState();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstAscDesc"] != null)
+                if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountID = accountid;
-                    pagestate.PlayerName = Request.Form["txtPlayerName"].Trim();
-                    pagestate.ScreenName = Request.Form["txtScreenName"].Trim();
-                    pagestate.ContentName = Request.Form["txtContentName"].Trim();
-                    pagestate.ContentType = Request.Form["txtContentType"].Trim();
+                    pagestate.PlayerName = Request.Form["txtPlayerName"].ToString().Trim();
+                    pagestate.ScreenName = Request.Form["txtScreenName"].ToString().Trim();
+                    pagestate.ContentName = Request.Form["txtContentName"].ToString().Trim();
+                    pagestate.ContentType = Request.Form["txtContentType"].ToString().Trim();
                     DateTime startdate = DateTime.Today.AddDays(-30);
                     DateTime enddate = DateTime.Today;
                     try
@@ -661,8 +558,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerScreenContentLog", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerScreenContentLog", ex);
+                
             }
         }
 
@@ -672,29 +569,6 @@ namespace osVodigiWeb6x.Controllers
             {
                 ReportPlayerScreenContentLogPageState pagestate = new ReportPlayerScreenContentLogPageState();
 
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ReportPlayerScreenContentLogPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
-
-                    pagestate.AccountID = accountid;
-                    pagestate.PlayerName = String.Empty;
-                    pagestate.ScreenName = String.Empty;
-                    pagestate.ContentName = String.Empty;
-                    pagestate.ContentType = String.Empty;
-                    pagestate.StartDate = DateTime.Today.AddDays(-30).ToShortDateString();
-                    pagestate.EndDate = DateTime.Today.ToShortDateString();
-                    pagestate.SortBy = "DisplayDateTime";
-                    pagestate.AscDesc = "Desc";
-                    pagestate.PageNumber = 1;
-                    Session["ReportPlayerScreenContentLogPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ReportPlayerScreenContentLogPageState)Session["ReportPlayerScreenContentLogPageState"];
-                }
                 return pagestate;
             }
             catch { return new ReportPlayerScreenContentLogPageState(); }
@@ -702,7 +576,7 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ReportPlayerScreenContentLogPageState pagestate)
         {
-            Session["ReportPlayerScreenContentLogPageState"] = pagestate;
+          
         }
 
         private List<SelectListItem> BuildReportPlayerScreenContentLogSortByList()
@@ -751,28 +625,19 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 // Get the account id
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
 
                 // Initialize or get the page state using session
                 ReportSurveyResultsPageState pagestate = GetReportSurveyResultsPageState();
 
                 // Set and save the page state to the submitted form values if any values are passed
-                if (Request.Form["lstSurvey"] != null)
+                if (String.IsNullOrEmpty(Request.Form["lstSurvey"]))
                 {
                     pagestate.AccountID = accountid;
-                    pagestate.SurveyID = Convert.ToInt32(Request.Form["lstSurvey"].Trim());
+                    pagestate.SurveyID = Convert.ToInt32(Request.Form["lstSurvey"].ToString().Trim());
                     DateTime startdate = DateTime.Today.AddDays(-30);
                     DateTime enddate = DateTime.Today;
                     try
@@ -807,8 +672,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportSurveyResults", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportSurveyResults", ex);
+                
             }
         }
 
@@ -818,23 +683,7 @@ namespace osVodigiWeb6x.Controllers
             {
                 ReportSurveyResultsPageState pagestate = new ReportSurveyResultsPageState();
 
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (Session["ReportSurveyResultsPageState"] == null)
-                {
-                    int accountid = 0;
-                    if (Session["UserAccountID"] != null)
-                        accountid = Convert.ToInt32(Session["UserAccountID"]);
 
-                    pagestate.AccountID = accountid;
-                    pagestate.SurveyID = 0;
-                    pagestate.StartDate = DateTime.Today.AddDays(-30).ToShortDateString();
-                    pagestate.EndDate = DateTime.Today.ToShortDateString();
-                    Session["ReportSurveyResultsPageState"] = pagestate;
-                }
-                else
-                {
-                    pagestate = (ReportSurveyResultsPageState)Session["ReportSurveyResultsPageState"];
-                }
                 return pagestate;
             }
             catch { return new ReportSurveyResultsPageState(); }
@@ -842,15 +691,13 @@ namespace osVodigiWeb6x.Controllers
 
         private void SavePageState(ReportSurveyResultsPageState pagestate)
         {
-            Session["ReportSurveyResultsPageState"] = pagestate;
+           
         }
 
         private List<SelectListItem> BuildReportSurveyResultsSurveyList()
         {
             // Get the account id
-            int accountid = 0;
-            if (Session["UserAccountID"] != null)
-                accountid = Convert.ToInt32(Session["UserAccountID"]);
+            int accountid = AuthUtils.GetAccountId();
 
             // Get the approved surveys
             ISurveyRepository surveyrep = new EntitySurveyRepository();
@@ -980,14 +827,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                if (Session["UserAccountID"] == null)
-                    return RedirectToAction("Validate", "Login");
-                User user = (User)Session["User"];
-                ViewData["LoginInfo"] = Utility.BuildUserAccountString(user.Username, Convert.ToString(Session["UserAccountName"]));
-                if (user.IsAdmin)
-                    ViewData["txtIsAdmin"] = "true";
-                else
-                    ViewData["txtIsAdmin"] = "false";
+                User user = AuthUtils.CheckAuthUser();
 
                 ViewData["PlayerHeartbeatTable"] = BuildPlayerHeartbeatTable();
 
@@ -997,8 +837,8 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                Helpers.SetupApplicationError("Report", "ReportPlayerHeartbeat", ex.Message);
-                return RedirectToAction("Index", "ApplicationError");
+                throw new Exceptions.AppControllerException("Report", "ReportPlayerHeartbeat", ex);
+                
             }
         }
 
@@ -1006,9 +846,7 @@ namespace osVodigiWeb6x.Controllers
         {
             try
             {
-                int accountid = 0;
-                if (Session["UserAccountID"] != null)
-                    accountid = Convert.ToInt32(Session["UserAccountID"]);
+                int accountid = AuthUtils.GetAccountId();
                 StringBuilder sb = new StringBuilder();
 
                 IPlayerRepository playerrep = new EntityPlayerRepository();
