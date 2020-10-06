@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using osVodigiWeb7x.Models;
 
 namespace Application.WebsiteCore
 {
@@ -36,6 +37,8 @@ namespace Application.WebsiteCore
             services.AddHealthChecks();
 
             services.AddControllersWithViews();
+
+            ConfigureAppServices(services);
 
         }
 
@@ -111,6 +114,13 @@ namespace Application.WebsiteCore
                 //endpoints.MapRazorPages();
             });
             */
+        }
+
+
+
+        private void ConfigureAppServices(IServiceCollection services)
+        {
+            services.AddScoped<IAccountRepository, EntityAccountRepository>();
         }
 
     }
