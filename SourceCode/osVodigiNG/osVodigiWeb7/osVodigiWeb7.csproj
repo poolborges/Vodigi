@@ -28,8 +28,6 @@
     <Folder Include="Areas\Backoffice\Views\Home\" />
     <Folder Include="Areas\Backoffice\Views\Products\" />
     <Folder Include="Areas\Backoffice\Views\Shared\" />
-    <Folder Include="Areas\Frontoffice\" />
-    <Folder Include="Areas\ClientPortal\" />
     <Folder Include="Areas\Backoffice\Views\Clients\" />
     <Folder Include="Models\Classes\" />
     <Folder Include="Models\Entities\Log\" />
@@ -39,6 +37,29 @@
     <Folder Include="wwwroot\images\" />
     <Folder Include="Views\Login\" />
     <Folder Include="Models\Session\" />
+    <Folder Include="Areas\AccountPortal\" />
+    <Folder Include="Areas\Backoffice\Views\Account\" />
+    <Folder Include="Areas\Backoffice\Views\SystemMessage\" />
+    <Folder Include="Areas\Backoffice\Views\User\" />
+    <Folder Include="Areas\AccountPortal\Views\Image\" />
+    <Folder Include="Areas\AccountPortal\Views\Music\" />
+    <Folder Include="Areas\AccountPortal\Views\Player\" />
+    <Folder Include="Areas\AccountPortal\Views\PlayerGroup\" />
+    <Folder Include="Areas\AccountPortal\Views\PlayerGroupSchedule\" />
+    <Folder Include="Areas\AccountPortal\Views\PlayerSettingAccountDefault\" />
+    <Folder Include="Areas\AccountPortal\Views\PlayList\" />
+    <Folder Include="Areas\AccountPortal\Views\Report\" />
+    <Folder Include="Areas\AccountPortal\Views\Screen\" />
+    <Folder Include="Areas\AccountPortal\Views\ScreenContent\" />
+    <Folder Include="Areas\AccountPortal\Views\ScreenWizard\" />
+    <Folder Include="Areas\AccountPortal\Views\SlideShow\" />
+    <Folder Include="Areas\AccountPortal\Views\Survey\" />
+    <Folder Include="Areas\AccountPortal\Views\SurveyQuestion\" />
+    <Folder Include="Areas\AccountPortal\Views\SurveyQuestionOption\" />
+    <Folder Include="Areas\AccountPortal\Views\Timeline\" />
+    <Folder Include="Areas\AccountPortal\Views\Upload\" />
+    <Folder Include="Areas\AccountPortal\Views\Video\" />
+    <Folder Include="Views\ApplicationError\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Areas\Administration\_ViewStart.cshtml" />

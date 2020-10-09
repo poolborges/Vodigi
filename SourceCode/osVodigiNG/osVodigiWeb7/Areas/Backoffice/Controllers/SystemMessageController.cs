@@ -26,8 +26,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using osVodigiWeb7.Extensions;
 using osVodigiWeb7x.Models;
+using osVodigiWeb7x.Controllers;
 
-namespace osVodigiWeb7x.Controllers
+namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 {
     public class SystemMessageController : Controller
     {

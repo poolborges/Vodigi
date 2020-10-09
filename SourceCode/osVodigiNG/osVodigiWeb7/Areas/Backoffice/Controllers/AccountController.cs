@@ -26,9 +26,12 @@ using osVodigiWeb7.Extensions;
 using osVodigiWeb7x.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using osVodigiWeb7x.Controllers;
 
-namespace osVodigiWeb7x.Controllers
+namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 {
+    [Area("Backoffice")]
+    [Route("Backoffice/[controller]")]
     public class AccountController : AbstractVodigiController
     {
 
