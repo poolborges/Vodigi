@@ -66,6 +66,7 @@
     <Folder Include="Domain\Business\" />
     <Folder Include="Domain\Dto\" />
     <Folder Include="Domain\Impl\" />
+    <Folder Include="ViewComponents\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Areas\Administration\_ViewStart.cshtml" />

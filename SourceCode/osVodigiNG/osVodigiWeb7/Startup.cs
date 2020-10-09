@@ -136,6 +136,8 @@ namespace Application.WebsiteCore
             services.AddScoped<ILoginRepository, EntityLoginRepository>();
             services.AddScoped<IAccountRepository, EntityAccountRepository>();
             services.AddScoped<IImageRepository, EntityImageRepository>();
+            services.AddScoped<IMusicRepository, EntityMusicRepository>();
+            services.AddScoped<IVideoRepository, EntityVideoRepository>();
         }
 
     }

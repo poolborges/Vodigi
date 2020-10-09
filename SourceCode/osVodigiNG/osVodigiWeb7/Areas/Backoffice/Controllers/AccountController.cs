@@ -61,6 +61,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 AccountPageState pagestate = GetPageState();
 
                 // Set and save the page state to the submitted form values if any values are passed
+                /*
                 if (!String.IsNullOrEmpty(Request.Form["lstAscDesc"]))
                 {
                     pagestate.AccountName = Request.Form["txtAccountName"].ToString().Trim();
@@ -74,6 +75,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     pagestate.PageNumber = Convert.ToInt32(Request.Form["txtPageNumber"].ToString().Trim());
                     SavePageState(pagestate);
                 }
+                */
 
                 // Add the session values to the view data so they can be populated in the form
                 ViewData["AccountName"] = pagestate.AccountName;
