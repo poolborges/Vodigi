@@ -48,6 +48,7 @@ namespace Application.WebsiteCore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                app.UseDatabaseErrorPage();
             }
             else
             {
@@ -120,6 +121,7 @@ namespace Application.WebsiteCore
 
         private void ConfigureAppServices(IServiceCollection services)
         {
+            services.AddScoped<ILoginRepository, EntityLoginRepository>();
             services.AddScoped<IAccountRepository, EntityAccountRepository>();
         }
 

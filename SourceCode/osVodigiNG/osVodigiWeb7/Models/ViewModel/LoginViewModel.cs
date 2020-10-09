@@ -1,15 +1,16 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc;
 
-namespace osVodigiWeb7.Controllers.ViewModel
+namespace osVodigiWeb7.Models.ViewModel
 {
     public class LoginViewModel
     {
 
-        [FromQuery(Name = "txtUsername")]
+        [Required]
         public string Username { get; set; }
 
-        [FromQuery(Name = "txtPassword")]
+        [Required]
         public string Password { get; set; }
 
         public string ReturnUrl { get; set; }

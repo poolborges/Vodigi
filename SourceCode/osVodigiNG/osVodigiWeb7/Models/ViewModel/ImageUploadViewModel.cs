@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace osVodigiWeb7.Controllers.ViewModel
+namespace osVodigiWeb7.Models.ViewModel
 {
     public class ImageUploadVM
     {

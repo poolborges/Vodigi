@@ -15,18 +15,26 @@ namespace osVodigiWeb7x
 
             if (user == null || !user.IsAdmin)
             {
-                throw new NotAuthzException("Admin");
+                throw new NotAuthzException("Current user does not has 'Admin' Authorization");
             }
             return user;
         }
 
         public static User CheckAuthUser()
         {
-            User user = null;
+            User user = new User { UserID = 1,
+                EmailAddress = "user@example.com",
+                IsAdmin= true, IsActive = true,
+                FirstName = "John",
+                LastName = "Due",
+                Username = "admin",
+                Password = "admn",
+                AccountID = 1
+            };
 
             if (user == null)
             {
-                throw new NotAuthcException();
+                throw new NotAuthcException("User is not authenticated");
             }
 
             return user;

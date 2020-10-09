@@ -32,12 +32,13 @@
     <Folder Include="Areas\ClientPortal\" />
     <Folder Include="Areas\Backoffice\Views\Clients\" />
     <Folder Include="Models\Classes\" />
-    <Folder Include="Views_\Login\" />
     <Folder Include="Models\Entities\Log\" />
     <Folder Include="Models\ViewModel\" />
     <Folder Include="Areas\Backoffice\Views\Dashboard\" />
     <Folder Include="Areas\Backoffice\Views\Shared\Components\" />
     <Folder Include="wwwroot\images\" />
+    <Folder Include="Views\Login\" />
+    <Folder Include="Models\Session\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="Areas\Administration\_ViewStart.cshtml" />

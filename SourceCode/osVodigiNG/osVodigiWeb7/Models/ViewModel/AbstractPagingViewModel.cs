@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace osVodigiWeb7.Controllers.ViewModel
+namespace osVodigiWeb7.Models.ViewModel
 {
     public class AbstractPagingModel
     {
