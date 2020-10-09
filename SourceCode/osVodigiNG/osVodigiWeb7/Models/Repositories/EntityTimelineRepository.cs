@@ -27,7 +27,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityTimelineRepository : ITimelineRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityTimelineRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Timeline GetTimeline(int id)
         {

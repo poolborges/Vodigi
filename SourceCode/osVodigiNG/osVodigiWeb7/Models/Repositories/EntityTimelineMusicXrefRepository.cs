@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityTimelineMusicXrefRepository : ITimelineMusicXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityTimelineMusicXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public IEnumerable<TimelineMusicXref> GetTimelineMusicXrefs(int timelineid)
         {

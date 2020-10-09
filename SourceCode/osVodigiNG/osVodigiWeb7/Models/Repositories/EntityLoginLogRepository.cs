@@ -21,7 +21,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityLoginLogRepository : ILoginLogRepository
     {
-        private VodigiLogsContext db = new VodigiLogsContext();
+        private VodigiLogsContext db;
+
+        public EntityLoginLogRepository(VodigiLogsContext context)
+        {
+            db = context;
+        }
 
         public void CreateLoginLog(LoginLog loginlog)
         {

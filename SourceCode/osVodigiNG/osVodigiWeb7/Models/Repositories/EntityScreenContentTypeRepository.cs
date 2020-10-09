@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityScreenContentTypeRepository : IScreenContentTypeRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityScreenContentTypeRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public ScreenContentType GetScreenContentType(int id)
         {

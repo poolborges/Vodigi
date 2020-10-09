@@ -22,7 +22,13 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerScreenLogRepository : IPlayerScreenLogRepository
     {
-        private VodigiLogsContext db = new VodigiLogsContext();
+
+        private readonly VodigiLogsContext db;
+
+        public EntityPlayerScreenLogRepository(VodigiLogsContext context)
+        {
+            db = context;
+        }
 
         public void CreatePlayerScreenLog(PlayerScreenLog playerscreenlog)
         {

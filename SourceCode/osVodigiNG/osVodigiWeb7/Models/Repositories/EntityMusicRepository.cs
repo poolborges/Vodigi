@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityMusicRepository : IMusicRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityMusicRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Music GetMusic(int id)
         {

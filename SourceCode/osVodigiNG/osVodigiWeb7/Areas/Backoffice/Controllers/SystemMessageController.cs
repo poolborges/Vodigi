@@ -30,22 +30,18 @@ using osVodigiWeb7x.Controllers;
 
 namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 {
+    [Area("Backoffice")]
+    [Route("Backoffice/[controller]")]
     public class SystemMessageController : Controller
     {
         ISystemMessageRepository repository;
-
-        public SystemMessageController()
-            : this(new EntitySystemMessageRepository())
-        { }
 
         public SystemMessageController(ISystemMessageRepository paramrepository)
         {
             repository = paramrepository;
         }
 
-        //
-        // GET: /SystemMessage/
-
+        [Route("[action]")]
         public ActionResult Index()
         {
             try
@@ -117,9 +113,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // GET: /SystemMessage/Create
-
+        [Route("[action]")]
         public ActionResult Create()
         {
             try
@@ -138,8 +132,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
         }
 
 
-        // POST: /SystemMessage/Create
-
+        [Route("[action]")]
         [HttpPost]
         public ActionResult Create(SystemMessage systemmessage)
         {
@@ -174,9 +167,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // GET: /SystemMessage/Edit/5
-
+        [Route("[action]")]
         public ActionResult Edit(int id)
         {
             try
@@ -195,9 +186,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // POST: /SystemMessage/Edit/5
-
+        [Route("[action]")]
         [HttpPost]
         public ActionResult Edit(SystemMessage systemmessage)
         {
@@ -231,9 +220,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // GET: /SystemMessage/Delete/5
-
+        [Route("[action]")]
         public ActionResult Delete(int id)
         {
             try

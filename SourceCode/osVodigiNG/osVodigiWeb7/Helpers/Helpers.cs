@@ -62,7 +62,7 @@ namespace osVodigiWeb7x
         {
             try
             {
-                IActivityLogRepository activityrep = new EntityActivityLogRepository();
+              
 
                 ActivityLog activitylog = new ActivityLog();
                 activitylog.AccountID = user.AccountID;
@@ -73,7 +73,9 @@ namespace osVodigiWeb7x
                 activitylog.ActivityDateTime = DateTime.Now.ToUniversalTime();
                 activitylog.ActivityDetails = activitydetails;
 
-                activityrep.CreateActivityLog(activitylog);
+                //TODO MUST persiste Loging
+                //IActivityLogRepository activityrep = new EntityActivityLogRepository();
+                //activityrep.CreateActivityLog(activitylog);
             }
             catch { }
         }

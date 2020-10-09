@@ -25,7 +25,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityAnsweredSurveyQuestionOptionRepository : IAnsweredSurveyQuestionOptionRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityAnsweredSurveyQuestionOptionRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public void CreateAnsweredSurveyQuestionOption(AnsweredSurveyQuestionOption option)
         {

@@ -36,12 +36,15 @@ namespace osVodigiWeb7x.Controllers
 {
     public class LoginController : AbstractVodigiController
     {
-        ILoginRepository repository;
+        readonly ILoginRepository userRepository;
+        readonly IAccountRepository accountRepository;
 
-        public LoginController(ILoginRepository paramrepository, IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
+        public LoginController(ILoginRepository _userRepository, IAccountRepository _accountRepository,IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
             : base(webHostEnvironment, configuration)
         {
-            repository = paramrepository;
+            userRepository = _userRepository;
+
+            accountRepository = _accountRepository;
         }
 
 
@@ -68,7 +71,7 @@ namespace osVodigiWeb7x.Controllers
             try
             {
                 // Validate the login
-                User user = repository.ValidateLogin(loginViewModel.Username, loginViewModel.Password);
+                User user = userRepository.ValidateLogin(loginViewModel.Username, loginViewModel.Password);
 
                 if (user == null)
                 {
@@ -103,7 +106,7 @@ namespace osVodigiWeb7x.Controllers
 
         private void createLogging(User user)
         {
-
+            /* TODO MUST LOGGING on user authentication
             ILoginLogRepository llrep = new EntityLoginLogRepository();
             LoginLog loginlog = new LoginLog();
             loginlog.AccountID = user.AccountID;
@@ -111,6 +114,7 @@ namespace osVodigiWeb7x.Controllers
             loginlog.Username = user.Username;
             loginlog.LoginDateTime = DateTime.Now.ToUniversalTime();
             llrep.CreateLoginLog(loginlog);
+            */
         }
 
         private void createLinks()
@@ -150,9 +154,11 @@ namespace osVodigiWeb7x.Controllers
 
         private string BuildSystemMessages()
         {
+
+            StringBuilder msgstext = new StringBuilder();
+            /* TODO Build BuildSystemMessages
             try
             {
-                StringBuilder msgstext = new StringBuilder();
                 msgstext.Append("");
 
                 ISystemMessageRepository msgrep = new EntitySystemMessageRepository();
@@ -172,7 +178,11 @@ namespace osVodigiWeb7x.Controllers
 
                 return msgstext.ToString();
             }
-            catch { return String.Empty; }
+            catch {
+            }
+            */
+
+            return msgstext.ToString();
 
         }
 
@@ -196,8 +206,8 @@ namespace osVodigiWeb7x.Controllers
             HttpContext.Session.Set<User>("User", user);
             HttpContext.Session.SetInt32("UserAccountID", user.AccountID);
 
-            IAccountRepository acctrep = new EntityAccountRepository();
-            Account account = acctrep.GetAccount(user.AccountID);
+  
+            Account account = accountRepository.GetAccount(user.AccountID);
             HttpContext.Session.SetString("UserAccountName", account.AccountName);
 
 

@@ -25,7 +25,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityDatabaseVersionRepository : IDatabaseVersionRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityDatabaseVersionRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public DatabaseVersion GetDatabaseVersion()
         {

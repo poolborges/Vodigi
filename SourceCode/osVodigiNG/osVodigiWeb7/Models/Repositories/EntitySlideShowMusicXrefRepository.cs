@@ -24,7 +24,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntitySlideShowMusicXrefRepository : ISlideShowMusicXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntitySlideShowMusicXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public IEnumerable<SlideShowMusicXref> GetSlideShowMusicXrefs(int slideshowid)
         {

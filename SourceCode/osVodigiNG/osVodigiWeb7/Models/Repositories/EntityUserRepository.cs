@@ -26,7 +26,13 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityUserRepository : IUserRepository
     {
-        private VodigiContext db = new VodigiContext();
+        
+        private readonly VodigiContext db;
+
+        public EntityUserRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public User GetUser(int id)
         {

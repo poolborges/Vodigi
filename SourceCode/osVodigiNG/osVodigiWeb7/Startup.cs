@@ -7,9 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using osVodigiWeb7.Domain.Business;
 using osVodigiWeb7x.Models;
 
 namespace Application.WebsiteCore
@@ -121,8 +123,19 @@ namespace Application.WebsiteCore
 
         private void ConfigureAppServices(IServiceCollection services)
         {
+
+            services.AddDbContext<VodigiContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("VodigiContext")));
+
+            services.AddDbContext<VodigiLogsContext>(options =>
+                options.UseSqlServer(
+                    Configuration.GetConnectionString("VodigiLogsContext")));
+
+            services.AddScoped<IAssetManager, AssetManager>();
             services.AddScoped<ILoginRepository, EntityLoginRepository>();
             services.AddScoped<IAccountRepository, EntityAccountRepository>();
+            services.AddScoped<IImageRepository, EntityImageRepository>();
         }
 
     }

@@ -25,7 +25,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerSettingSystemDefaultRepository : IPlayerSettingSystemDefaultRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityPlayerSettingSystemDefaultRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public PlayerSettingSystemDefault GetByPlayerSettingSystemDefaultID(int id)
         {

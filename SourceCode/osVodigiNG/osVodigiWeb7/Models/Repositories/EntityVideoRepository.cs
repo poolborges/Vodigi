@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityVideoRepository : IVideoRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityVideoRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Video GetVideo(int id)
         {

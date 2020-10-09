@@ -21,10 +21,15 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityLoginRepository : ILoginRepository
     {
+        private readonly IUserRepository userRepository;
+
+        public EntityLoginRepository(IUserRepository _userRepository)
+        {
+            userRepository = _userRepository;
+        }
         public User ValidateLogin(string username, string password)
         {
-            IUserRepository userrep = new EntityUserRepository();
-            return userrep.ValidateUser(username, password);
+            return userRepository.ValidateUser(username, password);
         }
     }
 }

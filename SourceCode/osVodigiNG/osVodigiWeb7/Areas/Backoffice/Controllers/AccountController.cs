@@ -27,6 +27,7 @@ using osVodigiWeb7x.Models;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using osVodigiWeb7x.Controllers;
+using osVodigiWeb7.Domain.Business;
 
 namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 {
@@ -35,18 +36,20 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
     public class AccountController : AbstractVodigiController
     {
 
-        IAccountRepository repository;
+        IAccountRepository acountRepository;
+        IAssetManager assetManager;
+        //SlideShowManager SlideShowManager;
 
-        public AccountController(IAccountRepository paramrepository,
+        public AccountController(IAccountRepository _acountRepository,
+            IAssetManager _assetManager,
             IWebHostEnvironment webHostEnvironment, IConfiguration configuration)
             : base(webHostEnvironment, configuration)
         {
-            repository = paramrepository;
+            acountRepository = _acountRepository;
+            assetManager = _assetManager;
         }
 
-        //
-        // GET: /Account/
-
+        [Route("[action]")]
         public ActionResult Index()
         {
             try
@@ -86,7 +89,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     isdescending = true;
 
                 // Get a Count of all filtered records
-                int recordcount = repository.GetAccountRecordCount(pagestate.AccountName, pagestate.Description, pagestate.IncludeInactive);
+                int recordcount = acountRepository.GetAccountRecordCount(pagestate.AccountName, pagestate.Description, pagestate.IncludeInactive);
 
                 // Determine the page count
                 int pagecount = 1;
@@ -111,7 +114,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 ViewData["PageCount"] = Convert.ToString(pagecount);
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
-                ViewResult result = View(repository.GetAccountPage(pagestate.AccountName, pagestate.Description, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
+                ViewResult result = View(acountRepository.GetAccountPage(pagestate.AccountName, pagestate.Description, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
                 return result;
             }
@@ -122,9 +125,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // GET: /Account/Create
-
+        [Route("[action]")]
         public ActionResult Create()
         {
             try
@@ -142,9 +143,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // POST: /Account/Create
-
+        [Route("[action]")]
         [HttpPost]
         public ActionResult Create(Account account)
         {
@@ -164,8 +163,10 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                         return View(account);
                     }
 
-                    repository.CreateAccount(account);
-                    CreateExampleData(account.AccountID);
+                    acountRepository.CreateAccount(account);
+
+
+                    //CreateExampleData(account.AccountID);
 
                     CommonMethods.CreateActivityLog(AuthUtils.CheckAuthUser(), "Account", "Add",
                                                     "Added account '" + account.AccountName + "' - ID: " + account.AccountID.ToString());
@@ -182,16 +183,14 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // GET: /Account/Edit/5
-
+        [Route("[action]")]
         public ActionResult Edit(int id)
         {
             try
             {
                 AuthUtils.CheckIfAdmin();
 
-                Account account = repository.GetAccount(id);
+                Account account = acountRepository.GetAccount(id);
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(account);
@@ -203,9 +202,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
         }
 
-        //
-        // POST: /Account/Edit/5
-
+        [Route("[action]")]
         [HttpPost]
         public ActionResult Edit(Account account)
         {
@@ -225,7 +222,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                         return View(account);
                     }
 
-                    repository.UpdateAccount(account);
+                    acountRepository.UpdateAccount(account);
 
                     CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Account", "Edit",
                                                     "Edited account '" + account.AccountName + "' - ID: " + account.AccountID.ToString());
@@ -243,7 +240,8 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
         }
 
         //
-        // Support Methods
+        ///////////////////////////////////////////////////////////////////////
+        //
 
         private List<SelectListItem> BuildSortByList()
         {
@@ -355,9 +353,10 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             return String.Empty;
         }
 
+        //
         ///////////////////////////////////////////////////////////////////////
-        ///
-
+        //
+        /*
 
         private void CreateExampleData(int accountid)
         {
@@ -368,8 +367,8 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 bool createvideos = true;
                 bool createmusics = true;
 
-                IImageRepository imagerep = new EntityImageRepository();
-                IEnumerable<Image> images = imagerep.GetAllImages(accountid);
+                
+                IEnumerable<Image> images = assetManager.GetIImageRepository().GetAllImages(accountid);
                 foreach (Image image in images)
                 {
                     if (
@@ -384,7 +383,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     }
                 }
 
-                IVideoRepository videorep = new EntityVideoRepository();
+                IVideoRepository videorep = assetManager.GetIVideoRepository();
                 IEnumerable<Video> videos = videorep.GetAllVideos(accountid);
                 foreach (Video video in videos)
                 {
@@ -392,7 +391,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                         createvideos = false;
                 }
 
-                IMusicRepository musicrep = new EntityMusicRepository();
+                IMusicRepository musicrep = assetManager.GetIMusicRepository();
                 IEnumerable<Music> musics = musicrep.GetAllMusics(accountid);
                 foreach (Music music in musics)
                 {
@@ -482,9 +481,9 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 if (!System.IO.File.Exists(newimage))
                     System.IO.File.Copy(sourceimage, newimage);
 
-                IImageRepository imagerep = new EntityImageRepository();
 
-                Image image = imagerep.GetImageByGuid(accountid, storedfilename);
+                IImageRepository imageRepository = assetManager.GetIImageRepository();
+                Image image = imageRepository.GetImageByGuid(accountid, storedfilename);
 
                 if (image == null || image.ImageID == 0)
                 {
@@ -495,19 +494,19 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     image.StoredFilename = storedfilename;
                     image.Tags = tags;
                     image.IsActive = true;
-                    imagerep.CreateImage(image);
+                    imageRepository.CreateImage(image);
                 }
 
                 return image;
             }
             catch { return null; }
         }
-
+        
         private SlideShow CreateExampleSlideShow(int accountid, string slideshowname, string tags, List<Image> images)
         {
             try
             {
-                ISlideShowRepository slideshowrep = new EntitySlideShowRepository();
+                
                 SlideShow slideshow = new SlideShow();
                 slideshow.AccountID = accountid;
                 slideshow.SlideShowName = slideshowname;
@@ -515,6 +514,8 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 slideshow.TransitionType = "Fade";
                 slideshow.IntervalInSecs = 10;
                 slideshow.IsActive = true;
+
+                ISlideShowRepository slideshowrep = new EntitySlideShowRepository();
                 slideshowrep.CreateSlideShow(slideshow);
 
                 ISlideShowImageXrefRepository ssixrefrep = new EntitySlideShowImageXrefRepository();
@@ -649,7 +650,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             catch { }
         }
 
-        public void CreateExampleVideoAndPlayListData(int accountid)
+        private void CreateExampleVideoAndPlayListData(int accountid)
         {
             try
             {
@@ -728,7 +729,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             catch { return null; }
         }
 
-        public void CreateExampleMusicAndTimelineData(int accountid, List<Image> images)
+        private void CreateExampleMusicAndTimelineData(int accountid, List<Image> images)
         {
             try
             {
@@ -813,8 +814,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             }
             catch { return null; }
         }
-
-
+        */
 
     }
 }

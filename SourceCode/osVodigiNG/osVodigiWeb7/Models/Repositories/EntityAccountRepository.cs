@@ -25,7 +25,13 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityAccountRepository : IAccountRepository
     {
-        private VodigiContext db = new VodigiContext();
+
+        private readonly VodigiContext db;
+
+        public EntityAccountRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Account GetAccount(int id)
         {

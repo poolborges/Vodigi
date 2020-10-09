@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityScreenRepository : IScreenRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityScreenRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Screen GetScreen(int id)
         {

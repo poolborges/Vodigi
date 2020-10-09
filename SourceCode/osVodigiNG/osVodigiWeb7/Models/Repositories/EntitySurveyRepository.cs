@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntitySurveyRepository : ISurveyRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntitySurveyRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Survey GetSurvey(int id)
         {

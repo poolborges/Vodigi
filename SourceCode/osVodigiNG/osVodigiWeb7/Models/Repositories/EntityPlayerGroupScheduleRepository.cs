@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerGroupScheduleRepository : IPlayerGroupScheduleRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityPlayerGroupScheduleRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public PlayerGroupSchedule GetPlayerGroupSchedule(int id)
         {

@@ -23,7 +23,13 @@ namespace osVodigiWeb7x.Models
 {
     public class EntitySlideShowImageXrefRepository : ISlideShowImageXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntitySlideShowImageXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
+
 
         public IEnumerable<SlideShowImageXref> GetSlideShowImageXrefs(int slideshowid)
         {

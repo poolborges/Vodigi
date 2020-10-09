@@ -25,12 +25,19 @@ namespace osVodigiWeb7x.Models
     public class EntityReportRepository : IReportRepository
     {
 
+        private VodigiLogsContext db;
+
+        public EntityReportRepository(VodigiLogsContext context)
+        {
+            db = context;
+        }
+
         public IEnumerable<ActivityLog> ReportActivityLogPage(int accountid, string username,
                                                         string entitytype, string entityaction,
                                                         DateTime startdate, DateTime enddate,
                                                         string sortby, bool isdescending, int pagenumber, int pagecount)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from activitylog in db.ActivityLogs
                         select activitylog;
@@ -58,7 +65,6 @@ namespace osVodigiWeb7x.Models
                                                 string entitytype, string entityaction,
                                                 DateTime startdate, DateTime enddate)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
 
             var query = from activitylog in db.ActivityLogs
                         select activitylog;
@@ -80,7 +86,7 @@ namespace osVodigiWeb7x.Models
                                                         DateTime enddate,
                                                         string sortby, bool isdescending, int pagenumber, int pagecount)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from loginlog in db.LoginLogs
                         select loginlog;
@@ -102,7 +108,7 @@ namespace osVodigiWeb7x.Models
 
         public int ReportLoginLogRecordCount(int accountid, string username, DateTime startdate, DateTime enddate)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from loginlog in db.LoginLogs
                         select loginlog;
@@ -121,7 +127,7 @@ namespace osVodigiWeb7x.Models
                                                         DateTime startdate, DateTime enddate,
                                                         string sortby, bool isdescending, int pagenumber, int pagecount)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+  
 
             var query = from playerscreencontentlog in db.PlayerScreenContentLogs
                         select playerscreencontentlog;
@@ -153,7 +159,7 @@ namespace osVodigiWeb7x.Models
                                                         string screenname, string screencontentname, string screencontenttypename,
                                                         DateTime startdate, DateTime enddate)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from playerscreencontentlog in db.PlayerScreenContentLogs
                         select playerscreencontentlog;
@@ -177,7 +183,7 @@ namespace osVodigiWeb7x.Models
                                                         DateTime startdate, DateTime enddate,
                                                         string sortby, bool isdescending, int pagenumber, int pagecount)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from playerscreenlog in db.PlayerScreenLogs
                         select playerscreenlog;
@@ -204,7 +210,7 @@ namespace osVodigiWeb7x.Models
         public int ReportPlayerScreenLogRecordCount(int accountid, string playername, string screenname,
                                                         DateTime startdate, DateTime enddate)
         {
-            VodigiLogsContext db = new VodigiLogsContext();
+
 
             var query = from playerscreenlog in db.PlayerScreenLogs
                         select playerscreenlog;

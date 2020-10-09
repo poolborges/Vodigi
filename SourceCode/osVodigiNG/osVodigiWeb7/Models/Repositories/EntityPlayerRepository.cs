@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayerRepository : IPlayerRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityPlayerRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Player GetPlayer(int id)
         {

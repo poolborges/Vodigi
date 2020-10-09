@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntitySystemMessageRepository : ISystemMessageRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntitySystemMessageRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public SystemMessage GetSystemMessage(int id)
         {

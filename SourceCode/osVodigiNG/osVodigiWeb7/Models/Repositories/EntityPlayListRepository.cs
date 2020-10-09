@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayListRepository : IPlayListRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityPlayListRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public PlayList GetPlayList(int id)
         {

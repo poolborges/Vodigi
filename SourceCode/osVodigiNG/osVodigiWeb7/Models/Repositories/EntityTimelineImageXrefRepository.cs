@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityTimelineImageXrefRepository : ITimelineImageXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityTimelineImageXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public IEnumerable<TimelineImageXref> GetTimelineImageXrefs(int timelineid)
         {

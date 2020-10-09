@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityScreenScreenContentXrefRepository : IScreenScreenContentXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityScreenScreenContentXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public IEnumerable<ScreenScreenContentXref> GetScreenScreenContentXrefs(int screenid)
         {

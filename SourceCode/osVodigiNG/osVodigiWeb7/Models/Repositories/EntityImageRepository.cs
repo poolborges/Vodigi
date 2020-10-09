@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityImageRepository : IImageRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntityImageRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public Image GetImage(int id)
         {

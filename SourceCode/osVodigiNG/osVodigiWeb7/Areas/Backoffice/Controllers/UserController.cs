@@ -31,17 +31,17 @@ using osVodigiWeb7x.Controllers;
 
 namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 {
+    [Area("Backoffice")]
+    [Route("Backoffice/[controller]")]
     public class UserController : Controller
     {
-        IUserRepository repository;
+        readonly IUserRepository userRepository;
+        readonly IAccountRepository accountRepository;
 
-        public UserController()
-            : this(new EntityUserRepository())
-        { }
-
-        public UserController(IUserRepository paramrepository)
+        public UserController(IUserRepository _userRepository, IAccountRepository _accountRepository)
         {
-            repository = paramrepository;
+            userRepository = _userRepository;
+            accountRepository = _accountRepository;
         }
 
         //
@@ -86,7 +86,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     isdescending = true;
 
                 // Get a Count of all filtered records
-                int recordcount = repository.GetUserRecordCount(pagestate.AccountID, pagestate.Username, pagestate.IncludeInactive);
+                int recordcount = userRepository.GetUserRecordCount(pagestate.AccountID, pagestate.Username, pagestate.IncludeInactive);
 
                 // Determine the page count
                 int pagecount = 1;
@@ -112,15 +112,15 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 ViewData["RecordCount"] = Convert.ToString(recordcount);
 
                 // We need to add the account name
-                IEnumerable<User> users = repository.GetUserPage(pagestate.AccountID, pagestate.Username, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount);
+                IEnumerable<User> users = userRepository.GetUserPage(pagestate.AccountID, pagestate.Username, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount);
                 List<UserView> userviews = new List<UserView>();
-                IAccountRepository acctrep = new EntityAccountRepository();
+                
                 foreach (User user in users)
                 {
                     UserView userview = new UserView();
                     userview.UserID = user.UserID;
                     userview.AccountID = user.AccountID;
-                    Account acct = acctrep.GetAccount(user.AccountID);
+                    Account acct = accountRepository.GetAccount(user.AccountID);
                     userview.AccountName = acct.AccountName;
                     userview.Username = user.Username;
                     userview.FirstName = user.FirstName;
@@ -191,7 +191,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                     }
                     else
                     {
-                        repository.CreateUser(user);
+                        userRepository.CreateUser(user);
 
                         CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Add",
                             "Added user '" + user.Username + "' - ID: " + user.UserID.ToString());
@@ -217,7 +217,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             {
                 AuthUtils.CheckIfAdmin();
 
-                User user = repository.GetUser(id);
+                User user = userRepository.GetUser(id);
                 ViewData["AccountList"] = new SelectList(BuildAccountList(user.AccountID), "Value", "Text", user.AccountID.ToString());
                 ViewData["ValidationMessage"] = String.Empty;
 
@@ -255,7 +255,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                         return View(user);
                     }
 
-                    repository.UpdateUser(user);
+                    userRepository.UpdateUser(user);
 
                     CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Edit",
                         "Edited user '" + user.Username + "' - ID: " + user.UserID.ToString());
@@ -281,7 +281,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             {
                 AuthUtils.CheckIfAdmin();
 
-                User user = repository.GetUser(id);
+                User user = userRepository.GetUser(id);
                 ViewData["ValidationMessage"] = String.Empty;
 
                 return View(user);
@@ -316,7 +316,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                         return View(user);
                     }
 
-                    repository.UpdateUser(user);
+                    userRepository.UpdateUser(user);
 
                     CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "User", "Change Password",
                         "Changed password for '" + user.Username + "' - ID: " + user.UserID.ToString());
@@ -389,8 +389,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
             // Build the account list
             List<SelectListItem> accountitems = new List<SelectListItem>();
 
-            IAccountRepository acctrep = new EntityAccountRepository();
-            IEnumerable<Account> accounts = acctrep.GetAllAccounts();
+            IEnumerable<Account> accounts = accountRepository.GetAllAccounts();
             foreach (Account account in accounts)
             {
                 SelectListItem item = new SelectListItem();
@@ -416,8 +415,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 acctitems.Add(all);
             }
 
-            IAccountRepository acctrep = new EntityAccountRepository();
-            IEnumerable<Account> accts = acctrep.GetAllAccounts();
+            IEnumerable<Account> accts = accountRepository.GetAllAccounts();
             foreach (Account acct in accts)
             {
                 SelectListItem item = new SelectListItem();
@@ -497,8 +495,7 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 
             if (!isEdit)
             {
-                IUserRepository urep = new EntityUserRepository();
-                User usercheck = urep.GetUserByUsername(user.Username);
+                User usercheck = userRepository.GetUserByUsername(user.Username);
                 if (usercheck != null)
                     return "This username already exists.";
             }

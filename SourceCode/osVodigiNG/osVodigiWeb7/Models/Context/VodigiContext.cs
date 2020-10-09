@@ -22,6 +22,12 @@ namespace osVodigiWeb7x.Models
 {
     public class VodigiContext : DbContext
     {
+        public VodigiContext(
+            DbContextOptions<VodigiContext> options)
+            : base(options)
+        {
+        }
+
         public DbSet<Account> Accounts { get; set; }
         public DbSet<AnsweredSurvey> AnsweredSurveys { get; set; }
         public DbSet<AnsweredSurveyQuestionOption> AnsweredSurveyQuestionOptions { get; set; }

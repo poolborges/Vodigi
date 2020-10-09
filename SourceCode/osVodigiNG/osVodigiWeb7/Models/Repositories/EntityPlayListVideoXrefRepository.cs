@@ -23,7 +23,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntityPlayListVideoXrefRepository : IPlayListVideoXrefRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private VodigiContext db;
+
+        public EntityPlayListVideoXrefRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public IEnumerable<PlayListVideoXref> GetPlayListVideoXrefs(int playlistid)
         {

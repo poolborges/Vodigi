@@ -26,7 +26,12 @@ namespace osVodigiWeb7x.Models
 {
     public class EntitySlideShowRepository : ISlideShowRepository
     {
-        private VodigiContext db = new VodigiContext();
+        private readonly VodigiContext db;
+
+        public EntitySlideShowRepository(VodigiContext context)
+        {
+            db = context;
+        }
 
         public SlideShow GetSlideShow(int id)
         {

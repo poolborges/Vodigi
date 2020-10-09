@@ -24,6 +24,12 @@ namespace osVodigiWeb7x.Models
 {
     public class VodigiLogsContext : DbContext
     {
+        public VodigiLogsContext(
+            DbContextOptions<VodigiLogsContext> options)
+            : base(options)
+        {
+        }
+
         public DbSet<LoginLog> LoginLogs { get; set; }
         public DbSet<ActivityLog> ActivityLogs { get; set; }
         public DbSet<PlayerScreenLog> PlayerScreenLogs { get; set; }
