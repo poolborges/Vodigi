@@ -1,0 +1,124 @@
+= Vodigi on Docker
+
+
+== Vodigi Databases
+
+
+Vodigi SQL Creation Script
+
+* "Vodigi 5.0 Master DB Scripts.sql"
+* "Vodigi 5.0 Master DB Data Population Scripts.sql"
+
+
+Vodigi SQL Upgrade Script
+
+* "Vodigi 5.0 to 5.5 - DB Upgrade Scripts.sql"
+* "Vodigi 5.5 to 6.0 - DB Upgrade Scripts.sql"
+
+
+VodigiLog SQL Creation Script
+
+* "VodigiLogs 5.0 Master DB Scripts.sql"
+
+
+== Attach Database
+
+Container name used here:
+
+* __vodigi-database__
+* __vodigi-mssql__
+
+
+.Example of Dockerfile
+----
+ADD DB_NAME.mdf /var/opt/mssql/data/
+ADD DB_NAME.ldf /var/opt/mssql/data/
+----
+
+
+.Example 1 - Copy database/files(mdf, ldf) to Container 
+----
+docker cp Vodigi.mdf vodigi-database:/var/opt/mssql/data/Vodigi.mdf
+docker cp Vodigi_log.ldf vodigi-database:/var/opt/mssql/data/Vodigi_log.ldf
+----
+
+.Example 2 - Run MSSQL image with attach database/File(mdf, ldf)
+----
+docker run --rm --name vodigi-mssql -d -p 1433:1433 -e sa_password=P@55w0rd -v $(PWD)/Databases:/var/opt/mssql -e ACCEPT_EULA=Y -e attach_dbs="[{'dbName':'Vodigi','dbFiles': ['/var/opt/mssql/Vodigi.mdf', '/var/opt/mssql/Vodigi_log.ldf']}]" microsoft/mssql-server-linux:latest
+----
+
+.Configuration for database Vodigi and VodigiLogs
+----
+[{'dbName':'Vodigi','dbFiles': ['/var/opt/mssql/Vodigi.mdf', '/var/opt/mssql/Vodigi_log.ldf']}, {'dbName':'VodigiLogs','dbFiles': ['/var/opt/mssql/VodigiLogs.mdf', '/var/opt/mssql/VodigiLogs_log.ldf']}]
+----
+
+== Create new database 
+
+TODO
+
+
+----
+/opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $password -d master -i create-database.sql
+----
+
+
+
+== Connect as a client 
+
+.Install SQL CLI tool
+----
+npm install -g sql-cli
+----
+
+----
+mssql -u sa -p P@55w0rd
+----
+
+.Show all databases
+----
+SELECT [name] FROM sys.databases
+----
+
+.Show vodigi Tables
+----
+use Vodigi;
+
+select * from [dbo].[Account]
+
+select * from [dbo].[User]
+
+sp_tables 'Vodigi'
+
+SELECT * FROM INFORMATION_SCHEMA.TABLES;
+----
+
+
+.Add Default Account
+----
+use Vodigi;
+
+INSERT INTO [dbo].[Account](AccountName,AccountDescription,FTPServer,FTPUsername,FTPPassword,IsActive) VALUES('Default Account','Default Account','ftp://111.111.111.11','username','password',1);
+----
+
+.Add default User
+----
+use Vodigi;
+INSERT INTO [dbo].[User](AccountID,Username,[Password],FirstName,LastName,EmailAddress,IsAdmin,IsActive) VALUES(1000000,'admin','admin','Administrator','User','admin@example.com',1,1);
+----
+
+.Execute Direct SQL on docker 
+----
+docker exec vodigi-database /opt/mssql-tools/bin/sqlcmd -U sa -P P@55w0rd -Q "SELECT [name] FROM sys.databases"
+----
+
+
+----
+mssql> use master
+mssql> CREATE DATABASE devdb
+mssql> use devdb
+mssql> .run script.sql
+----
+
+== Reference
+
+TODO..

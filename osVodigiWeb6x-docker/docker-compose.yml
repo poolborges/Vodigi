@@ -1,0 +1,27 @@
+version: '3'  
+
+services:
+
+  mssql:
+    container_name: vodigi-database
+    image: microsoft/mssql-server-linux:latest
+    ports:
+      - 1433:1433
+    volumes:
+      - data-db:/var/opt/mssql
+      # Copy sql and shell scripts onto the container
+      - ./sql:/usr/src/app/sql
+      - ./scripts:/usr/src/app 
+    # setup working directory bash will be executed from this path
+    working_dir: /usr/src/app 
+    # run the entrypoint.sh
+    command: sh -c ' chmod +x ./entrypoint.sh; ./entrypoint.sh & /opt/mssql/bin/sqlservr;'
+    environment:
+      ACCEPT_EULA: Y
+      SA_PASSWORD: P@55w0rd
+
+volumes:
+  data-db:
+    driver: local
+  data-app-ui:
+    driver: local
