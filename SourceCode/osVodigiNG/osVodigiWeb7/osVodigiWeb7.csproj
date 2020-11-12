@@ -1,206 +1,158 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Application.WebsiteCore' ">
-    <StartAction>Project</StartAction>
-    <ExternalConsole>true</ExternalConsole>
-    <ApplicationURL>https://localhost:5001;http://localhost:5000</ApplicationURL>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <Commandlineparameters></Commandlineparameters>
-  </PropertyGroup>
+  <PropertyGroup Condition=" '$(RunConfiguration)' == 'Application.WebsiteCore' " />
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.8" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.8" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.1.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="5.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="5.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="5.0.0">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="5.0.0" />
+    <PackageReference Include="UniversalTypeConverter" Version="2.0.0" />
   </ItemGroup>
-
+  
   <ItemGroup>
-    <Folder Include="Areas\" />
-    <Folder Include="Areas\Backoffice\" />
-    <Folder Include="Areas\Backoffice\Controllers\" />
-    <Folder Include="Areas\Backoffice\Views\" />
-    <Folder Include="Areas\Backoffice\Views\Home\" />
-    <Folder Include="Areas\Backoffice\Views\Products\" />
-    <Folder Include="Areas\Backoffice\Views\Shared\" />
-    <Folder Include="Areas\Backoffice\Views\Clients\" />
-    <Folder Include="Models\Classes\" />
-    <Folder Include="Models\Entities\Log\" />
-    <Folder Include="Models\ViewModel\" />
-    <Folder Include="Areas\Backoffice\Views\Dashboard\" />
-    <Folder Include="Areas\Backoffice\Views\Shared\Components\" />
-    <Folder Include="wwwroot\images\" />
-    <Folder Include="Views\Login\" />
-    <Folder Include="Models\Session\" />
-    <Folder Include="Areas\AccountPortal\" />
-    <Folder Include="Areas\Backoffice\Views\Account\" />
-    <Folder Include="Areas\Backoffice\Views\SystemMessage\" />
-    <Folder Include="Areas\Backoffice\Views\User\" />
-    <Folder Include="Areas\AccountPortal\Views\Image\" />
-    <Folder Include="Areas\AccountPortal\Views\Music\" />
-    <Folder Include="Areas\AccountPortal\Views\Player\" />
-    <Folder Include="Areas\AccountPortal\Views\PlayerGroup\" />
-    <Folder Include="Areas\AccountPortal\Views\PlayerGroupSchedule\" />
-    <Folder Include="Areas\AccountPortal\Views\PlayerSettingAccountDefault\" />
-    <Folder Include="Areas\AccountPortal\Views\PlayList\" />
-    <Folder Include="Areas\AccountPortal\Views\Report\" />
-    <Folder Include="Areas\AccountPortal\Views\Screen\" />
-    <Folder Include="Areas\AccountPortal\Views\ScreenContent\" />
-    <Folder Include="Areas\AccountPortal\Views\ScreenWizard\" />
-    <Folder Include="Areas\AccountPortal\Views\SlideShow\" />
-    <Folder Include="Areas\AccountPortal\Views\Survey\" />
-    <Folder Include="Areas\AccountPortal\Views\SurveyQuestion\" />
-    <Folder Include="Areas\AccountPortal\Views\SurveyQuestionOption\" />
-    <Folder Include="Areas\AccountPortal\Views\Timeline\" />
-    <Folder Include="Areas\AccountPortal\Views\Upload\" />
-    <Folder Include="Areas\AccountPortal\Views\Video\" />
-    <Folder Include="Views\ApplicationError\" />
-    <Folder Include="Domain\" />
-    <Folder Include="Domain\Business\" />
-    <Folder Include="Domain\Dto\" />
-    <Folder Include="Domain\Impl\" />
-    <Folder Include="ViewComponents\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="Areas\Administration\_ViewStart.cshtml" />
-    <Content Remove="Areas\Administration\Views\Shared\_Layout.cshtml" />
-    <Content Remove="Areas\Administration\Views\Products\Shared\_Layout.cshtml" />
-    <Content Remove="Areas\Administration\Views\Products\Shared\_CookieConsentPartial.cshtml" />
-    <Content Remove="mono_crash.18c5474ae1.0.json" />
-    <Content Remove="mono_crash.18c5474ae1.1.json" />
-    <Content Remove="mono_crash.18c5474ae1.0.json" />
-    <Content Remove="mono_crash.18c5474ae1.1.json" />
-    <Content Remove="wwwroot\Scripts\jquery-1.9.1.min.map" />
-    <Content Remove="wwwroot\Scripts\jquery-1.9.1.min.js" />
-    <Content Remove="wwwroot\Scripts\jquery-1.9.1.intellisense.js" />
-    <Content Remove="wwwroot\Scripts\jquery-ui-1.10.2.min.js" />
-    <Content Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.css.map" />
-    <Content Remove="wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map" />
-    <Content Remove="wwwroot\lib\bootstrap\dist\css\bootstrap-theme.min.css" />
-    <Content Remove="wwwroot\lib\bootstrap\dist\js\bootstrap.min.js" />
-    <Content Remove="wwwroot\lib\jquery\dist\jquery.min.map" />
-    <Content Remove="wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js" />
-    <Content Remove="wwwroot\lib\jquery-validation\dist\additional-methods.min.js" />
-    <Content Remove="wwwroot\images\account-icon.png" />
-    <Content Remove="wwwroot\images\banner1.svg" />
-    <Content Remove="wwwroot\images\banner2.svg" />
-    <Content Remove="wwwroot\images\banner3.svg" />
-    <Content Remove="wwwroot\images\image-icon.png" />
-    <Content Remove="wwwroot\images\logo.png" />
-    <Content Remove="wwwroot\images\menubar.png" />
-    <Content Remove="wwwroot\images\message-icon.png" />
-    <Content Remove="wwwroot\images\music.png" />
-    <Content Remove="wwwroot\images\music-icon.png" />
-    <Content Remove="wwwroot\images\no-image-available.jpg" />
-    <Content Remove="wwwroot\images\playergroup-icon.png" />
-    <Content Remove="wwwroot\images\player-icon.png" />
-    <Content Remove="wwwroot\images\playersetting-icon.png" />
-    <Content Remove="wwwroot\images\playlist-icon.png" />
-    <Content Remove="wwwroot\images\progress-bar.gif" />
-    <Content Remove="wwwroot\images\report-icon.png" />
-    <Content Remove="wwwroot\images\screencontent-icon.png" />
-    <Content Remove="wwwroot\images\screen-icon.png" />
-    <Content Remove="wwwroot\images\slideshow-icon.png" />
-    <Content Remove="wwwroot\images\survey-icon.png" />
-    <Content Remove="wwwroot\images\timeline-icon.png" />
-    <Content Remove="wwwroot\images\user-icon.png" />
-    <Content Remove="wwwroot\images\video-icon.png" />
-    <Content Remove="wwwroot\images\video-small.png" />
-    <Content Remove="wwwroot\images\vodigi-logo.png" />
-    <Content Remove="wwwroot\images\vodigi-logo-6.png" />
-    <Content Remove="wwwroot\images\vodigi-logo-oval.png" />
-    <Content Remove="wwwroot\images\vodigi-logo-oval-small.png" />
-    <Content Remove="wwwroot\images\vodigi-logo-tag.png" />
-    <Content Remove="wwwroot\images\vodigi-tag.png" />
-    <Content Remove="wwwroot\images\vodigi-tag-6.png" />
+    <Content Remove="wwwroot\Content\Site.css" />
+    <Content Remove="wwwroot\Content\themes\base\images\animated-overlay.gif" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.accordion.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.all.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.autocomplete.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.base.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.button.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.core.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.datepicker.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.dialog.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.menu.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.progressbar.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.resizable.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.selectable.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.slider.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.spinner.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.tabs.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.theme.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery.ui.tooltip.css" />
+    <Content Remove="wwwroot\Content\themes\base\jquery-ui.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\animated-overlay.gif" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.button.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.core.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <Content Remove="wwwroot\Content\themes\base\minified\jquery-ui.min.css" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="Models\Classes\Account.cs" />
-    <Compile Remove="Models\Classes\PlayerView.cs" />
-    <Compile Remove="Models\Classes\TimelineVideoXref.cs" />
-    <Compile Remove="Models\Classes\PlayerSettingType.cs" />
-    <Compile Remove="Models\Classes\ScreenScreenContentXref.cs" />
-    <Compile Remove="Models\Classes\PlayListVideoXref.cs" />
-    <Compile Remove="Models\Classes\PlayerGroupSchedule.cs" />
-    <Compile Remove="Models\Classes\SurveyQuestion.cs" />
-    <Compile Remove="Models\Classes\ScreenContent.cs" />
-    <Compile Remove="Models\Classes\LoginLog.cs" />
-    <Compile Remove="Models\Classes\Screen.cs" />
-    <Compile Remove="Models\Classes\ScreenWizardView.cs" />
-    <Compile Remove="Models\Classes\SystemMessage.cs" />
-    <Compile Remove="Models\Classes\Survey.cs" />
-    <Compile Remove="Models\Classes\PlayerScreenContentLog.cs" />
-    <Compile Remove="Models\Classes\PlayerSettingSystemDefault.cs" />
-    <Compile Remove="Models\Classes\User.cs" />
-    <Compile Remove="Models\Classes\PlayerSettingAccountDefault.cs" />
-    <Compile Remove="Models\Classes\ScreenContentView.cs" />
-    <Compile Remove="Models\Classes\Timeline.cs" />
-    <Compile Remove="Models\Classes\Upload.cs" />
-    <Compile Remove="Models\Classes\ScreenContentType.cs" />
-    <Compile Remove="Models\Classes\UserView.cs" />
-    <Compile Remove="Models\Classes\PlayerSettingAccountDefaultView.cs" />
-    <Compile Remove="Models\Classes\SurveyQuestionOption.cs" />
-    <Compile Remove="Models\Classes\PlayerSetting.cs" />
-    <Compile Remove="Models\Classes\Login.cs" />
-    <Compile Remove="Models\Classes\PlayerScreenLog.cs" />
-    <Compile Remove="Models\Classes\Video.cs" />
-    <Compile Remove="Models\Classes\SlideShowMusicXref.cs" />
-    <Compile Remove="Models\Classes\SlideShowImageXref.cs" />
-    <Compile Remove="Models\Classes\Music.cs" />
-    <Compile Remove="Models\Classes\Player.cs" />
-    <Compile Remove="Models\Classes\PlayList.cs" />
-    <Compile Remove="Models\Classes\TimelineImageXref.cs" />
-    <Compile Remove="Models\Classes\PlayerGroup.cs" />
-    <Compile Remove="Models\Classes\PlayerSettingView.cs" />
-    <Compile Remove="Models\Classes\ScreenView.cs" />
-    <Compile Remove="Models\Classes\UserAccount.cs" />
-    <Compile Remove="Models\Classes\TimelineMediaSort.cs" />
-    <Compile Remove="Models\Classes\TimelineMusicXref.cs" />
-    <Compile Remove="Models\Classes\SlideShow.cs" />
-    <Compile Remove="Controllers\ScreenWizardController.cs" />
+    <None Include="wwwroot\Content\Site.css" />
+    <None Include="wwwroot\Content\themes\base\images\animated-overlay.gif" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_glass_75_dadada_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-icons_222222_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-icons_2e83ff_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-icons_454545_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-icons_888888_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\images\ui-icons_cd0a0a_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.accordion.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.all.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.autocomplete.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.base.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.button.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.core.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.datepicker.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.dialog.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.menu.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.progressbar.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.resizable.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.selectable.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.slider.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.spinner.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.tabs.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.theme.css" />
+    <None Include="wwwroot\Content\themes\base\jquery.ui.tooltip.css" />
+    <None Include="wwwroot\Content\themes\base\jquery-ui.css" />
+    <None Include="wwwroot\Content\themes\base\minified\images\animated-overlay.gif" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_flat_0_aaaaaa_40x100.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_flat_75_ffffff_40x100.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_glass_55_fbf9ee_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_glass_65_ffffff_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_glass_75_dadada_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_glass_75_e6e6e6_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_glass_95_fef1ec_1x400.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-bg_highlight-soft_75_cccccc_1x100.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-icons_222222_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-icons_2e83ff_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-icons_454545_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-icons_888888_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\minified\images\ui-icons_cd0a0a_256x240.png" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.accordion.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.autocomplete.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.button.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.core.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.datepicker.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.dialog.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.menu.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.progressbar.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.resizable.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.selectable.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.slider.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.spinner.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.tabs.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.theme.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery.ui.tooltip.min.css" />
+    <None Include="wwwroot\Content\themes\base\minified\jquery-ui.min.css" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="mono_crash.mem.8544.1.blob" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="wwwroot\images\account-icon.png" />
-    <None Include="wwwroot\images\banner1.svg" />
-    <None Include="wwwroot\images\banner2.svg" />
-    <None Include="wwwroot\images\banner3.svg" />
-    <None Include="wwwroot\images\image-icon.png" />
-    <None Include="wwwroot\images\logo.png" />
-    <None Include="wwwroot\images\menubar.png" />
-    <None Include="wwwroot\images\message-icon.png" />
-    <None Include="wwwroot\images\music.png" />
-    <None Include="wwwroot\images\music-icon.png" />
-    <None Include="wwwroot\images\no-image-available.jpg" />
-    <None Include="wwwroot\images\playergroup-icon.png" />
-    <None Include="wwwroot\images\player-icon.png" />
-    <None Include="wwwroot\images\playersetting-icon.png" />
-    <None Include="wwwroot\images\playlist-icon.png" />
-    <None Include="wwwroot\images\progress-bar.gif" />
-    <None Include="wwwroot\images\report-icon.png" />
-    <None Include="wwwroot\images\screencontent-icon.png" />
-    <None Include="wwwroot\images\screen-icon.png" />
-    <None Include="wwwroot\images\slideshow-icon.png" />
-    <None Include="wwwroot\images\survey-icon.png" />
-    <None Include="wwwroot\images\timeline-icon.png" />
-    <None Include="wwwroot\images\user-icon.png" />
-    <None Include="wwwroot\images\video-icon.png" />
-    <None Include="wwwroot\images\video-small.png" />
-    <None Include="wwwroot\images\vodigi-logo.png" />
-    <None Include="wwwroot\images\vodigi-logo-6.png" />
-    <None Include="wwwroot\images\vodigi-logo-oval.png" />
-    <None Include="wwwroot\images\vodigi-logo-oval-small.png" />
-    <None Include="wwwroot\images\vodigi-logo-tag.png" />
-    <None Include="wwwroot\images\vodigi-tag.png" />
-    <None Include="wwwroot\images\vodigi-tag-6.png" />
+    <Folder Include="wwwroot\Content\" />
+    <Folder Include="Models\Entities\Master\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="Core\" />
   </ItemGroup>
 </Project>

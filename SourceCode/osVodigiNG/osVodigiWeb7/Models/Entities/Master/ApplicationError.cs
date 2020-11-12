@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
-namespace osVodigiWeb7x.Models
+﻿namespace osVodigiWeb7x.Models
 {
     public class ApplicationError
     {

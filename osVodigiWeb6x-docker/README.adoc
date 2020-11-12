@@ -112,6 +112,12 @@ docker exec vodigi-database /opt/mssql-tools/bin/sqlcmd -U sa -P P@55w0rd -Q "SE
 ----
 
 
+.Execute Direct SQL on docker 
+----
+docker exec vodigi-database /opt/mssql-tools/bin/sqlcmd -U sa -P P@55w0rd -Q "SELECT [name] FROM sys.databases"
+----
+
+
 ----
 mssql> use master
 mssql> CREATE DATABASE devdb

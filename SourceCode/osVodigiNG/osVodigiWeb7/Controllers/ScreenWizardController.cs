@@ -18,32 +18,39 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
+using osVodigiWeb7.Core;
 using osVodigiWeb7.Extensions;
-using System.Configuration;
-using osVodigiWeb6x.Models;
+using osVodigiWeb7x;
+using osVodigiWeb7x.Exceptions;
+using osVodigiWeb7x.Models;
 
 namespace osVodigiWeb6x.Controllers
 {
     public class ScreenWizardController : Controller
     {
-        IScreenRepository repository;
-        string firstfile = String.Empty;
-        string selectedfile = String.Empty;
+        private IScreenRepository repository;
+        private IScreenScreenContentXrefRepository sscrep;
+        private IScreenContentTypeRepository sctrep;
+        private IScreenContentRepository screp;
+        private IImageRepository imgrep;
+        private ITimelineRepository tlrep;
+        private IPlayListRepository plrep;
+        private ISlideShowRepository ssrep;
 
-        public ScreenWizardController()
-            : this(new EntityScreenRepository())
-        { }
+        private string firstfile = String.Empty;
+        private string selectedfile = String.Empty;
 
-        public ScreenWizardController(IScreenRepository paramrepository)
+        private ApplcationOptions appOptions;
+
+        public ScreenWizardController(IScreenRepository paramrepository, IOptions<ApplcationOptions> appOptions)
         {
-            repository = paramrepository;
+            this.repository = paramrepository;
+            this.appOptions = appOptions.Value;
         }
 
 
@@ -75,7 +82,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1", ex);
+                throw new AppControllerException("ScreenWizard", "Step 1", ex);
                 
             }
         }
@@ -135,7 +142,8 @@ namespace osVodigiWeb6x.Controllers
                         else
                             repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 1",
+                        //TODO Should get user from HttpContext
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen", "Wizard Step 1",
                             "Step 1 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         return RedirectToAction("Step2", new { id = screen.ScreenID });
@@ -146,7 +154,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 1 POST", ex);
+                throw new AppControllerException("ScreenWizard", "Step 1 POST", ex);
                 
             }
         }
@@ -185,7 +193,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2", ex);
+                throw new osVodigiWeb7x.Exceptions.AppControllerException("ScreenWizard", "Step 2", ex);
                 
             }
         }
@@ -237,7 +245,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 2",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen", "Wizard Step 2",
                             "Step 2 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         if (screen.IsInteractive)
@@ -251,7 +259,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 2 POST", ex);
+                throw new AppControllerException("ScreenWizard", "Step 2 POST", ex);
                 
             }
         }
@@ -266,7 +274,6 @@ namespace osVodigiWeb6x.Controllers
                 User user = AuthUtils.CheckAuthUser();
 
                 Screen screen = repository.GetScreen(id);
-                IImageRepository imgrep = new EntityImageRepository();
                 Image image = imgrep.GetImage(screen.ButtonImageID);
                 if (image == null)
                     ViewData["ImageList"] = new SelectList(BuildImageList(""), "Value", "Text", "");
@@ -280,13 +287,13 @@ namespace osVodigiWeb6x.Controllers
                 ViewData["ScreenID"] = id;
                 
                 int accountid = AuthUtils.GetAccountId();
-                ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
+                ViewData["ImageFolder"] = appOptions.MediaRootFolder + Convert.ToString(AuthUtils.GetAccountId()) + @" /Images/";
 
                 return View(screen);
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                throw new AppControllerException("ScreenWizard", "Step 3", ex);
                 
             }
         }
@@ -306,7 +313,7 @@ namespace osVodigiWeb6x.Controllers
 
                     string buttonimageguid = Request.Form["lstButtonImage"];
 
-                    IImageRepository imgrep = new EntityImageRepository();
+                    
                     Image img = imgrep.GetImageByGuid(AuthUtils.GetAccountId(), buttonimageguid);
                     if (img != null)
                         screen.ButtonImageID = img.ImageID;
@@ -328,7 +335,7 @@ namespace osVodigiWeb6x.Controllers
                             ViewData["ImageUrl"] = firstfile;
 
                         int accountid = AuthUtils.GetAccountId();
-                        ViewData["ImageFolder"] = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
+                        ViewData["ImageFolder"] = appOptions.MediaRootFolder + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
                         return View(screen);
                     }
@@ -336,7 +343,7 @@ namespace osVodigiWeb6x.Controllers
                     {
                         repository.UpdateScreen(screen);
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 3",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen", "Wizard Step 3",
                             "Step 3 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         if (screen.IsInteractive)
@@ -350,7 +357,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                throw new AppControllerException("ScreenWizard", "Step 3 POST", ex);
                 
             }
         }
@@ -373,7 +380,6 @@ namespace osVodigiWeb6x.Controllers
 
                 // Get the content ids for the screen
                 string ids = String.Empty;
-                IScreenScreenContentXrefRepository sscrep = new EntityScreenScreenContentXrefRepository();
                 IEnumerable<ScreenScreenContentXref> sscs = sscrep.GetScreenScreenContentXrefs(screen.ScreenID);
                 foreach (ScreenScreenContentXref ssc in sscs)
                 {
@@ -385,7 +391,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3", ex);
+                throw new AppControllerException("ScreenWizard", "Step 3", ex);
                 
             }
         }
@@ -415,11 +421,11 @@ namespace osVodigiWeb6x.Controllers
                     else
                     {
                         // Delete and recreate the screen/screen content xrefs
-                        IScreenScreenContentXrefRepository xrefrep = new EntityScreenScreenContentXrefRepository();
-                        xrefrep.DeleteScreenScreenContentXrefs(screen.ScreenID);
+
+                        sscrep.DeleteScreenScreenContentXrefs(screen.ScreenID);
 
                         // Create a xref for each screen content in the screen
-                        IScreenScreenContentXrefRepository sscrep = new EntityScreenScreenContentXrefRepository();
+                        
                         string[] ids = Request.Form["txtScreenScreenContent"].ToString().Split('|');
                         int i = 1;
                         foreach (string id in ids)
@@ -435,7 +441,7 @@ namespace osVodigiWeb6x.Controllers
                             }
                         }
 
-                        CommonMethods.CreateActivityLog((User)Session["User"], "Screen", "Wizard Step 4",
+                        CommonMethods.CreateActivityLog(HttpContext.Session.Get<User>("User"), "Screen", "Wizard Step 4",
                             "Step 4 '" + screen.ScreenName + "' - ID: " + screen.ScreenID.ToString());
 
                         return RedirectToAction("Index", "Screen");
@@ -446,7 +452,7 @@ namespace osVodigiWeb6x.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exceptions.AppControllerException("ScreenWizard", "Step 3 POST", ex);
+                throw new AppControllerException("ScreenWizard", "Step 3 POST", ex);
                 
             }
         }
@@ -518,7 +524,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the timeline list
             List<SelectListItem> items = new List<SelectListItem>();
 
-            ITimelineRepository tlrep = new EntityTimelineRepository();
+            
             IEnumerable<Timeline> tls = tlrep.GetAllTimelines(accountid);
             foreach (Timeline tl in tls)
             {
@@ -547,7 +553,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the slide show list
             List<SelectListItem> items = new List<SelectListItem>();
 
-            ISlideShowRepository ssrep = new EntitySlideShowRepository();
+            
             IEnumerable<SlideShow> sss = ssrep.GetAllSlideShows(accountid);
             foreach (SlideShow ss in sss)
             {
@@ -576,7 +582,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the play list list
             List<SelectListItem> items = new List<SelectListItem>();
 
-            IPlayListRepository plrep = new EntityPlayListRepository();
+            
             IEnumerable<PlayList> pls = plrep.GetAllPlayLists(accountid);
             foreach (PlayList pl in pls)
             {
@@ -603,10 +609,9 @@ namespace osVodigiWeb6x.Controllers
             int accountid = AuthUtils.GetAccountId();
 
             // Get the active images
-            IImageRepository imgrep = new EntityImageRepository();
             IEnumerable<Image> imgs = imgrep.GetAllImages(accountid);
 
-            string imagefolder = ConfigurationManager.AppSettings["MediaRootFolder"] + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
+            string imagefolder = appOptions.MediaRootFolder + Convert.ToString(AuthUtils.GetAccountId()) + @"/Images/";
 
             List<SelectListItem> items = new List<SelectListItem>();
             bool first = true;
@@ -638,8 +643,7 @@ namespace osVodigiWeb6x.Controllers
             // Build the screen content list
             List<SelectListItem> items = new List<SelectListItem>();
 
-            IScreenContentTypeRepository sctrep = new EntityScreenContentTypeRepository();
-            IScreenContentRepository screp = new EntityScreenContentRepository();
+            
             IEnumerable<ScreenContent> scs = screp.GetAllScreenContents(accountid);
             foreach (ScreenContent sc in scs)
             {
@@ -658,9 +662,7 @@ namespace osVodigiWeb6x.Controllers
         {
             List<SelectListItem> items = new List<SelectListItem>();
 
-            IScreenContentRepository screp = new EntityScreenContentRepository();
-            IScreenContentTypeRepository sctrep = new EntityScreenContentTypeRepository();
-            IScreenScreenContentXrefRepository sscrep = new EntityScreenScreenContentXrefRepository();
+         
             IEnumerable<ScreenScreenContentXref> sscs = sscrep.GetScreenScreenContentXrefs(screenid);
 
             foreach (ScreenScreenContentXref ssc in sscs)

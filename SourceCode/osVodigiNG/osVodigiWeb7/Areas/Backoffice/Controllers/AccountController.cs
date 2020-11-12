@@ -52,8 +52,6 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
         [Route("[action]")]
         public ActionResult Index()
         {
-            try
-            {
                 AuthUtils.CheckIfAdmin();
 
 
@@ -119,12 +117,6 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
                 ViewResult result = View(acountRepository.GetAccountPage(pagestate.AccountName, pagestate.Description, pagestate.IncludeInactive, pagestate.SortBy, isdescending, pagestate.PageNumber, pagecount));
                 result.ViewName = "Index";
                 return result;
-            }
-            catch (Exception ex)
-            {
-                throw new Exceptions.AppControllerException("Account", "Index", ex);
-                
-            }
         }
 
         [Route("[action]")]
@@ -290,29 +282,24 @@ namespace osVodigiWeb7x.Areas.Backoffice.Controllers
 
         private AccountPageState GetPageState()
         {
-            try
+            AccountPageState pagestate = HttpContext.Session.Get<AccountPageState>("AccountPageState");
+
+            // Initialize the session values if they don't exist - need to do this the first time controller is hit
+            if (pagestate == null)
             {
-                AccountPageState pagestate = HttpContext.Session.Get<AccountPageState>("AccountPageState");
-
-
-                // Initialize the session values if they don't exist - need to do this the first time controller is hit
-                if (pagestate == null)
+                int accountid = AuthUtils.GetAccountId();
+                pagestate = new AccountPageState
                 {
-                    int accountid = AuthUtils.GetAccountId();
-                    pagestate = new AccountPageState
-                    {
-                        AccountName = String.Empty,
-                        Description = String.Empty,
-                        IncludeInactive = false,
-                        SortBy = "AccountName",
-                        AscDesc = "Ascending",
-                        PageNumber = 1
-                    };
-                    SavePageState(pagestate);
-                }
-                return pagestate;
+                    AccountName = String.Empty,
+                    Description = String.Empty,
+                    IncludeInactive = false,
+                    SortBy = "AccountName",
+                    AscDesc = "Ascending",
+                    PageNumber = 1
+                };
+                SavePageState(pagestate);
             }
-            catch { return new AccountPageState(); }
+            return pagestate;
         }
 
         private void SavePageState(AccountPageState pagestate)

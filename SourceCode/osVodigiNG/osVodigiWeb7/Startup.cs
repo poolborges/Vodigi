@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using osVodigiWeb7.Core;
 using osVodigiWeb7.Domain.Business;
 using osVodigiWeb7x.Models;
 
@@ -36,6 +37,17 @@ namespace Application.WebsiteCore
                
             });
 
+            #region Configurar sessao
+            services.AddDistributedMemoryCache();
+
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromHours(1);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+            #endregion
+
             services.AddHealthChecks();
 
             services.AddControllersWithViews();
@@ -50,7 +62,8 @@ namespace Application.WebsiteCore
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseDatabaseErrorPage();
+                app.UseDeveloperExceptionPage();
+                app.UseMigrationsEndPoint();
             }
             else
             {
@@ -63,6 +76,9 @@ namespace Application.WebsiteCore
             app.UseCookiePolicy();
             //app.UseAuthentication();
             app.UseRouting();
+
+            //Configurar Session
+            app.UseSession();
 
             app.UseEndpoints(endpoints =>
             {
@@ -124,6 +140,9 @@ namespace Application.WebsiteCore
         private void ConfigureAppServices(IServiceCollection services)
         {
 
+            services.Configure<ApplcationOptions>(options => Configuration.GetSection(ApplcationOptions.KEY).Bind(options));
+
+            services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDbContext<VodigiContext>(options =>
                 options.UseSqlServer(
                     Configuration.GetConnectionString("VodigiContext")));

@@ -110,7 +110,8 @@ namespace osVodigiWeb7x.Models
                 query = query.Where(accts => accts.IsActive == true);
 
             // Get a Count of all filtered records
-            return query.Count();
+            int count = (query != null) ? query.Count() : 0;
+            return count;  
         }
 
         public void CreateAccount(Account account)
