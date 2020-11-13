@@ -29,8 +29,9 @@ using osVodigiWeb7x;
 using osVodigiWeb7x.Exceptions;
 using osVodigiWeb7x.Models;
 
-namespace osVodigiWeb6x.Controllers
+namespace osVodigiWeb7x.AccountPortal.Controllers
 {
+    [Area("AccountPortal")]
     public class ScreenWizardController : Controller
     {
         private IScreenRepository repository;
