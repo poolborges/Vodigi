@@ -154,5 +154,6 @@
     <Folder Include="Models\Entities\Master\" />
     <Folder Include="Exceptions\" />
     <Folder Include="Core\" />
+    <Folder Include="Areas\AccountPortal\Views\Shared\partials\" />
   </ItemGroup>
 </Project>
