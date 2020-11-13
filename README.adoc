@@ -1,17 +1,29 @@
-[[doc]]
-= VodigiNext 
-:author: Paulo Borges
-:copyright: 2020-2020 Paulo Borges
-:revnumber: 
-:revdate: {docdatetime}
-:version-label!:
+// Global settings
+:ascii-ids:
 :encoding: UTF-8
 :lang: pt_PT
+:icons: font
+:toc:
+:toc-placement!:
+:toclevels: 3
+:numbered:
+:stem:
+
 ifdef::env-github[]
-:branch: master
-:status:
-:imagesdir: images/
+:imagesdir: https://raw.githubusercontent.com/poolborges/Vodigi/master/docs/images/
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
 endif::[]
+
+[[doc]]
+= Vodigi Next Generation (VodigiNG)
+:author: Copyright (c) 2020-2020 Paulo Borges.
+:revnumber: krpos-0.0.1-snapshot
+:revdate: {last-update-label} {docdatetime}
+:version-label!:
 
 NOTE: Generated: {localdate} {localtime}
 
@@ -29,20 +41,39 @@ endif::[]
 [[doc.summary]]
 == Summary
 
+The code name for this project is "VodigiNG"
+
 This project is based on: 
 
 * Vodigi version 6.0 release at 10-06-2013. 
 * Branch vodigi-6.0 {url-repo-branch-v6}
 * Original repository:  http://sourceforge.net/projects/vodigi/files/
 
-== Future is coming 
+== osVodigix6 
+
+Screenshots (OLD VERSION
+
+image::osVodigix6_screen-shoot-01.png[]
+
+image::osVodigix6_screen-shoot-02.png[]
+
+== VodigiNG
+
+Screenshots
+
+image::osVodigiNG_screen-shoot-01.png[]
+
+=== Future is coming 
 
 * .NET Core 3
 * Container (Docker)
+* Databases Support: PostgresSQL, SQLServer, ...
+* New Theme based one of those: 
+** Material Admin (Material Design) https://github.com/BootstrapDash/Material-Admin
+** AdminLTE 3.0.0 (Boostrap) https://github.com/ColorlibHQ/AdminLTE
 
 
-== osVodigi Next
-
+.How to create osVodigi Next
 ----
 dotnet new classlib -o osVodigi.Domain
 dotnet new api -o osVodigi.WebApi
