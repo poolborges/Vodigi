@@ -7,102 +7,102 @@
     <div class="mdc-drawer__content">
         <div class="mdc-list-group">
             <nav class="mdc-list mdc-drawer-menu">
-                <div class="mdc-list-item mdc-drawer-item">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="0">
                     <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Home" asp-action="Index">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">home</i>
-                        Home
+                        Dashboard
                     </a>
                 </div>
-                <div class="mdc-list-item mdc-drawer-item">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
                     <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Report" asp-action="Index">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">track_changes</i>
                         Reports
                     </a>
                 </div>
-                <div class="mdc-list-item mdc-drawer-item">
-                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="ui-sub-menu">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="ui-sub-menu" tabindex="-1">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">dashboard</i>
                         Player Manager
                         <i class="mdc-drawer-arrow material-icons">chevron_right</i>
                     </a>
-                    <div class="mdc-expansion-panel" id="player-manager-submenu">
+                    <div class="mdc-expansion-panel" id="player-manager-submenu" style="display: none;">
                         <nav class="mdc-list mdc-drawer-submenu">
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Player" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Player" asp-action="Index" tabindex="-1">
                                     Players
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerGroup" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerGroup" asp-action="Index" tabindex="-1">
                                     Player Group
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerGroupSchedule" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerGroupSchedule" asp-action="Index" tabindex="-1">
                                     Player Group Schedule
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerSettingAccountDefault" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayerSettingAccountDefault" asp-action="Index" tabindex="-1">
                                     Default Player Settings
                                 </a>
                             </div>
                         </nav>
                     </div>
                 </div>
-                <div class="mdc-list-item mdc-drawer-item">
-                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="sample-page-submenu">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="ui-sub-menu" tabindex="-1">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">pages</i>
                         Media/Asset Manager
                         <i class="mdc-drawer-arrow material-icons">chevron_right</i>
                     </a>
-                    <div class="mdc-expansion-panel" id="asset-manager-submenu">
+                    <div class="mdc-expansion-panel" id="asset-manager-submenu" style="display: none;">
                         <nav class="mdc-list mdc-drawer-submenu">
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Upload" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Upload" asp-action="Index" tabindex="-1">
                                     Upload
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Timeline" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Timeline" asp-action="Index" tabindex="-1">
                                     Timeline
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="SlideShow" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="SlideShow" asp-action="Index" tabindex="-1">
                                     SlideShow
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayList" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="PlayList" asp-action="Index" tabindex="-1">
                                     PlayList
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Image" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Image" asp-action="Index" tabindex="-1">
                                     Images
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Video" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Video" asp-action="Index" tabindex="-1">
                                     Videos
                                 </a>
                             </div>
-                            <div class="mdc-list-item mdc-drawer-item">
-                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Music" asp-action="Index">
+                            <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                                <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Music" asp-action="Index" tabindex="-1">
                                     Musics
                                 </a>
                             </div>
                         </nav>
                     </div>
                 </div>
-                <div class="mdc-list-item mdc-drawer-item">
-                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="sample-page-submenu">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="ui-sub-menu" tabindex="-1">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">pages</i>
                         Screen Manager
                         <i class="mdc-drawer-arrow material-icons">chevron_right</i>
                     </a>
-                    <div class="mdc-expansion-panel" id="screen-manager-submenu">
+                    <div class="mdc-expansion-panel" id="screen-manager-submenu" style="display: none;">
                         <nav class="mdc-list mdc-drawer-submenu">
                             <div class="mdc-list-item mdc-drawer-item">
                                 <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Screen" asp-action="Index">
@@ -123,13 +123,13 @@
                     </div>
                 </div>
 
-                <div class="mdc-list-item mdc-drawer-item">
-                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="sample-page-submenu">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
+                    <a class="mdc-expansion-panel-link" href="#" data-toggle="expansionPanel" data-target="ui-sub-menu" tabindex="-1">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">pages</i>
                         Survey Manager
                         <i class="mdc-drawer-arrow material-icons">chevron_right</i>
                     </a>
-                    <div class="mdc-expansion-panel" id="survey-manager-submenu">
+                    <div class="mdc-expansion-panel" id="survey-manager-submenu" style="display: none;">
                         <nav class="mdc-list mdc-drawer-submenu">
                             <div class="mdc-list-item mdc-drawer-item">
                                 <a class="mdc-drawer-link" asp-area="AccountPortal" asp-controller="Survey" asp-action="Index">
@@ -149,7 +149,7 @@
                         </nav>
                     </div>
                 </div>
-                <div class="mdc-list-item mdc-drawer-item">
+                <div class="mdc-list-item mdc-drawer-item" tabindex="-1">
                     <a class="mdc-drawer-link" href="https://www.bootstrapdash.com/demo/material-admin-free/jquery/documentation/documentation.html" target="_blank">
                         <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">description</i>
                         Documentation
