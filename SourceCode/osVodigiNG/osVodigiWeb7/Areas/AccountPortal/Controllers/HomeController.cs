@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Application.WebsiteCore.Models;
 
-namespace Application.WebsiteCore.AccountPortal.Backoffice.Controllers
+namespace Application.WebsiteCore.AccountPortal.Controllers
 {
     [Area("AccountPortal")]
     [Route("AccountPortal/[controller]")]
