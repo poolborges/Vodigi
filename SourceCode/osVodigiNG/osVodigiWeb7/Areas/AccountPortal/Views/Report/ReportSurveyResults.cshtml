@@ -1,0 +1,31 @@
+﻿@{
+    ViewBag.Title = "ReportSurveyResults";
+}
+
+<br />
+<div class="textblock">
+    <table class="instructions">
+        <tr>
+            <td style="width:100px;"><img src="~/Images/report-icon.png" alt="" style="border-radius:8px 8px;" /></td>
+            <td>
+                <span class="paragraphheader">Survey Results Report</span><br />
+                <span class="paragraphtext">Please enter the report search parameters below.</span>
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("ReportSurveyResults", "Report", FormMethod.Post, new { id = "formSearch" }))
+{    
+    <table class="searchtable" style="width:700px;">
+        <tr>
+            <td class="searchcell"><b>Survey:&nbsp;</b><br />@Html.DropDownList("lstSurvey", (SelectList)ViewData["Surveys"], new { @style = "width:350px;font-size:10px;" })</td>
+            <td class="searchcell"><b>Start Date UTC:</b><br />@Html.TextBox("txtStartDate", (string)ViewData["StartDate"], new { @style = "width:100px;font-size:10px;", @class = "date" })</td>
+            <td class="searchcell"><b>End Date UTC:</b><br />@Html.TextBox("txtEndDate", (string)ViewData["EndDate"], new { @style = "width:100px;font-size:10px;", @class = "date" })</td>
+            <td class="searchcell" style="vertical-align:bottom;"><input type="submit" class="search" value="Search" /></td>
+        </tr>
+    </table>    
+    @Html.Raw((string)ViewData["SurveyTable"])
+    <br /><br />
+}
+

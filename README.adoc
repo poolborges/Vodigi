@@ -53,15 +53,17 @@ This project is based on:
 
 Screenshots (OLD VERSION
 
-image::osVodigix6_screen-shoot-01.png[]
+image::osVodigix6_screen-shoot-01.png[Vodigi6 :: Login]
 
-image::osVodigix6_screen-shoot-02.png[]
+image::osVodigix6_screen-shoot-02.png[Vodigi6 :: Manager]
 
 == VodigiNG
 
 Screenshots
 
-image::osVodigiNG_screen-shoot-01.png[]
+image::osVodigiNG_screen-shoot-02.png[KOS :: Livescreen Manager Console]
+
+image::osVodigiNG_screen-shoot-01.png[KOS :: Livescreen Tenant Console]
 
 === Future is coming 
 

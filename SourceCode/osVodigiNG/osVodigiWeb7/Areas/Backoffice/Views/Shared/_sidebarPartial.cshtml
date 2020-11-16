@@ -1,0 +1,37 @@
+﻿<!-- SlideBar -->
+<aside class="mdc-drawer mdc-drawer--dismissible mdc-drawer--open">
+    <div class="mdc-drawer__header">
+        <a href="#" class="brand-logo">
+            <img src="~/material-admin/images/logo_2.svg" alt="logo">
+        </a>
+    </div>
+    <div class="mdc-drawer__content">
+        <div class="mdc-list-group">
+            <nav class="mdc-list mdc-drawer-menu">
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" asp-area="BackOffice" asp-controller="Home" asp-action="Index">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">home</i>
+                        Home
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" asp-area="BackOffice" asp-controller="Account" asp-action="Index">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">dashboard</i>
+                        Account
+                    </a>
+                </div>
+                <div class="mdc-list-item mdc-drawer-item">
+                    <a class="mdc-drawer-link" asp-area="BackOffice" asp-controller="SystemMessage" asp-action="Index">
+                        <i class="material-icons mdc-list-item__start-detail mdc-drawer-item-icon" aria-hidden="true">description</i>
+                        Messages
+                    </a>
+                </div>
+            </nav>
+        </div>
+        <div class="profile-actions">
+            <a href="javascript:;">Settings</a>
+            <span class="divider"></span>
+            <a href="javascript:;">Logout</a>
+        </div>
+    </div>
+</aside>

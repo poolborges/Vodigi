@@ -1,0 +1,53 @@
+﻿@model osVodigiWeb7x.Models.SystemMessage
+
+@{
+    ViewBag.Title = "Add System Message";
+}
+
+
+@using (Html.BeginForm()) {
+
+    <table class="formtable" style="border-spacing:0;border-collapse:collapse;" role="presentation">
+        <tr>
+            <td class="formheader" colspan="2">Add System Message</td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Title: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.SystemMessageTitle, new { @style = "width:300px;", maxlength = 64 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>Body: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.SystemMessageBody, new { @style = "width:300px;", maxlength = 256 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Start Date: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.DisplayDateStart, new { @Value = Model.DisplayDateStart.ToString("d"), @style = "width:100px;font-size:12px;", @class = "date" })
+            </td>
+        </tr>
+        <tr>
+            <td class="formsecondary"><b>End Date: <span class="required">*</span></b></td>
+            <td class="formsecondary">
+                @Html.TextBoxFor(model => model.DisplayDateEnd, new { @Value = Model.DisplayDateEnd.ToString("d"), @style = "width:100px;font-size:12px;", @class = "date" })
+            </td>
+        </tr>
+        <tr>
+            <td class="formprimary"><b>Priority: <span class="required">*</span></b></td>
+            <td class="formprimary">
+                @Html.TextBoxFor(model => model.Priority, new { @style = "width:50px;", maxlength = 4 })
+            </td>
+        </tr>
+        <tr>
+            <td class="formfooter" colspan="2"><div id="returnlink"><input type="submit" value="Save" style="width:75px;" />@Html.ActionLink("Back to List", "Index")</div></td>
+        </tr>
+    </table>
+    <div class="formfootnote"><span class="required">*</span> indicates a required field.</div>
+    <br />
+    <div class="errormessage">@Html.Raw((string)ViewData["ValidationMessage"])</div>
+}
+
+<br /><br />
