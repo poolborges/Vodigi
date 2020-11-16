@@ -24,5 +24,7 @@
     <Folder Include="Exceptions\" />
     <Folder Include="Core\" />
     <Folder Include="Areas\AccountPortal\Views\Shared\partials\" />
+    <Folder Include="wwwroot\carbon\" />
+    <Folder Include="wwwroot\carbon\css\" />
   </ItemGroup>
 </Project>
