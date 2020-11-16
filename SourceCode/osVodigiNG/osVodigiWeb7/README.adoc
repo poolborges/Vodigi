@@ -18,3 +18,14 @@ docker run --rm -it -p 8000:80 osvodigiweb7
 ----
 docker images osVodigiWeb7
 ----
+
+
+== Modularaty
+
+* Oqtane (open source Modular Application Framework for Blazor)
+** People: shaun-walker
+** Company: Softvision
+** https://github.com/oqtane/oqtane.framework
+* Orchard Core
+** People:
+** https://github.com/OrchardCMS/OrchardCore
