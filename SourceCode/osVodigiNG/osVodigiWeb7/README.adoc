@@ -10,8 +10,6 @@ Next Version of osVodigi
 ----
 docker build --pull -t osvodigiweb7 .
 docker run --rm -it -p 8000:80 osvodigiweb7
-
-docker run --rm -it -p 8000:80 osvodigiweb7
 ----
 
 
