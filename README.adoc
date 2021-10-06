@@ -9,6 +9,7 @@
 :numbered:
 :stem:
 
+// Github settings
 ifdef::env-github[]
 :imagesdir: https://raw.githubusercontent.com/poolborges/Vodigi/master/docs/images/
 :tip-caption: :bulb:
@@ -16,6 +17,7 @@ ifdef::env-github[]
 :important-caption: :heavy_exclamation_mark:
 :caution-caption: :fire:
 :warning-caption: :warning:
+:badges:
 endif::[]
 
 [[doc]]
@@ -24,19 +26,19 @@ endif::[]
 :revnumber: krpos-0.0.1-snapshot
 :revdate: {last-update-label} {docdatetime}
 :version-label!:
-
-NOTE: Generated: {localdate} {localtime}
-
+// URIs
 :url-ci-travis: https://travis-ci.org/poolborges/Vodigi/
 :url-ci-appveyor: https://ci.appveyor.com/project/poolborges/Vodigi
 :url-ci-github: https://github.com/poolborges/Vodigi/actions
 :url-repo-branch-v6: https://github.com/poolborges/Vodigi/tree/vodigi-6.0
 
-ifdef::status[]
+
+ifdef::badges[]
 image:https://img.shields.io/badge/License-GPLv3-blue.svg[GPL v3 License, link=#copyright-and-license]
 image:https://github.com/poolborges/Vodigi/workflows/Build%20CI/badge.svg?branch=master[Build Status (Github CI), link={url-ci-github}]
 endif::[]
 
+NOTE: Generated: {localdate} {localtime}
 
 [[doc.summary]]
 == Summary
