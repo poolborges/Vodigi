@@ -28,7 +28,7 @@ using System.IO;
 
 namespace osVodigiPlayer.UserControls
 {
-    public partial class ucSlideShowPanZoom : UserControl
+    public partial class ucSlideShowPanZoom : UserControl, IPlayController
     {
         // Complete Event
         public static readonly RoutedEvent SlideShowCompleteEvent = EventManager.RegisterRoutedEvent(
@@ -236,7 +236,7 @@ namespace osVodigiPlayer.UserControls
             ShowNextImage();
         }
 
-        public void StopTimer()
+        public void Stop()
         {
             try
             {

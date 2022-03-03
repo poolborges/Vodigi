@@ -104,10 +104,9 @@ namespace osVodigiPlayer.UserControls
             try
             {
                 // Try to get the database version at the url specified
-                osVodigiWS.osVodigiServiceSoapClient ws = new osVodigiWS.osVodigiServiceSoapClient();
-                ws.Endpoint.Address = new System.ServiceModel.EndpointAddress(new Uri(txtVodigiWebserviceURL.Text.Trim()));
+                osVodigiPlayer.Helpers.VodigiWSClient ws = new osVodigiPlayer.Helpers.VodigiWSClient(new Uri(txtVodigiWebserviceURL.Text.Trim()));
 
-                osVodigiWS.DatabaseVersion version = ws.DatabaseVersion_Get();
+                var version = ws.GetDatabaseVersionAsync();
                 if (version == null)
                 {
                     lblError.Text = errortext;

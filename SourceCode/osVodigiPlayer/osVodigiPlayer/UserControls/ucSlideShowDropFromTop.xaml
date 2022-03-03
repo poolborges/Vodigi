@@ -10,7 +10,7 @@
         <Storyboard x:Key="sbImageOne">
             <DoubleAnimation Name="daImageOne" 
                                          From="300" To="0" Duration="00:00:01"
-                                         Storyboard.TargetName="imgOne"
+                                         Storyboard.TargetName="imgSlideshow1"
                                          Storyboard.TargetProperty="(Canvas.Top)">
                 <DoubleAnimation.EasingFunction>
                     <BounceEase Bounces="0" EasingMode="EaseOut" Bounciness="5"></BounceEase>
@@ -20,7 +20,7 @@
         <Storyboard x:Key="sbImageTwo">
             <DoubleAnimation Name="daImageTwo" 
                                          From="300" To="0" Duration="00:00:01"
-                                         Storyboard.TargetName="imgTwo"
+                                         Storyboard.TargetName="imgSlideshow2"
                                          Storyboard.TargetProperty="(Canvas.Top)">
                 <DoubleAnimation.EasingFunction>
                     <BounceEase Bounces="0" EasingMode="EaseOut" Bounciness="5"></BounceEase>
@@ -36,8 +36,8 @@
         </Grid.Clip>
         <Canvas x:Name="canvasRoot">
 
-            <Image x:Name="imgOne" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
-            <Image x:Name="imgTwo" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
+            <Image x:Name="imgSlideshow1" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
+            <Image x:Name="imgSlideshow2" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
             <MediaElement x:Name="mediaPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" UnloadedBehavior="Manual" Opacity="0"></MediaElement>
 
         </Canvas>

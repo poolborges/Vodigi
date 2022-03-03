@@ -17,6 +17,7 @@ using System.Windows.Threading;
 using System.Xml.Linq;
 using System.IO;
 using System.Configuration;
+using osVodigiPlayer.Helpers;
 
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
@@ -257,14 +258,14 @@ namespace osVodigiPlayer.UserControls
             try
             {
                 // Get the schedule asychronously
-                osVodigiWS.osVodigiServiceSoapClient ws = new osVodigiWS.osVodigiServiceSoapClient();
-                ws.Endpoint.Address = new System.ServiceModel.EndpointAddress(new Uri(PlayerConfiguration.configVodigiWebserviceURL));
+                VodigiWSClient ws = new VodigiWSClient();
 
-                osVodigiWS.Player_GetCurrentScheduleResponse scheduleResponse = await ws.Player_GetCurrentScheduleAsync(PlayerConfiguration.configPlayerID);
-                string xml = scheduleResponse.Body.Player_GetCurrentScheduleResult;
+                string xml = await ws.GetCurrentScheduleAsync();
 
                 if (xml.StartsWith("<xml><Error>"))
-                    throw new Exception("Error");
+                {
+                    throw new Exception("Error: Cannot get Current Schedule");
+                }
 
                 ScheduleFile.SaveScheduleFile(xml);
 

@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Windows.Media.Animation;
+using osVodigiPlayer.Data;
 
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
@@ -74,10 +75,21 @@ namespace osVodigiPlayer.UserControls
             catch { }
         }
 
+        private void btnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                RegisterClicked();
+            }
+            catch { }
+        }
+
         void btnRegister_TouchUp(object sender, TouchEventArgs e)
         {
             RegisterClicked();
         }
+
+
 
         void btnRegister_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -90,33 +102,47 @@ namespace osVodigiPlayer.UserControls
             {
                 lblError.Text = String.Empty;
 
+                if (String.IsNullOrEmpty(txtVodigiWebserviceURL.Text.Trim()))
+                {
+                    lblError.Text = "Please enter Webservice URL.";
+                    return;
+                }
+
                 if (String.IsNullOrEmpty(txtAccountName.Text.Trim()) || String.IsNullOrEmpty(txtPlayerName.Text.Trim()))
                 {
                     lblError.Text = "Please enter Account and Player Names.";
                     return;
                 }
 
-                osVodigiWS.osVodigiServiceSoapClient ws = new osVodigiWS.osVodigiServiceSoapClient();
-                ws.Endpoint.Address = new System.ServiceModel.EndpointAddress(new Uri(PlayerConfiguration.configVodigiWebserviceURL));
+                osVodigiPlayer.Helpers.VodigiWSClient ws = new osVodigiPlayer.Helpers.VodigiWSClient(new Uri(txtVodigiWebserviceURL.Text.Trim()));
+
+                var version = ws.GetDatabaseVersionAsync().ConfigureAwait(false).GetAwaiter().GetResult(); ;
+                if (version == null)
+                {
+                    lblError.Text = "invalid Webservice URL. Please try again.";
+                }
 
                 // Validate the account
-                osVodigiWS.Account account = ws.Account_GetByName(txtAccountName.Text.Trim());
+                Account account = ws.GetAccountByNameAsync(txtAccountName.Text.Trim()).ConfigureAwait(false).GetAwaiter().GetResult(); ;
                 if (account == null)
                 {
                     lblError.Text = "Invalid Account Name. Please retry.";
                     return;
                 }
 
-                PlayerConfiguration.configAccountID = account.AccountID;
-                PlayerConfiguration.configAccountName = account.AccountName;
 
                 // Validate the player
-                osVodigiWS.Player player = ws.Player_GetByName(account.AccountID, txtPlayerName.Text.Trim());
+                Player player = ws.GetPlayerByNameAsync(account.AccountID, txtPlayerName.Text.Trim()).ConfigureAwait(false).GetAwaiter().GetResult();
                 if (player == null)
                 {
                     lblError.Text = "Invalid Player Name. Please retry.";
                     return;
                 }
+
+
+                PlayerConfiguration.configVodigiWebserviceURL = txtVodigiWebserviceURL.Text.Trim();
+                PlayerConfiguration.configAccountID = account.AccountID;
+                PlayerConfiguration.configAccountName = account.AccountName;
 
                 PlayerConfiguration.configPlayerID = player.PlayerID;
                 PlayerConfiguration.configPlayerName = player.PlayerName;
@@ -127,14 +153,6 @@ namespace osVodigiPlayer.UserControls
 
                 // Since registration can cause accountid/playerid changes, delete the local schedule file
                 ScheduleFile.DeleteScheduleFile();
-
-                // Register the player at vodigi.com
-                try
-                {
-                    VodigiWS.VodigiWSSoapClient vws = new VodigiWS.VodigiWSSoapClient();
-                    vws.PlayerRegistered("PlayerRegistration");
-                }
-                catch { }
 
                 FadeOut();
             }
@@ -169,7 +187,7 @@ namespace osVodigiPlayer.UserControls
                 txtAccountName.Text = String.Empty;
                 txtPlayerName.Text = String.Empty;
                 lblError.Text = String.Empty;
-                lblWebserviceUrl.Text = PlayerConfiguration.configVodigiWebserviceURL;
+                txtVodigiWebserviceURL.Text = PlayerConfiguration.configVodigiWebserviceURL;
             }
             catch { }
         }

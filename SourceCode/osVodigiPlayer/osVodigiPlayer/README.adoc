@@ -1,0 +1,49 @@
+﻿= Vodigi Player
+
+== BlueShark 
+
+
+MainWndow Function Key
+
+* F10 = Refresh
+* F11 = Reset Player
+* F12 = Close App
+
+Packages
+
+* Dependency Injecion
+* Configuration Microsoft.Extensions.Configuration 5.0.0
+* Logging
+* IHostedService Microsoft.Extensions.Hosting 
+
+Extention
+
+* Microsoft.Extensions.Option
+* Microsoft.Extensions.FileProviders
+
+.ServiceModel
+|====
+|
+
+|
+|System.ServiceModel.Duplex
+
+|====
+
+=== Configuration and Options
+
+* appsettings.{Environment}.json
+
+.appsettings.Development.json
+[source, json]
+---
+{
+  "Logging": {
+    "LogLevel": {
+      "Default": "Information",
+      "Microsoft": "Warning",
+      "Microsoft.Hosting.Lifetime": "Information"
+    }
+  }
+}
+---

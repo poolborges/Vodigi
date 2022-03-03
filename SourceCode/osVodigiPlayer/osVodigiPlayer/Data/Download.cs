@@ -21,6 +21,7 @@ namespace osVodigiPlayer
 {
     class Download
     {
+        public int ID { get; set; }
         public string StoredFilename { get; set; }
         public string FileType { get; set; }
         public string Name { get; set; }

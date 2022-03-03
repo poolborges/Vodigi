@@ -1,4 +1,8 @@
-﻿
+﻿using System;
+using System.Text;
+using System.IO;
+using System.Configuration;
+
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
     Copyright (C) 2005-2013  JMC Publications, LLC
@@ -19,10 +23,31 @@
 
 namespace osVodigiPlayer
 {
-    class DownloadVideo
+    class XMLUtils
     {
-        public int VideoID { get; set; }
-        public string StoredFilename { get; set; }
-        public string VideoName { get; set; }
+        public static string EncodeXMLString(string xmlin)
+        {
+            try
+            {
+                return xmlin.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("\"", "&quot;").Replace("'", "&apos;");
+            }
+            catch
+            {
+                return xmlin;
+            }
+        }
+
+        public static string DecodeXMLString(string xmlin)
+        {
+            try
+            {
+                return xmlin.Replace("&amp;", "&").Replace("&lt;", "<").Replace("&gt;", ">").Replace("&quot;", "\"").Replace("&apos;", "'");
+            }
+            catch
+            {
+                return xmlin;
+            }
+        }
+
     }
 }

@@ -42,14 +42,14 @@
             <Canvas.RenderTransform>
                 <ScaleTransform x:Name="stImageSlideshow1" ScaleX="1.0" ScaleY="1.0"></ScaleTransform>
             </Canvas.RenderTransform>
-            <Image x:Name="imgOne" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
+            <Image x:Name="imgSlideshow1" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
         </Canvas>
 
         <Canvas x:Name="canvasImageTwo" VerticalAlignment="Center" HorizontalAlignment="Center">
             <Canvas.RenderTransform>
                 <ScaleTransform x:Name="stImageSlideshow2" ScaleX="1.0" ScaleY="1.0"></ScaleTransform>
             </Canvas.RenderTransform>
-            <Image x:Name="imgTwo" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
+            <Image x:Name="imgSlideshow2" HorizontalAlignment="Center" VerticalAlignment="Center" Stretch="Fill"></Image>
         </Canvas>
         <MediaElement x:Name="mediaPlayer" HorizontalAlignment="Center" VerticalAlignment="Center" LoadedBehavior="Manual" UnloadedBehavior="Manual" Opacity="0"></MediaElement>
 

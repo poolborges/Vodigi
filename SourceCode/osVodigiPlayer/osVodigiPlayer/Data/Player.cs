@@ -17,9 +17,9 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------------------------- */
 
-namespace osVodigiPlayer
+namespace osVodigiPlayer.Data
 {
-    class Player
+    public class Player
     {
         public int PlayerID { get; set; }
         public int PlayerGroupID { get; set; }

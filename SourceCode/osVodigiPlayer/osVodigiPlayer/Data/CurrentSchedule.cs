@@ -82,7 +82,7 @@ namespace osVodigiPlayer
                           {
                               ScreenID = Convert.ToInt32(Screen.Attribute("ScreenID").Value),
                               AccountID = Convert.ToInt32(Screen.Attribute("AccountID").Value),
-                              ScreenName = Utility.DecodeXMLString(Convert.ToString(Screen.Attribute("ScreenName").Value)),
+                              ScreenName = XMLUtils.DecodeXMLString(Convert.ToString(Screen.Attribute("ScreenName").Value)),
                               PlayListID = Convert.ToInt32(Screen.Attribute("PlayListID").Value),
                               SlideShowID = Convert.ToInt32(Screen.Attribute("SlideShowID").Value),
                               TimelineID = Convert.ToInt32(Screen.Attribute("TimelineID").Value),
@@ -124,14 +124,14 @@ namespace osVodigiPlayer
                            {
                                ScreenContentID = Convert.ToInt32(ScreenContent.Attribute("ScreenContentID").Value),
                                ScreenContentTypeID = Convert.ToInt32(ScreenContent.Attribute("ScreenContentTypeID").Value),
-                               ScreenContentTypeName = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("ScreenContentTypeName").Value)),
-                               ScreenContentName = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("ScreenContentName").Value)),
+                               ScreenContentTypeName = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("ScreenContentTypeName").Value)),
+                               ScreenContentName = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("ScreenContentName").Value)),
                                ScreenContentTitle = Convert.ToString(ScreenContent.Attribute("ScreenContentTitle").Value),
                                ThumbnailImageID = Convert.ToInt32(ScreenContent.Attribute("ThumbnailImageID").Value),
-                               CustomField1 = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField1").Value)),
-                               CustomField2 = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField2").Value)),
-                               CustomField3 = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField3").Value)),
-                               CustomField4 = Utility.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField4").Value)),
+                               CustomField1 = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField1").Value)),
+                               CustomField2 = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField2").Value)),
+                               CustomField3 = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField3").Value)),
+                               CustomField4 = XMLUtils.DecodeXMLString(Convert.ToString(ScreenContent.Attribute("CustomField4").Value)),
                            }
                     ).ToList();
 
@@ -149,7 +149,7 @@ namespace osVodigiPlayer
                            {
                                SlideShowID = Convert.ToInt32(SlideShow.Attribute("SlideShowID").Value),
                                IntervalInSecs = Convert.ToInt32(SlideShow.Attribute("IntervalInSecs").Value),
-                               TransitionType = Utility.DecodeXMLString(Convert.ToString(SlideShow.Attribute("TransitionType").Value)),
+                               TransitionType = XMLUtils.DecodeXMLString(Convert.ToString(SlideShow.Attribute("TransitionType").Value)),
                            }
                     ).ToList();
 
@@ -280,7 +280,7 @@ namespace osVodigiPlayer
                               {
                                   ImageID = Convert.ToInt32(Image.Attribute("ImageID").Value),
                                   StoredFilename = Convert.ToString(Image.Attribute("StoredFilename").Value),
-                                  ImageName = Utility.DecodeXMLString(Image.Attribute("ImageName").Value),
+                                  ImageName = XMLUtils.DecodeXMLString(Image.Attribute("ImageName").Value),
                               }
                     ).ToList();
 
@@ -298,7 +298,7 @@ namespace osVodigiPlayer
                               {
                                   MusicID = Convert.ToInt32(Music.Attribute("MusicID").Value),
                                   StoredFilename = Convert.ToString(Music.Attribute("StoredFilename").Value),
-                                  MusicName = Utility.DecodeXMLString(Music.Attribute("MusicName").Value),
+                                  MusicName = XMLUtils.DecodeXMLString(Music.Attribute("MusicName").Value),
                               }
                     ).ToList();
 
@@ -351,7 +351,7 @@ namespace osVodigiPlayer
                               {
                                   VideoID = Convert.ToInt32(Video.Attribute("VideoID").Value),
                                   StoredFilename = Convert.ToString(Video.Attribute("StoredFilename").Value),
-                                  VideoName = Utility.DecodeXMLString(Convert.ToString(Video.Attribute("VideoName").Value)),
+                                  VideoName = XMLUtils.DecodeXMLString(Convert.ToString(Video.Attribute("VideoName").Value)),
                               }
                     ).ToList();
 
@@ -368,7 +368,7 @@ namespace osVodigiPlayer
                                select new Survey
                                {
                                    SurveyID = Convert.ToInt32(Survey.Attribute("SurveyID").Value),
-                                   SurveyName = Utility.DecodeXMLString(Convert.ToString(Survey.Attribute("SurveyName").Value)),
+                                   SurveyName = XMLUtils.DecodeXMLString(Convert.ToString(Survey.Attribute("SurveyName").Value)),
                                    SurveyImageID = Convert.ToInt32(Survey.Attribute("SurveyImageID").Value),
                                }
                     ).ToList();
@@ -387,7 +387,7 @@ namespace osVodigiPlayer
                                  {
                                      SurveyQuestionID = Convert.ToInt32(SurveyQuestion.Attribute("SurveyQuestionID").Value),
                                      SurveyID = Convert.ToInt32(SurveyQuestion.Attribute("SurveyID").Value),
-                                     SurveyQuestionText = Utility.DecodeXMLString(Convert.ToString(SurveyQuestion.Attribute("SurveyQuestionText").Value)),
+                                     SurveyQuestionText = XMLUtils.DecodeXMLString(Convert.ToString(SurveyQuestion.Attribute("SurveyQuestionText").Value)),
                                      AllowMultiselect = Convert.ToBoolean(SurveyQuestion.Attribute("AllowMultiselect").Value),
                                      SortOrder = Convert.ToInt32(SurveyQuestion.Attribute("SortOrder").Value),
                                  }
@@ -408,7 +408,7 @@ namespace osVodigiPlayer
 
                                    SurveyQuestionOptionID = Convert.ToInt32(SurveyQuestionOption.Attribute("SurveyQuestionOptionID").Value),
                                    SurveyQuestionID = Convert.ToInt32(SurveyQuestionOption.Attribute("SurveyQuestionID").Value),
-                                   SurveyQuestionOptionText = Utility.DecodeXMLString(Convert.ToString(SurveyQuestionOption.Attribute("SurveyQuestionOptionText").Value)),
+                                   SurveyQuestionOptionText = XMLUtils.DecodeXMLString(Convert.ToString(SurveyQuestionOption.Attribute("SurveyQuestionOptionText").Value)),
                                    SortOrder = Convert.ToInt32(SurveyQuestionOption.Attribute("SortOrder").Value),
                                }
                     ).ToList();
@@ -425,9 +425,9 @@ namespace osVodigiPlayer
                     settings = (from PlayerSetting in xmldoc.Descendants("PlayerSetting")
                                select new PlayerSetting
                                {
-                                   PlayerSettingName = Utility.DecodeXMLString(Convert.ToString(PlayerSetting.Attribute("PlayerSettingName").Value)),
+                                   PlayerSettingName = XMLUtils.DecodeXMLString(Convert.ToString(PlayerSetting.Attribute("PlayerSettingName").Value)),
                                    PlayerSettingTypeID = Convert.ToInt32(PlayerSetting.Attribute("PlayerSettingTypeID").Value),
-                                   PlayerSettingValue = Utility.DecodeXMLString(Convert.ToString(PlayerSetting.Attribute("PlayerSettingValue").Value)),
+                                   PlayerSettingValue = XMLUtils.DecodeXMLString(Convert.ToString(PlayerSetting.Attribute("PlayerSettingValue").Value)),
                                }
                     ).ToList();
 

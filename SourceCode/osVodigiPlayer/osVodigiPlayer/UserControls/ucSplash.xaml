@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+             d:DesignHeight="480" d:DesignWidth="600" Background="Transparent" Cursor="Arrow">
     <UserControl.Resources>
         <Storyboard x:Key="sbFadeOut">
             <DoubleAnimation
@@ -24,22 +24,28 @@
 
     <Grid x:Name="gridMain">
         <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
+        
         <Image x:Name="imgLogo" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="55,24,55,0" Stretch="Fill" Width="190" Height="80" Source="/Images/logo.png"></Image>
         <TextBlock x:Name="txtTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,124,0,0"
-                   Text="Vodigi Player" FontFamily="Verdana" FontSize="28" FontWeight="Bold" Foreground="#315581"></TextBlock>
+                   FontFamily="Verdana" FontSize="28" FontWeight="Bold" Foreground="#315581" 
+                   Text="BlueShark Player" Localization.Attributes="$Content(Readable Unmodifiable)"></TextBlock>
         <TextBlock x:Name="txtSubtitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,174,0,0"
-                   Text="Windows Desktop Edition" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581"></TextBlock>
+                   FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581" 
+                   Text="Desktop Edition" Localization.Attributes="$Content(Readable Unmodifiable)"></TextBlock>
         <TextBlock x:Name="txtVersion" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,200,0,0"
-                   Text="Version 6.0" FontFamily="Verdana" FontSize="12" Foreground="#315581"></TextBlock>
-        <TextBlock x:Name="txtCopyright" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,231,0,0"
-        	Text="Copyright © 2005-2013" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
-        <TextBlock x:Name="txtCompany" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,247,0,0"
-        	Text="JMC Publications, LLC" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
-        <TextBlock x:Name="txtLoading" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,273,0,0"
+                   Text="Version 0.6.0" FontFamily="Verdana" FontSize="12" Foreground="#315581"></TextBlock>
+        <TextBlock x:Name="txtCopyright" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,230,0,0"
+        	Text="Copyright © 2020-2021" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
+        <TextBlock x:Name="txtCompany" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,245,0,0"
+        	Text="Baita Sistemas, Lda" FontFamily="Verdana" FontSize="12" Foreground="#315581"/>
+        <TextBlock x:Name="txtLoading" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,300 ,0,0"
         	Text="Please wait. Loading..." FontFamily="Verdana" FontSize="10" Foreground="#315581"/>
-        <Rectangle x:Name="rectOrange" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="45,161,0,0" Fill="#F25022" Height="10" Width="50"></Rectangle>
-        <Rectangle x:Name="rectGreen" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="98,161,0,0" Fill="#7FBA00" Height="10" Width="50"></Rectangle>
-        <Rectangle x:Name="rectBlue" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="151,161,0,0" Fill="#02A4EF" Height="10" Width="50"></Rectangle>
-        <Rectangle x:Name="rectYellow" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="204,161,0,0" Fill="#FFB901" Height="10" Width="50"></Rectangle>
+
+        <StackPanel x:Name="colored" Orientation="Horizontal" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,10">
+            <Rectangle x:Name="rectOrange" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="0,0,0,0" Fill="#F25022" Height="10" Width="50"></Rectangle>
+            <Rectangle x:Name="rectGreen" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Fill="#7FBA00" Height="10" Width="50"></Rectangle>
+            <Rectangle x:Name="rectBlue" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0" Fill="#02A4EF" Height="10" Width="50"></Rectangle>
+            <Rectangle x:Name="rectYellow" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,0,0,0"  Fill="#FFB901" Height="10" Width="50"></Rectangle>
+        </StackPanel>
     </Grid>
 </UserControl>

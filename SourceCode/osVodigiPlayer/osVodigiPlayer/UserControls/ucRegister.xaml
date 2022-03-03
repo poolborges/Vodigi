@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+             d:DesignHeight="480" d:DesignWidth="600" Background="#FFFFFFFF" Cursor="Arrow">
     <UserControl.Resources>
         <Storyboard x:Key="sbFadeOut">
             <DoubleAnimation
@@ -23,41 +23,48 @@
     </UserControl.Resources>
 
     <Grid x:Name="gridMain">
-        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
-        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0" Fill="#F25022" Width="290" Height="40"></Rectangle>
+        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#00FFFFFF" Stroke="#315581" StrokeThickness="1"></Rectangle>
+        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,0" Fill="#FF405579" Width="600" Height="35" ></Rectangle>
         <TextBlock x:Name="lblTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,12,0,0"
                    Text="Player Registration" FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        <!-- 
         <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,55,0,0"
-                   FontFamily="Verdana" FontSize="10" Foreground="#333333" Width="260" TextWrapping="Wrap"
+                   FontFamily="Verdana" FontSize="10" Foreground="#333333" Width="560" TextWrapping="Wrap"
                    Text="Please enter your account name and this player's name." 
                    ></TextBlock>
 
-        <TextBlock x:Name="lblAccountName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,95,0,0"
-                   Text="Account Name:" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581"></TextBlock>
-        <TextBox x:Name="txtAccountName" VerticalAlignment="Top" HorizontalAlignment="Center" Width="240" Margin="0,115,0,0" BorderBrush="#02A4EF"></TextBox>
+        REGIS FORM: BEGIN-->
 
-        <TextBlock x:Name="lblPlayerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="40,143,0,0"
-                   Text="Player Name:" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#315581"></TextBlock>
-        <TextBox x:Name="txtPlayerName" VerticalAlignment="Top" HorizontalAlignment="Center" Width="240" Margin="0,163,0,0" BorderBrush="#02A4EF"></TextBox>
+        <TextBlock x:Name="lblVodigiWebserviceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,40,0,0" Foreground="#FF333333" 
+                   FontFamily="Verdana" FontSize="18" FontWeight="Normal" 
+                   Text="Web Service URL:"></TextBlock>
+        <TextBox x:Name="txtVodigiWebserviceURL" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,60,0,0" Foreground="#FF333333" 
+                 FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579" IsEnabled="True"
+                 Text="http://localhost/osVodigiWeb/osVodigiService.asmx"></TextBox>
 
-        <TextBlock x:Name="lblError" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,190,0,0"
-                   Text="Error" FontFamily="Verdana" FontSize="12" Foreground="#CC0000"></TextBlock>
+        <TextBlock x:Name="lblAccountName"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,90,0,0" Foreground="#FF333333" 
+                  FontFamily="Verdana" FontSize="18" FontWeight="Normal" 
+                   Text="Account Name:" ></TextBlock>
+        <TextBox x:Name="txtAccountName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,110,0,0" Foreground="#FF333333" 
+                 FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579" IsEnabled="True"
+                 ></TextBox>
 
-        <Rectangle x:Name="rectFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,275,0,0" Fill="#F25022" Width="290" Height="20"></Rectangle>
-        <TextBlock x:Name="lblFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,277,0,0"
-                   Text="Vodigi Player - Windows Desktop Edition" FontFamily="Verdana" FontSize="12" Foreground="#FFFFFF"></TextBlock>
+        <TextBlock x:Name="lblPlayerName"  VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,140,0,0" Foreground="#FF333333" 
+                   FontFamily="Verdana" FontSize="18" FontWeight="Normal" 
+                   Text="Player Name:"></TextBlock>
+        <TextBox x:Name="txtPlayerName" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,160,0,0" Foreground="#FF333333" 
+                 FontFamily="Verdana" FontSize="18" FontWeight="Normal" Width="463" BorderThickness="2" BorderBrush="#FF405579" IsEnabled="True"
+                 ></TextBox>
 
+        <TextBlock x:Name="lblError" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,200,0,0" Foreground="#FFCC0000" Text="Validate"
+                 FontFamily="Verdana" FontSize="12" FontWeight="Normal"></TextBlock>
 
-        <Grid x:Name="btnRegister" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,210,0,0" Width="120" Height="28" Background="Transparent">
-            <Rectangle x:Name="rectRegister" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#315581" RadiusX="12" RadiusY="12"></Rectangle>
-            <TextBlock x:Name="lblRegister" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
-                       Text="Register" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        <Button x:Name="btnRegister" IsDefault="True" VerticalAlignment="Top" HorizontalAlignment="Left" Width="100" Height="32" Margin="200,250,0,0" Content="Register" Click="btnRegister_Click"></Button>
+
+        <!-- REGIS FORM: END -->
+
+        <Grid x:Name="gridFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,460,0,0" Width="600" Height="20" Background="Transparent">
+            <Rectangle x:Name="rectFooter" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FF405579"></Rectangle>
         </Grid>
-
-        <TextBlock x:Name="lblWebserviceUrlLabel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,249,0,0"
-                   Text="Vodigi Web Service URL:" FontFamily="Verdana" FontSize="10" TextDecorations="Underline" Foreground="#333333"></TextBlock>
-        <TextBlock x:Name="lblWebserviceUrl" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,261,0,0"
-                   Text="http://free.vodigi.com/VodigiWebservice.asmx" FontFamily="Verdana" FontSize="10" Foreground="#333333" TextTrimming="CharacterEllipsis" TextWrapping="NoWrap"></TextBlock>
-
     </Grid>
 </UserControl>

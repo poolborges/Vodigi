@@ -28,7 +28,7 @@ using System.IO;
 
 namespace osVodigiPlayer.UserControls
 {
-    public partial class ucTimeline : UserControl
+    public partial class ucTimeline : UserControl, IPlayController
     {
         // Complete Event
         public static readonly RoutedEvent TimelineCompleteEvent = EventManager.RegisterRoutedEvent(
@@ -95,7 +95,7 @@ namespace osVodigiPlayer.UserControls
             catch { }
         }
 
-        public void StopAll()
+        public void Stop()
         {
             try
             {

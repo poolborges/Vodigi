@@ -23,7 +23,7 @@ using System.Windows.Controls;
 
 namespace osVodigiPlayer.UserControls
 {
-    public partial class ucPlayList : UserControl
+    public partial class ucPlayList : UserControl, IPlayController
     {
         // Complete Event
         public static readonly RoutedEvent PlayListCompleteEvent = EventManager.RegisterRoutedEvent(
@@ -73,7 +73,7 @@ namespace osVodigiPlayer.UserControls
             catch { }
         }
 
-        public void StopAll()
+        public void Stop()
         {
             try
             {

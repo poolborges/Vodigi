@@ -1,0 +1,24 @@
+﻿<Window x:Class="osVodigiPlayer.Windows.AdminWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:osVodigiPlayer.Windows"
+        xmlns:ucs="clr-namespace:osVodigiPlayer.UserControls"
+        mc:Ignorable="d"
+        Title="Administrator" Height="480" Width="800">
+
+    <Grid x:Name="gridFullScreen" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF000000">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Grid x:Name="gridMain" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#FF000000" Grid.Row="0">
+
+            <ucs:ucSchedule x:Name="ucSchedule" VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Height="480" Visibility="Collapsed"></ucs:ucSchedule>
+            <ucs:ucSettings x:Name="ucSettings" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Visibility="Collapsed"></ucs:ucSettings>
+            <ucs:ucDownload x:Name="ucDownload" VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Height="480" Visibility="Collapsed"></ucs:ucDownload>
+            <ucs:ucResetPlayer x:Name="ucResetPlayer" VerticalAlignment="Center" HorizontalAlignment="Center" Width="600" Height="480" Visibility="Collapsed"></ucs:ucResetPlayer>
+        </Grid>
+    </Grid>
+</Window>

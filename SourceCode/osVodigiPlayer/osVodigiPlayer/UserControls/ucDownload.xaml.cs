@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using System.Windows.Media.Animation;
 using System.Windows.Threading;
 using System.IO;
+using System.Threading;
 
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
@@ -38,16 +39,14 @@ namespace osVodigiPlayer.UserControls
 {
     public partial class ucDownload : UserControl
     {
-        DispatcherTimer timerdownload;
-        private List<Download> downloads = new List<Download>();
-        int currentfileindex = 0;
-        int totalfilecount = 0;
+
+        public static readonly RoutedEvent DownloadClosedEvent = EventManager.RegisterRoutedEvent(
+            "DownloadClosed", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ucDownload));
 
         Storyboard sbFadeIn;
         Storyboard sbFadeOut;
 
-        public static readonly RoutedEvent DownloadClosedEvent = EventManager.RegisterRoutedEvent(
-            "DownloadClosed", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ucDownload));
+        Thread dlthread;
 
         public event RoutedEventHandler DownloadClosed
         {
@@ -65,9 +64,6 @@ namespace osVodigiPlayer.UserControls
                 sbFadeOut = (Storyboard)FindResource("sbFadeOut");
                 sbFadeOut.Completed += sbFadeOut_Completed;
 
-                timerdownload = new DispatcherTimer();
-                timerdownload.Interval = TimeSpan.FromSeconds(1);
-                timerdownload.Tick += timerdownload_Tick;
             }
             catch { }
         }
@@ -76,31 +72,27 @@ namespace osVodigiPlayer.UserControls
         {
             try
             {
-                GetDownloadsList();
-
-                progressBar.Minimum = 0;
-                progressBar.Maximum = downloads.Count - 1;
-                progressBar.Value = 0;
-
-                currentfileindex = 0;
-                if (downloads != null && downloads.Count > 0)
-                {
-                    lblDownloadFile.Text = downloads[currentfileindex].FileType + ": " + downloads[currentfileindex].Name;
-                    lblDownloadStatus.Text = "File " + (currentfileindex + 1).ToString() + " of " + totalfilecount.ToString();
-                }
-                else
-                {
-                    lblDownloadFile.Text = "Please wait. Downloading media.";
-                    lblDownloadStatus.Text = String.Empty;
-                }
-
+                lblDownloadFile.Text = "Please wait. Downloading media.";
                 lblDownloadFile.Visibility = Visibility.Visible;
-                progressBar.Visibility = Visibility.Visible;
+                lblDownloadStatus.Text = String.Empty;
                 lblDownloadStatus.Visibility = Visibility.Visible;
 
-                timerdownload.Start();
+                progressBar.Minimum = 0;
+                //progressBar.Maximum = downloads.Count;
+                progressBar.Value = 0;
+                progressBar.Visibility = Visibility.Visible;
+
+                Progress<int> progress = new Progress<int>();
+                progress.ProgressChanged += ReportProgressHandler;
+
+                GetDownloadsList();
             }
             catch { }
+        }
+
+        private void ReportProgressHandler(object sender, int e)
+        {
+            progressBar.Value = e;
         }
 
         void sbFadeOut_Completed(object sender, EventArgs e)
@@ -113,28 +105,6 @@ namespace osVodigiPlayer.UserControls
             catch { }
         }
 
-        void timerdownload_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                timerdownload.Stop();
-
-                if (currentfileindex != totalfilecount)
-                {
-                    DownloadNextFile();
-                    timerdownload.Start();
-                }
-                else
-                {
-                    lblDownloadFile.Text = "Downloads Complete";
-                    lblDownloadStatus.Text = "File " + currentfileindex.ToString() + " of " + totalfilecount.ToString();
-
-                    FadeOut();
-                }
-            }
-            catch { }
-        }
-
         public void FadeIn()
         {
             try
@@ -143,6 +113,14 @@ namespace osVodigiPlayer.UserControls
                 gridMain.Opacity = 0;
                 this.Visibility = Visibility.Visible;
                 sbFadeIn.Begin();
+
+                // Start the download thread if not already running
+                if (dlthread == null)
+                {
+                    DownloadThread downloadthread = new DownloadThread();
+                    dlthread = new Thread(downloadthread.DownloadThreadWorker);
+                    dlthread.Start();
+                }
             }
             catch { }
         }
@@ -151,14 +129,17 @@ namespace osVodigiPlayer.UserControls
         {
             try
             {
-                timerdownload.Stop();
                 sbFadeOut.Begin();
+
+                // Attempt to kill the download thread
+                if (dlthread != null) dlthread.Abort();
             }
             catch { }
         }
 
-        public void GetDownloadsList()
+        private List<Download> GetDownloadsList()
         {
+            List<Download> downloads = new List<Download>();
             try
             {
                 downloads = new List<Download>();
@@ -190,57 +171,31 @@ namespace osVodigiPlayer.UserControls
                     downloads.Add(download);
                 }
 
-                totalfilecount = downloads.Count;
-
-                progressBar.Minimum = 0;
-                progressBar.Maximum = downloads.Count;
-                progressBar.Value = 0;
             }
             catch { }
+
+            return downloads;
         }
 
-        public void DownloadNextFile()
+        private void DownloadNextFile(List<Download> downloads, IProgress<int> progress)
         {
-            try
+            int currentfileindex = 1;
+            int totalfilecount = downloads.Count();
+            foreach (var down in downloads) 
             {
-                // Build the source and target urls
-                // Save to C:\osVodigi\Images\GUID.ext or C:\osVodigi\Videos\GUID.ext by default
-                string target = String.Empty;
-                string source = String.Empty;
-
-                if (downloads[currentfileindex].FileType.ToLower() == "video")
-                {
-                    source = DownloadManager.MediaSourceUrl + PlayerConfiguration.configAccountID.ToString() + "/Videos/" + downloads[currentfileindex].StoredFilename;
-                    target = DownloadManager.DownloadFolder + @"Videos\" + downloads[currentfileindex].StoredFilename;
-                }
-                else if (downloads[currentfileindex].FileType.ToLower() == "music")
-                {
-                    source = DownloadManager.MediaSourceUrl + PlayerConfiguration.configAccountID.ToString() + "/Music/" + downloads[currentfileindex].StoredFilename;
-                    target = DownloadManager.DownloadFolder + @"Music\" + downloads[currentfileindex].StoredFilename;
-                }
-                else
-                {
-                    source = DownloadManager.MediaSourceUrl + PlayerConfiguration.configAccountID.ToString() + "/Images/" + downloads[currentfileindex].StoredFilename;
-                    target = DownloadManager.DownloadFolder + @"Images\" + downloads[currentfileindex].StoredFilename;
-                }
-
+                Download download = downloads[currentfileindex];
                 try
                 {
-                    lblDownloadFile.Text = downloads[currentfileindex + 1].FileType + ": " + downloads[currentfileindex + 1].Name;
-                    lblDownloadStatus.Text = "File " + (currentfileindex + 2).ToString() + " of " + totalfilecount.ToString();
+                    lblDownloadFile.Text = download.FileType + ": " + download.Name;
+                    lblDownloadStatus.Text = "File " + (currentfileindex).ToString() + " of " + totalfilecount.ToString();
                     progressBar.Value = progressBar.Value + 1;
-                    System.Windows.Forms.Application.DoEvents();
+                    //REMOVED System.Windows.Forms.Application.DoEvents();
+
+                    MediaManager.DownloadAndSaveFile(download);
                 }
                 catch { }
-
-                if (!File.Exists(target))
-                {
-                    DownloadManager.DownloadAndSaveFile(source, target);
-                }
-
-                currentfileindex = currentfileindex + 1;
+                currentfileindex++;
             }
-            catch { }
         }
 
     }

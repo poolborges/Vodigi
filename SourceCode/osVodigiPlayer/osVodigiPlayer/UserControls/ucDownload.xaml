@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+             d:DesignHeight="480" d:DesignWidth="600" Background="#FFFFFF" Cursor="Arrow">
     <UserControl.Resources>
         <Storyboard x:Key="sbFadeOut">
             <DoubleAnimation
@@ -23,24 +23,25 @@
     </UserControl.Resources>
 
     <Grid x:Name="gridMain">
-        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
-        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0" Fill="#02A4EF" Width="290" Height="40"></Rectangle>
+        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#00FFFFFF" Stroke="#315581" StrokeThickness="1"></Rectangle>
+        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,0" Fill="#FF405579" Width="600" Height="35" ></Rectangle>
         <TextBlock x:Name="lblTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,12,0,0"
                    Text="Media Download" FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
-        <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,55,0,0"
-                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Width="260" TextWrapping="Wrap"
+
+        <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,40,0,0"
+                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Width="550" TextWrapping="Wrap"
                    Text="Please wait while the media for the current schedule is downloaded."></TextBlock>
 
-        <Rectangle x:Name="rectFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,275,0,0" Fill="#02A4EF" Width="290" Height="20"></Rectangle>
-        <TextBlock x:Name="lblFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,277,0,0"
-                   Text="Vodigi Player - Windows Desktop Edition" FontFamily="Verdana" FontSize="12" Foreground="#FFFFFF"></TextBlock>
+        <TextBlock x:Name="lblDownloadFile" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,150,0,0" TextAlignment="Left" Width="550"
+                   FontFamily="Verdana" FontSize="18" Foreground="#333333" Text="File Name" ></TextBlock>
+        <ProgressBar x:Name="progressBar" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,200,0,0" Height="18" Minimum="0" Maximum="1" Width="550"></ProgressBar>
+        <TextBlock x:Name="lblDownloadStatus" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,250,0,0" TextAlignment="Left" Width="550"
+                   FontFamily="Verdana" FontSize="18" Foreground="#333333" Text="1 of x" ></TextBlock>
 
 
-        <TextBlock x:Name="lblDownloadFile" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="15,139,15,0" TextAlignment="Center" Width="270"
-                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Text="File Name" ></TextBlock>
-        <ProgressBar x:Name="progressBar" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="15,161,15,0" Height="18" Minimum="0" Maximum="1" Width="270"></ProgressBar>
-        <TextBlock x:Name="lblDownloadStatus" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="15,186,15,0" TextAlignment="Center" Width="270"
-                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Text="1 of x" ></TextBlock>
+        <Grid x:Name="gridFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,460,0,0" Width="600" Height="20" Background="Transparent">
+            <Rectangle x:Name="rectFooter" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FF405579"></Rectangle>
+        </Grid>
 
     </Grid>
 </UserControl>

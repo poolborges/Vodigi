@@ -1,6 +1,8 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2012
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31613.86
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "osVodigiPlayer", "osVodigiPlayer\osVodigiPlayer.csproj", "{4F288117-4679-4940-9E4C-AA567E7498C0}"
 EndProject
 Global
@@ -55,5 +57,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B4F1535E-B44C-46DB-B466-598D77A0BECE}
 	EndGlobalSection
 EndGlobal

@@ -18,6 +18,8 @@ using System.Xml.Linq;
 using System.Configuration;
 using System.Net;
 using System.IO;
+using System.Windows.Media.Animation;
+using osVodigiPlayer.Data;
 
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
@@ -44,6 +46,8 @@ namespace osVodigiPlayer.UserControls
         public static readonly RoutedEvent SettingsCompleteEvent = EventManager.RegisterRoutedEvent(
             "SettingsComplete", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ucSettings));
 
+        Storyboard sbFadeIn;
+
         public event RoutedEventHandler SettingsComplete
         {
             add { AddHandler(SettingsCompleteEvent, value); }
@@ -53,16 +57,30 @@ namespace osVodigiPlayer.UserControls
         public ucSettings()
         {
             InitializeComponent();
+            sbFadeIn = (Storyboard)FindResource("sbFadeIn");
+        }
+
+        public void FadeIn()
+        {
+            try
+            {
+                ResetControl();
+                gridMain.Opacity = 0;
+                this.Visibility = Visibility.Visible;
+                sbFadeIn.Begin();
+            }
+            catch { }
         }
 
         public void ResetControl()
         {
             try
             {
+                PlayerConfiguration.LoadPlayerConfiguration();
                 txtAccountName.Text = PlayerConfiguration.configAccountName;
-                txtAccountName.IsEnabled = false;
+                txtAccountName.IsEnabled = true; 
                 txtPlayerName.Text = PlayerConfiguration.configPlayerName;
-                txtPlayerName.IsEnabled = false;
+                txtPlayerName.IsEnabled = true;
                 lblIDs.Text = "Player ID: " + PlayerConfiguration.configPlayerID.ToString() + "   Account ID: " + PlayerConfiguration.configAccountID.ToString();
                 btnUnregister.IsEnabled = true;
                 btnClose.IsEnabled = true;
@@ -78,6 +96,15 @@ namespace osVodigiPlayer.UserControls
 
                 // Close this dialog and resume processing on main screen
                 RaiseEvent(new RoutedEventArgs(SettingsCompleteEvent));
+            }
+            catch { }
+        }
+
+        private async void btnRegister_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await RegisterClicked();
             }
             catch { }
         }
@@ -104,8 +131,7 @@ namespace osVodigiPlayer.UserControls
             {
                 lblWebServerValidate.Text = String.Empty;
 
-                osVodigiWS.osVodigiServiceSoapClient ws = new osVodigiWS.osVodigiServiceSoapClient();
-
+               
                 if (!txtWebServiceURL.Text.ToLower().StartsWith("http://"))
                 {
                     lblWebServerValidate.Text = "The Vodigi Web Service URL must begin with http://";
@@ -114,14 +140,15 @@ namespace osVodigiPlayer.UserControls
 
                 try
                 {
-                    ws.Endpoint.Address = new System.ServiceModel.EndpointAddress(new Uri(txtWebServiceURL.Text.Trim()));
-                    osVodigiWS.UserAccount useraccount = ws.User_Validate("defaultusername", "defaultpassword");
+                    osVodigiPlayer.Helpers.VodigiWSClient ws = new osVodigiPlayer.Helpers.VodigiWSClient(new Uri(txtWebServiceURL.Text.Trim()));
+                    var version = ws.GetDatabaseVersionAsync();
+                    if (version == null)
+                    {
+                        lblWebServerValidate.Text = "The Vodigi Web Service URL is not valid.";
+                        return;
+                    }
                 }
-                catch
-                {
-                    lblWebServerValidate.Text = "The Vodigi Web Service URL is not valid.";
-                    return;
-                }
+                catch { }
 
                 if (!txtMediaSourceURL.Text.ToLower().StartsWith("http://"))
                 {
@@ -520,6 +547,68 @@ namespace osVodigiPlayer.UserControls
             //txtCloseButtonText.Text = Utility.GetAppSetting("ButtonTextClose");
             //txtNextButtonText.Text = Utility.GetAppSetting("ButtonTextNext");
             //txtBackButtonText.Text = Utility.GetAppSetting("ButtonTextBack");
+        }
+
+        private async Task RegisterClicked()
+        {
+            try
+            {
+                lblError.Text = String.Empty;
+
+                if (String.IsNullOrEmpty(txtVodigiWebserviceURL.Text.Trim()))
+                {
+                    lblError.Text = "Please enter Webservice URL.";
+                    return;
+                }
+
+                if (String.IsNullOrEmpty(txtAccountName.Text.Trim()) || String.IsNullOrEmpty(txtPlayerName.Text.Trim()))
+                {
+                    lblError.Text = "Please enter Account and Player Names.";
+                    return;
+                }
+
+                osVodigiPlayer.Helpers.VodigiWSClient ws =  new osVodigiPlayer.Helpers.VodigiWSClient(new Uri(txtVodigiWebserviceURL.Text.Trim()));
+
+                var version = await ws.GetDatabaseVersionAsync();
+                if (version == null)
+                {
+                    lblError.Text = "invalid Webservice URL. Please try again.";
+                    return;
+                }
+
+                // Validate the account
+                Account account = await ws.GetAccountByNameAsync(txtAccountName.Text.Trim());
+                if (account == null)
+                {
+                    lblError.Text = "Invalid Account Name. Please retry.";
+                    return;
+                }
+
+
+                // Validate the player
+                Player player = await ws.GetPlayerByNameAsync(account.AccountID, txtPlayerName.Text.Trim());
+                if (player == null)
+                {
+                    lblError.Text = "Invalid Player Name. Please retry.";
+                    return;
+                }
+
+
+                PlayerConfiguration.configVodigiWebserviceURL = txtVodigiWebserviceURL.Text.Trim();
+                PlayerConfiguration.configAccountID = account.AccountID;
+                PlayerConfiguration.configAccountName = account.AccountName;
+
+                PlayerConfiguration.configPlayerID = player.PlayerID;
+                PlayerConfiguration.configPlayerName = player.PlayerName;
+
+                // Set the remaining properties on PlayerConfiguration and save the configuration
+                PlayerConfiguration.configIsPlayerInitialized = true;
+                PlayerConfiguration.SavePlayerConfiguration();
+
+                // Since registration can cause accountid/playerid changes, delete the local schedule file
+                ScheduleFile.DeleteScheduleFile();
+            }
+            catch { lblError.Text = "Cannot connect to Remote Server. Please retry."; }
         }
 
     }

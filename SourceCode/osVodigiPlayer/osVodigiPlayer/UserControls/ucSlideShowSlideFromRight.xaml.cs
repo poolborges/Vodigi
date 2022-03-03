@@ -28,7 +28,7 @@ using System.IO;
 
 namespace osVodigiPlayer.UserControls
 {
-    public partial class ucSlideShowSlideFromRight : UserControl
+    public partial class ucSlideShowSlideFromRight : UserControl, IPlayController
     {
         // Complete Event
         public static readonly RoutedEvent SlideShowCompleteEvent = EventManager.RegisterRoutedEvent(
@@ -107,21 +107,21 @@ namespace osVodigiPlayer.UserControls
                 rectClip.Rect = new Rect(0, 0, this.Width, this.Height);
 
                 // Set the width/height of the image controls
-                imgOne.Width = this.Width;
-                imgOne.Height = this.Height;
+                imgSlideshow1.Width = this.Width;
+                imgSlideshow1.Height = this.Height;
 
-                imgTwo.Width = this.Width;
-                imgTwo.Height = this.Height;
+                imgSlideshow2.Width = this.Width;
+                imgSlideshow2.Height = this.Height;
 
                 if (dsImageFillMode.ToLower().StartsWith("f"))
                 {
-                    imgOne.Stretch = Stretch.Fill;
-                    imgOne.Stretch = Stretch.Fill;
+                    imgSlideshow1.Stretch = Stretch.Fill;
+                    imgSlideshow1.Stretch = Stretch.Fill;
                 }
                 else
                 {
-                    imgTwo.Stretch = Stretch.UniformToFill;
-                    imgTwo.Stretch = Stretch.UniformToFill;
+                    imgSlideshow2.Stretch = Stretch.UniformToFill;
+                    imgSlideshow2.Stretch = Stretch.UniformToFill;
                 }
 
                 // Set the Background color - applied to gridMain
@@ -194,19 +194,19 @@ namespace osVodigiPlayer.UserControls
 
                     if (imageToDisplay == 1)
                     {
-                        imgOne.Source = GetBitmap(dsImageURLs[imageIndex]);
-                        imgOne.SetValue(Canvas.LeftProperty, Convert.ToDouble(this.Width + 50));
-                        imgOne.SetValue(Canvas.ZIndexProperty, 100);
-                        imgTwo.SetValue(Canvas.ZIndexProperty, 99);
+                        imgSlideshow1.Source = GetBitmap(dsImageURLs[imageIndex]);
+                        imgSlideshow1.SetValue(Canvas.LeftProperty, Convert.ToDouble(this.Width + 50));
+                        imgSlideshow1.SetValue(Canvas.ZIndexProperty, 100);
+                        imgSlideshow2.SetValue(Canvas.ZIndexProperty, 99);
                         sbImageOne.Begin();
                         imageToDisplay = 2;
                     }
                     else
                     {
-                        imgTwo.Source = GetBitmap(dsImageURLs[imageIndex]);
-                        imgTwo.SetValue(Canvas.LeftProperty, Convert.ToDouble(this.Width + 50));
-                        imgTwo.SetValue(Canvas.ZIndexProperty, 100);
-                        imgOne.SetValue(Canvas.ZIndexProperty, 99);
+                        imgSlideshow2.Source = GetBitmap(dsImageURLs[imageIndex]);
+                        imgSlideshow2.SetValue(Canvas.LeftProperty, Convert.ToDouble(this.Width + 50));
+                        imgSlideshow2.SetValue(Canvas.ZIndexProperty, 100);
+                        imgSlideshow1.SetValue(Canvas.ZIndexProperty, 99);
                         sbImageTwo.Begin();
                         imageToDisplay = 1;
                     }
@@ -220,7 +220,7 @@ namespace osVodigiPlayer.UserControls
             ShowNextImage();
         }
 
-        public void StopTimer()
+        public void Stop()
         {
             try
             {

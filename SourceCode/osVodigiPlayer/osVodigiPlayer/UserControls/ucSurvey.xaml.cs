@@ -8,6 +8,8 @@ using System.Windows.Media.Imaging;
 using System.Configuration;
 using System.Windows.Threading;
 using System.Windows.Media.Animation;
+using System.Threading.Tasks;
+using osVodigiPlayer.Helpers;
 
 /* ----------------------------------------------------------------------------------------
     Vodigi - Open Source Interactive Digital Signage
@@ -134,7 +136,7 @@ namespace osVodigiPlayer.UserControls
                     {
                         if (image.ImageID == dsSurvey.SurveyImageID)
                         {
-                            string imagepath = Helpers.PlayerSettings.GetPlayerSetting("DownloadFolder").PlayerSettingValue + @"Images\" + image.StoredFilename;
+                            string imagepath = MediaManager.GetImagePath(image.StoredFilename);
                             imgSurveyImage.Source = new BitmapImage(new Uri(imagepath, UriKind.Absolute));
                         }
                     }
@@ -218,12 +220,11 @@ namespace osVodigiPlayer.UserControls
             catch { }
         }
 
-        private void SaveQuestionData()
+        private async void SaveQuestionData()
         {
             try
             {
-                osVodigiWS.osVodigiServiceSoapClient ws = new osVodigiWS.osVodigiServiceSoapClient();
-                ws.Endpoint.Address = new System.ServiceModel.EndpointAddress(new Uri(PlayerConfiguration.configVodigiWebserviceURL));
+                VodigiWSClient ws = new VodigiWSClient();
 
                 // Save the data
                 if (iAnsweredSurveyID == 0)
@@ -231,13 +232,15 @@ namespace osVodigiPlayer.UserControls
                     // Create the answered survey
                     try
                     {
-                        iAnsweredSurveyID = ws.AnsweredSurvey_Create(PlayerConfiguration.configAccountID, dsSurvey.SurveyID, PlayerConfiguration.configPlayerID);
+                        iAnsweredSurveyID = await ws.CreateAnsweredSurveyIDAsync(dsSurvey.SurveyID);
                     }
                     catch { return; }
                 }
 
                 if (stackQuestion.Children.Count > 0)
                 {
+                    List<Task> listOfTasks = new List<Task>();
+
                     // Skip the first item since it's the text label
                     for (int i = 1; i < stackQuestion.Children.Count; i += 1)
                     {
@@ -260,16 +263,17 @@ namespace osVodigiPlayer.UserControls
                                 bIsSelected = Convert.ToBoolean(radiobutton.IsChecked);
                             }
 
-                            // Update the answered survey question option
-                            try
-                            {
-                                ws.AnsweredSurveyQuestionOption_CreateAsync(iAnsweredSurveyID, iSurveyQuestionOptionID, bIsSelected);
-                            }
-                            catch { }
+                            listOfTasks.Add(ws.CreateAnsweredSurveyQuestionOptionAsync(iAnsweredSurveyID, iSurveyQuestionOptionID, bIsSelected));
                         }
                         catch { }
-
                     }
+
+                    // Update the answered survey question option
+                    try
+                    {
+                        await Task.WhenAll(listOfTasks);
+                    }
+                    catch { }
                 }
             }
             catch { }

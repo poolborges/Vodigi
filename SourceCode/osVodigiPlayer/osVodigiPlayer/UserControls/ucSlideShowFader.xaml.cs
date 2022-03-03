@@ -28,7 +28,7 @@ using System.IO;
 
 namespace osVodigiPlayer.UserControls
 {
-    public partial class ucSlideShowFader : UserControl
+    public partial class ucSlideShowFader : UserControl, IPlayController
     {
         // Complete Event
         public static readonly RoutedEvent SlideShowCompleteEvent = EventManager.RegisterRoutedEvent(
@@ -207,7 +207,7 @@ namespace osVodigiPlayer.UserControls
             ShowNextImage();
         }
 
-        public void StopTimer()
+        public void Stop()
         {
             try
             {

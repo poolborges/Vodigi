@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300" Background="Transparent" Cursor="Arrow">
+             d:DesignHeight="480" d:DesignWidth="600" Background="#FFFFFF" Cursor="Arrow">
     <UserControl.Resources>
         <Storyboard x:Key="sbFadeOut">
             <DoubleAnimation
@@ -23,29 +23,33 @@
     </UserControl.Resources>
 
     <Grid x:Name="gridMain">
-        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FFFFFF" Stroke="#315581" StrokeThickness="5"></Rectangle>
-        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,5,0,0" Fill="#F25022" Width="290" Height="40"></Rectangle>
+
+        <Rectangle x:Name="rectBackground" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#00FFFFFF" Stroke="#315581" StrokeThickness="1"></Rectangle>
+        <Rectangle x:Name="rectTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,0,0,0" Fill="#FF405579" Width="600" Height="35" ></Rectangle>
         <TextBlock x:Name="lblTitle" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,12,0,0"
                    Text="Reset Player" FontFamily="Verdana" FontSize="18" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
-        <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,55,0,0"
-                   FontFamily="Verdana" FontSize="10" Foreground="#333333" Width="260" TextWrapping="Wrap"
+        
+        <TextBlock x:Name="lblInstructions" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,50,0,0"
+                   FontFamily="Verdana" FontSize="12" Foreground="#333333" Width="550" TextWrapping="Wrap"
                    Text="Click the 'Reset Player' button below to reset this player. You will be prompted to re-register the player. The player must be connected to the Internet for registration." 
                    ></TextBlock>
 
-        <Rectangle x:Name="rectFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,275,0,0" Fill="#F25022" Width="290" Height="20"></Rectangle>
-        <TextBlock x:Name="lblFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,277,0,0"
-                   Text="Vodigi Player - Windows Desktop Edition" FontFamily="Verdana" FontSize="12" Foreground="#FFFFFF"></TextBlock>
 
-
-        <Grid x:Name="btnReset" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="25,165,0,0" Width="120" Height="28" Background="Transparent">
+        <Grid x:Name="btnReset" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="20,150,0,0" Width="120" Height="28" Background="Transparent">
             <Rectangle x:Name="rectReset" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#315581" RadiusX="12" RadiusY="12"></Rectangle>
             <TextBlock x:Name="lblReset" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
                        Text="Reset Player" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
         </Grid>
-        <Grid x:Name="btnCancel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="155,165,0,0" Width="120" Height="28" Background="Transparent">
+        <Grid x:Name="btnCancel" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="150,150,0,0" Width="120" Height="28" Background="Transparent">
             <Rectangle x:Name="rectCancel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#315581" RadiusX="12" RadiusY="12"></Rectangle>
             <TextBlock x:Name="lblCancel" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,-1,0,0"
                        Text="Cancel" FontFamily="Verdana" FontSize="14" FontWeight="Bold" Foreground="#FFFFFF"></TextBlock>
+        </Grid>
+
+
+
+        <Grid x:Name="gridFooter" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,460,0,0" Width="600" Height="20" Background="Transparent">
+            <Rectangle x:Name="rectFooter" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Fill="#FF405579"></Rectangle>
         </Grid>
 
     </Grid>

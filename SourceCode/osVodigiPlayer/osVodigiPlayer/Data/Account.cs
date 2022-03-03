@@ -17,11 +17,11 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ---------------------------------------------------------------------------------------- */
 
-namespace osVodigiPlayer
+namespace osVodigiPlayer.Data
 {
-    class Account
+    public class Account
     {
-        private int AccountID { get; set; }
-        private string AccountName { get; set; }
+        public int AccountID { get; set; }
+        public string AccountName { get; set; }
     }
 }
