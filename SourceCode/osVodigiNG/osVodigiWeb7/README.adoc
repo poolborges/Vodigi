@@ -16,3 +16,49 @@ docker run --rm -it -p 8000:80 osvodigiweb7
 ----
 docker images osVodigiWeb7
 ----
+
+===
+
+.migração e criar o conjunto inicial de tabelas para o modelo;
+----
+dotnet ef migrations add InitialMigration
+
+dotnet ef migrations add InitialMigration --context VodigiContext --output-dir Migrations/VodigiContextSqliteMigrations
+
+dotnet ef migrations add InitialMigration --context VodigiLogsContext --output-dir Migrations/VodigiLogsContextSqliteMigrations
+----
+
+.aplicar a migração a base de dados
+----
+dotnet ef database update --context VodigiContext
+----
+
+
+----
+dotnet ef migrations remove
+----
+
+== Powser
+
+----
+PM> Add-Migration InitialMigration -Context
+----
+
+
+----
+PM> Update-Database
+----
+
+
+== Global 
+
+----
+dotnet tool install -g dotnet-ef
+dotnet tool update -g dotnet-ef
+----
+
+
+== Reference
+
+* https://entityframeworkcore.com/providers-sqlite
+* https://docs.abp.io/en/abp/latest

@@ -142,14 +142,24 @@ namespace Application.WebsiteCore
 
             services.Configure<ApplcationOptions>(options => Configuration.GetSection(ApplcationOptions.KEY).Bind(options));
 
+            var connectionVodigiContext = "Data Source=VodigiContext.db"; 
+            // Configuration["ConexaoSqlite:VodigiContext"];
+            //Configuration.GetConnectionString("VodigiContext");
+
+            var connectionVodigiLogsContext = "Data Source=VodigiLogsContext.db";
+            //Configuration["ConexaoSqlite:VodigiLogsContext"];
+            //Configuration.GetConnectionString("VodigiLogsContext");
+
             services.AddDatabaseDeveloperPageExceptionFilter();
             services.AddDbContext<VodigiContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("VodigiContext")));
+                //options.UseSqlServer( Configuration.GetConnectionString("VodigiContext"))
+                options.UseSqlite(connectionVodigiContext)
+                );
 
             services.AddDbContext<VodigiLogsContext>(options =>
-                options.UseSqlServer(
-                    Configuration.GetConnectionString("VodigiLogsContext")));
+                //options.UseSqlServer( Configuration.GetConnectionString("VodigiLogsContext"))
+                options.UseSqlite(connectionVodigiLogsContext)
+                );
 
             services.AddScoped<IAssetManager, AssetManager>();
             services.AddScoped<ILoginRepository, EntityLoginRepository>();

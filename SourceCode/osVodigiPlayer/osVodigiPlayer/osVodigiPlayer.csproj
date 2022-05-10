@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Title>osVodigiPlayer</Title>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <RootNamespace>osVodigiPlayer</RootNamespace>
     <ApplicationIcon>film.ico</ApplicationIcon>
@@ -35,11 +35,11 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Hangfire.MemoryStorage" Version="1.7.0" />
-    <PackageReference Include="Hangfire.NetCore" Version="1.7.25" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.2" />
-    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
-    <PackageReference Include="System.ServiceModel.Http" Version="4.8.1" />
+    <PackageReference Include="Hangfire.NetCore" Version="1.7.28" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="6.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="6.0.0" />
+    <PackageReference Include="System.ServiceModel.Http" Version="4.9.0" />
   </ItemGroup>
   <!-- BUILD :: GENERATE STRONGLY TYPE CLASSES  FOR RESOUCE/I8N AND SETTINGS -->
   <ItemGroup>
