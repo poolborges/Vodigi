@@ -7,3 +7,6 @@ _ReSharper.*
 **/packages/
 **/.vs/
 SourceCode/osVodigiNG/osVodigiWeb7/osVodigiWeb7.sln
+/SourceCode/osVodigiNG/osVodigiWeb7/Migrations
+/SourceCode/osVodigiNG/osVodigiWeb7/VodigiLogsContext.db
+/SourceCode/osVodigiNG/osVodigiWeb7/VodigiContext.db
