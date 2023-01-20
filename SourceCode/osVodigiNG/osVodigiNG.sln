@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32002.261
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osVodigiWeb7", "osVodigiWeb7\osVodigiWeb7.csproj", "{E3E3A695-2008-4B61-AD5A-92341FEA5F3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osVodigiNG.Web", "osVodigiWeb7\osVodigiNG.Web.csproj", "{E3E3A695-2008-4B61-AD5A-92341FEA5F3B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osVodigiNG.Domain", "osVodigiNG.Domain\osVodigiNG.Domain.csproj", "{2251466F-465A-47C5-9BB7-E559D3734467}"
 EndProject
