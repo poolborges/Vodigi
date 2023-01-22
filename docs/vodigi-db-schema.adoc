@@ -1,0 +1,184 @@
+= Vodigi DB Schema 
+
+
+Tartuga Signage 
+
+
+BlueSharkDS
+
+Content Creator 
+
+* 
+
+ContentPlayer
+VideoPlay
+AudioPlayer
+SlideShowPlyayer
+ImageViwer
+
+Content 
+
+Track
+
+Clip 
+
+VideoClip : Clip
+AudioClip : Clip 
+ImageClip : Clip 
+
+Layout
+
+=== Content Deliver 
+
+Player
+PlayerGroup = Same Content
+PlayerCaegor = Same DeviceSpec
+
+PlayerSetting {key, value, value_kind, label, unit_id, unit_level:{DEVICE|GROUP|TENANT}}
+
+value_kind: long, double, s, json_obj, json_arr
+
+== Conceps 
+
+SlideShow
+Content
+Screen
+
+== Database 
+
+=== Schema Version 5
+
+.tables 
+|====
+|User
+|Sore Login Credenial
+
+|Video
+|
+
+|SlideShowImageXref
+|
+
+|SlideShow
+|
+
+|ScreenScreenContentXref
+|Reference table of M:M relation between Screen and Content
+
+|ScreenContentType
+|
+
+|ScreenContent
+|
+
+|Screen
+|FK {PlayListID, SlideShowID}
+
+|PlayListVideoXref
+|
+
+|PlayList
+|
+
+|PlayerGroupSchedule
+|
+
+|PlayerGroup
+|
+
+|Player
+|
+
+|Image
+|
+
+|Account
+|Organiza
+
+|====
+
+
+Changes
+
+[plantuml]
+----
+@startuml
+
+entity 
+
+@enduml
+----
+
+
+=== Schema Version 5.5
+
+.tables 
+|====
+|AnsweredSurvey
+|
+
+|AnsweredSurveyQuestionOption
+|
+
+|Survey
+|
+
+|SurveyQuestion
+|
+
+|SurveyQuestionOption
+|
+
+|SlideShowMusicXref
+|
+
+|Music
+|
+
+|SystemMessage
+|
+
+|====
+
+=== Schema Version 6.0
+
+. (9)
+|====
+
+|DatabaseVersion
+|
+
+|PlayerSetting
+|
+
+|PlayerSettingAccountDefault
+|
+
+|PlayerSettingSystemDefault
+|
+
+|PlayerSettingType
+|
+
+|Timeline
+|
+
+|TimelineImageXref
+|
+
+|TimelineMusicXref
+|
+
+|TimelineVideoXref
+|
+|====
+
+
+=== Schema Version 7.0
+
+Media files
+
+* Audio 
+* Video 
+* Image
+

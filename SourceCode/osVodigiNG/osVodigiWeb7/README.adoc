@@ -17,7 +17,15 @@ docker run --rm -it -p 8000:80 osvodigiweb7
 docker images osVodigiWeb7
 ----
 
-===
+=== EF
+
+
+Provider 
+
+* Oracle Entity Framework Core 3.1
+* dotnet add package Microsoft.EntityFrameworkCore.SqlServer -v 2.2.4
+
+
 
 .migração e criar o conjunto inicial de tabelas para o modelo;
 ----
@@ -38,7 +46,7 @@ dotnet ef database update --context VodigiContext
 dotnet ef migrations remove
 ----
 
-== Powser
+== Powershell Visual Studio
 
 ----
 PM> Add-Migration InitialMigration -Context
@@ -49,12 +57,29 @@ PM> Add-Migration InitialMigration -Context
 PM> Update-Database
 ----
 
+== dotnet-ef 
 
-== Global 
+
+* https://www.nuget.org/packages/dotnet-ef
+
+Entity Framework Core Tools for the .NET Command-Line Interface.
 
 ----
+dotnet tool install --global dotnet-ef --version 7.0.2
 dotnet tool install -g dotnet-ef
 dotnet tool update -g dotnet-ef
+----
+
+
+.Enables these commonly used dotnet-ef commands: 
+----
+dotnet ef migrations add 
+dotnet ef migrations list 
+dotnet ef migrations script
+dotnet ef dbcontext info
+dotnet ef dbcontext scaffold 
+dotnet ef database drop 
+dotnet ef database update 
 ----
 
 
